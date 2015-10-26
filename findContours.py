@@ -143,8 +143,11 @@ def main():
     # Simple image
     # inputImg = cv2.imread('simpleLaser.jpg',0)
     
-    # Real image
+    # Real image (small)
     inputImg = cv2.imread('smallRealBoard1.jpg',0)
+    
+    # Real image (big)
+    # inputImg = cv2.imread('realBoard1.jpg',0)
     
     
     '''
