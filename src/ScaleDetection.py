@@ -73,6 +73,7 @@ class ScaleDetection:
         '''
         if self.x_scale == None or self.y_scale == None:
             print "The system must be calibrated: x or y scale is still None"
+            return(None, None)
         im = cv2.imread(image)
         imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
         ret,thresh = cv2.threshold(imgray, 50, 255, 0)
