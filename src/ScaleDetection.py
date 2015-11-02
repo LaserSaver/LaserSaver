@@ -2,10 +2,11 @@ import numpy as np
 import cv2
 import logging
 import json
+from decimal import *
 
 
 logger = logging.getLogger(__name__)
-
+getcontext().prec = 50
 
 class ScaleDetection:
     def __init__(self):
@@ -14,7 +15,6 @@ class ScaleDetection:
 
     def calibrate(self, image, known_x, known_y):
         im = cv2.imread(image)
-
         imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
         ret,thresh = cv2.threshold(imgray,50,255,0)
         contours, hierarchy = cv2.findContours(thresh,
@@ -23,19 +23,19 @@ class ScaleDetection:
 
         areas = [cv2.contourArea(c) for c in contours]
         max_index = np.argmax(areas)
-        max_countour = contours[max_index]
+        max_contour = contours[max_index]
 
         # rectangle contains (x,y), (w,h), theta (angle of rotation)
-        rectangle = cv2.minAreaRect(cnt)
+        rectangle = cv2.minAreaRect(max_contour)
         box = cv2.cv.BoxPoints(rectangle)
         box = np.int0(box)
         (w,h) = rectangle[1]  # dimensions in pixels
-
         # size in pixels is proportional to real scale
         # this scale times pixels can now determin scale
         # as long as the camera is kept at a fixed height
-        self.x_scale = x/w
-        self.vert_scale = y/h
+
+        self.x_scale = Decimal(known_x)/Decimal(w)
+        self.y_scale = Decimal(known_y)/Decimal(h)
 
     def saveConfigFile(self, config_file="scale.config"):
         """
@@ -72,9 +72,8 @@ class ScaleDetection:
                     which is the largest contour
         '''
         im = cv2.imread(image)
-
-        imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
-        ret,thresh = cv2.threshold(imgray,50,255,0)
+        imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+        ret,thresh = cv2.threshold(imgray, 50, 255, 0)
         contours, hierarchy = cv2.findContours(thresh,
                                                cv2.RETR_TREE,
                                                cv2.CHAIN_APPROX_SIMPLE)
@@ -89,6 +88,6 @@ class ScaleDetection:
         box = cv2.cv.BoxPoints(rectangle)
         box = np.int0(box)
         w,h = rectangle[1]
-        width = w * self.x_scale
-        height = h * self.y_scale
+        width = Decimal(w) * Decimal(self.x_scale)
+        height = Decimal(h) * Decimal(self.y_scale)
         return (width, height)
