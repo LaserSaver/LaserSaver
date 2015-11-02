@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import logging
+import json
 
 
 logger = logging.getLogger(__name__)
@@ -36,11 +37,24 @@ class ScaleDetection:
         self.x_scale = x/w
         self.vert_scale = y/h
 
-    def saveConfigFile(self, config="scale.config"):
-        pass
+    def saveConfigFile(self, config_file="scale.config"):
+        """
+        Given a config file, which defaults to configs/scale.config, save
+        a dictionary {"x_scale": self.x_scale, "y_scale": self.y_scale}
+        """
+        data = {"x_scale": self.x_scale, "y_scale": self.y_scale}
+        with open(config_file, 'w') as conf:
+            json.dump(data, conf)
 
-    def loadConfigFile(
-        pass
+
+    def loadConfigFile(self, config_file="scale.config"):
+        """
+        Given a config file, which defaults to configs/scale.config,
+        and returns a dictionary {"x_scale": val, "y_scale": val}
+        """
+        with open(config_file, 'r') as conf:
+            config = json.load(conf)
+        return config
 
     def detectSize(self, image):
         '''
