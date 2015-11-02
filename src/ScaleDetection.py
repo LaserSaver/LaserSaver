@@ -68,8 +68,8 @@ class ScaleDetection:
         Args:
             image: image file path
         Returns:
-            rectange: A tuple of (width, height) of the board, which
-                    is the largest contour
+            rectange: A tuple of (width, height) of the board in real world,
+                    which is the largest contour
         '''
         im = cv2.imread(image)
 
@@ -88,4 +88,7 @@ class ScaleDetection:
         rectangle = cv2.minAreaRect(max_contour)
         box = cv2.cv.BoxPoints(rectangle)
         box = np.int0(box)
-        return rectangle[1]
+        w,h = rectangle[1]
+        width = w * self.x_scale
+        height = h * self.y_scale
+        return (width, height)
