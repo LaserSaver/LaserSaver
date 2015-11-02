@@ -39,8 +39,10 @@ class ScaleDetection:
 
     def saveConfigFile(self, config_file="scale.config"):
         """
-        Given a config file, which defaults to configs/scale.config, save
-        a dictionary {"x_scale": self.x_scale, "y_scale": self.y_scale}
+        saves a dictionary {"x_scale": self.x_scale, "y_scale": self.y_scale}
+        Args:
+            config_file: location of config file,
+                       defaults to configs/scale.config.
         """
         data = {"x_scale": self.x_scale, "y_scale": self.y_scale}
         with open(config_file, 'w') as conf:
@@ -49,8 +51,12 @@ class ScaleDetection:
 
     def loadConfigFile(self, config_file="scale.config"):
         """
-        Given a config file, which defaults to configs/scale.config,
-        and returns a dictionary {"x_scale": val, "y_scale": val}
+        Args:
+            config_file: location of config file,
+                       defaults to configs/scale.config.
+        Returns:
+            config: A dictionary of {"x_scale": val, "y_scale": val}
+
         """
         with open(config_file, 'r') as conf:
             config = json.load(conf)
@@ -58,8 +64,12 @@ class ScaleDetection:
 
     def detectSize(self, image):
         '''
-        For a calibrated system, given an image detectSize returns
-        (width, height) of the board (which is the largest contour)
+        System must be calibrated.
+        Args:
+            image: image file path
+        Returns:
+            rectange: A tuple of (width, height) of the board, which
+                    is the largest contour
         '''
         im = cv2.imread(image)
 
