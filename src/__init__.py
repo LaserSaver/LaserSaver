@@ -1,3 +1,3 @@
-from ScaleDetection import ScaleDetection
+from scaleDetection import ScaleDetection
 
 __all__ = ["ScaleDetection"]

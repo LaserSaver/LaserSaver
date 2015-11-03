@@ -1,4 +1,4 @@
-from src.ScaleDetection import ScaleDetection
+from scaleDetection import ScaleDetection
 from decimal import *
 import json
 
