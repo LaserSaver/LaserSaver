@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
-setup(name='scale',
+setup(name='scanner',
       version='0.1',
       description='scale detection',
-      package_dir={'scale': 'src'},
-      packages=['scale'])
+      package_dir={'scanner': 'src'},
+      packages=['scanner'])
