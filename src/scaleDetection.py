@@ -13,6 +13,12 @@ class ScaleDetection:
         x_scale = None
         y_scale = None
 
+    def getScale(self):
+        '''
+        Returns tuple of (self.x_scale, self.y_scale)
+        '''
+        return (self.x_scale, self.y_scale)
+
     def calibrate(self, image, known_x, known_y):
         '''
         Given an image of an object of known size sets the x and y scale
@@ -62,10 +68,13 @@ class ScaleDetection:
         Args:
             config_file: location of config file,
                        defaults to configs/scale.config.
+        Returns:
+            True on success, False on failure
         """
         data = {"x_scale": self.x_scale, "y_scale": self.y_scale}
         with open(config_file, 'w') as conf:
             json.dump(data, conf)
+        return True
 
     def loadConfigFile(self, config_file="scale.config"):
         """
@@ -73,13 +82,17 @@ class ScaleDetection:
             config_file: location of config file,
                        defaults to configs/scale.config.
         Returns:
-            config: A dictionary of {"x_scale": val, "y_scale": val}
-
+            True on success, False on failure
         """
-        with open(config_file, 'r') as conf:
-            config = json.load(conf)
+        try:
+            with open(config_file, 'r') as conf:
+                config = json.load(conf)
+        except IOError as e:
+            print(e)
+            return False
         self.x_scale = config["x_scale"]
         self.y_scale = config["y_scale"]
+        return True
 
     def detectSize(self, image):
         '''
@@ -88,13 +101,20 @@ class ScaleDetection:
             image: image file path
         Returns:
             A tuple of (width, height) of the rectangle bounding the
-            object in real world units.
+            object in real world units. Returns (None, None) if
+            unsuccessful.
         '''
         if self.x_scale is None or self.y_scale is None:
             print "The system must be calibrated: x or y scale is still None"
+            return (None, None)
 
         im = cv2.imread(image)
-        imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+        try:
+            imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+        except cv2.error as e:
+            print("Could not create gray image, ensure the given "
+                  "filename exists")
+            return False
         ret, thresh = cv2.threshold(imgray, 50, 255, 0)
         contours, hierarchy = cv2.findContours(thresh,
                                                cv2.RETR_TREE,
