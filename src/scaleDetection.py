@@ -6,7 +6,6 @@ from decimal import *
 
 
 logger = logging.getLogger(__name__)
-getcontext().prec = 50
 
 
 class ScaleDetection:
@@ -25,7 +24,12 @@ class ScaleDetection:
             True on success, False on failure
         '''
         im = cv2.imread(image)
-        imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+        try:
+            imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+        except cv2.error as e:
+            print("Could not create gray image, ensure the given "
+                  "filename exists")
+            return False
         ret, thresh = cv2.threshold(imgray, 50, 255, 0)
         contours, hierarchy = cv2.findContours(thresh,
                                                cv2.RETR_TREE,
@@ -44,8 +48,12 @@ class ScaleDetection:
         # this scale times pixels can now determin scale
         # as long as the camera is kept at a fixed height
 
-        self.x_scale = Decimal(known_x)/Decimal(w)
-        self.y_scale = Decimal(known_y)/Decimal(h)
+        try:
+            self.x_scale = Decimal(known_x)/Decimal(w)
+            self.y_scale = Decimal(known_y)/Decimal(h)
+        except InvalidOperation:
+            print "known_x and known_y must be numbers, retry calibration"
+            return False
         return True
 
     def saveConfigFile(self, config_file="scale.config"):
@@ -75,12 +83,12 @@ class ScaleDetection:
 
     def detectSize(self, image):
         '''
-        System must be calibrated.
+        For a calibrated system, detects the size of the largest object.
         Args:
             image: image file path
         Returns:
-            rectange: A tuple of (width, height) of the board in real world,
-                    which is the largest contour
+            A tuple of (width, height) of the rectangle bounding the
+            object in real world units.
         '''
         if self.x_scale is None or self.y_scale is None:
             print "The system must be calibrated: x or y scale is still None"
