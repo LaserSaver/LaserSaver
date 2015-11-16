@@ -13,15 +13,12 @@ newlogger.info('Info Message')
 class logger():
     def __init__(self, loggerName = 'LaserCutter', loglevel = "info", cmdline = False, filename = "lasercutter.log"):
     '''
-    Initialize a new logger
-    :param loggerName: Name of Logger default is Lasercutter
-    :type loggerName: String
-    :param loglevel: Level of Log set to 'debug' for debug mode.  Default is 'info'
-    :type loglevel: String
-    :param cmdline: Paramaeter to log to cmdline. Default is False
-    :type cmdline: Boolean
-    :param filename: Name of logging file.  Default is 'lasercutter.log'
-    :type filename: String
+    Initialize a new logger that logs
+    Args:
+        loggerName (str): Name of Logger.  Default is 'Lasercutter'
+        loglevel (str): Level of Log set to 'debug' for debug mode.  Default is 'info'
+        cmdline (bool): Parameter to log to cmdline. Default is False
+        filename (str): Name of logging file.  Default is 'lasercutter.log'
     '''
         if loglevel == "debug":
             level = logging.DEBUG
@@ -42,8 +39,8 @@ class logger():
 
     #returns an instance of the logger
     def getLogger(self):
-        '''
-        Returns the initialized logger
-        :rtype: logger instance
-        '''
+    '''
+    Returns:
+        logger: The logger created by the class
+    '''
         return self.logger
