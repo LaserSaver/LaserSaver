@@ -3,6 +3,9 @@ from decimal import *
 import json
 
 
+IMAGE = 'test.jpg'
+
+
 def testCalibration():
     image = 'test.jpg'
     sd = ScaleDetection()
@@ -10,6 +13,14 @@ def testCalibration():
     w,h = (3012.616455078125, 2951.0859375)
     assert round(sd.x_scale * Decimal(w), 1) == 30.2
     assert round(sd.y_scale * Decimal(h), 1) == 30.2
+
+
+def testCalibrationFail():
+    sd = ScaleDetection()
+    sd.calibrate(IMAGE, 30.2, "a")
+    # w,h = (3012.616455078125, 2951.0859375)
+    # assert round(sd.x_scale * Decimal(w), 1) == 30.2
+    # assert round(sd.y_scale * Decimal(h), 1) == 30.2
 
 
 def testScale():
