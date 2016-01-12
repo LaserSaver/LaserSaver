@@ -11,17 +11,25 @@ NOTES:
 '''
 
 def find_edges(img):
-    '''
-    Returns image of detected edges from original image
+    """ Returns image of detected edges from original image
         Currently both original and copy 
     
+    Called from find_contours
     Utilizes Canny algorithm for edge detection
+    
     
     Threshold numbers are compared to calculated Gradient values
     Max: Anything above definitely an edge
     Min: Anything below definitely NOT an edge
     
-    '''
+    Args:
+        img (jpg): Original image of board
+        
+    Returns:
+        edges1: Image of found edges
+        copy: Copy of edges1
+    
+    """
 
     # Actual edge detection
     # Current threshold numbers are fairly arbitrary, although they are fairly accurate
@@ -36,13 +44,23 @@ def find_edges(img):
 
   
 def find_contours(img):
-    '''
-    Finds contours of image, and draws them
-        Returns: list of found contours, image of drawn contours, and the edge image it was built off
+    """ Finds contours of image, and draws them
     
     Each individual contour is a numpy array of (x,y) coordinates of boundary points of the object.
     
-    '''
+    Called from main()
+        
+    Args:
+        img (jpg): Original image of board
+    
+    Returns: 
+        contours: list of found contours
+        drawing: image of drawn contours
+        edgeImage: the edge image the contour image was built off
+    
+    
+    
+    """
     
     # Get modified image
     # edgeImage is the original edge image, modImg is the copy
@@ -64,22 +82,22 @@ def find_contours(img):
     
     
 
-    '''
+    """
     EXTRACTING CORRECT CONTOURS --- (ASSUMING THERE ARE CONTOURS OTHER THAN THOSE OF THE BOARD)
 
         - FIND CONTOUR W/ LARGEST AREA --> THIS SHOULD BE THE SHEET ITSELF
         - REMOVE CONTOURS WHOSE X AND Y VALUES ARE NOT WITHIN THOSE OF THE LARGEST CONTOUR
         - ALL REMAINING CONTOURS SHOULD REPRESENT FEATURES OF THE BOARD
-    '''
+    """
  
     
-    '''
+    """
     LOOP THROUGH ALL CONTOURS AND ONLY DRAW ONE SET OF CORRECT CONTOURS
        
         - THERE ARE MULTIPLE DIFFERENT CONTOURS AROUND EACH EDGE
             - ONLY WANT THE ONE SET
     
-    '''
+    """
     i=0
     j=0
     for cnt in contours:
@@ -125,6 +143,12 @@ def find_contours(img):
 
 
 def main():
+    """ Finds the contours from an image of the laser-cut board
+    
+    Currently only displays original image and created contour image
+    Should eventually save these for later processing
+    
+    """
     
     # If exporting to contour data to file,
     #   first clear the file of previous text
