@@ -4,20 +4,17 @@ import json
 
 
 # all [x, y]
+SAVE_IMG = False
+
 IMAGE = 'tests/tester1.jpg'
 IMG_DIM = [5, 5]
 IMG_PIX = (359.0, 359.0)
 SCALE = [0.01392757660167130919220055710, 0.01392757660167130919220055710]
 
-IMAGE_2 = 'tests/tester2.jpg'
-IMG_DIM_2 = [8.0, 3.0]
-
-IMAGE_3 = 'tests/tester3.jpg'
-IMG_DIM_3 = [4.0, 4.0]
-
-IMAGE_4 = 'tests/tester4.jpg'
-IMG_DIM_4 = [4.0, 8.0]
-
+IMAGES = ['tests/tester1.jpg', 'tests/tester2.jpg',
+          'tests/tester3.jpg', 'tests/tester4.jpg']
+# [x, y]
+DIMS = [[5, 5], [3.0, 8.0], [4.0, 4.0], [8.0, 4.0]]
 
 # IMAGE = 'tests/power_brick.jpg'
 # IMG_DIM = [139.2, 64.5]
@@ -47,51 +44,16 @@ def testCalibrationFailIm():
     assert f == False
 
 
-def testScale():
-    sd = ScaleDetection()
-    sd.x_scale = SCALE[0]
-    sd.y_scale = SCALE[1]
-    w,h = sd.detectSize(IMAGE_2)
-    print round(w,0)
-    print round(h,0)
-    assert round(w, 0) == IMG_DIM_2[0]
-    assert round(h, 0) == IMG_DIM_2[1]
-
-
-def testScale2():
-    sd = ScaleDetection()
-    sd.x_scale = SCALE[0]
-    sd.y_scale = SCALE[1]
-    w,h = sd.detectSize(IMAGE)
-    print "image 2"
-    print round(w,0)
-    print round(h,0)
-    assert round(w, 0) == IMG_DIM[0]
-    assert round(h, 0) == IMG_DIM[1]
-
-
-def testScale3():
-    sd = ScaleDetection()
-    sd.x_scale = SCALE[0]
-    sd.y_scale = SCALE[1]
-    w,h = sd.detectSize(IMAGE_3)
-    print "image 3"
-    print round(w,0)
-    print round(h,0)
-    assert round(w, 0) == IMG_DIM_3[0]
-    assert round(h, 0) == IMG_DIM_3[1]
-
-
-def testScale4():
-    sd = ScaleDetection()
-    sd.x_scale = SCALE[0]
-    sd.y_scale = SCALE[1]
-    w,h = sd.detectSize(IMAGE_4)
-    print "image 4"
-    print round(w,0)
-    print round(h,0)
-    assert round(w, 0) == IMG_DIM_4[0]
-    assert round(h, 0) == IMG_DIM_4[1]
+def testScales():
+    for i in range(0, len(IMAGES)):
+        sd = ScaleDetection()
+        sd.x_scale = SCALE[0]
+        sd.y_scale = SCALE[1]
+        w,h = sd.detectSize(IMAGES[i], show_conts=True)
+        print round(w,0)
+        print round(h,0)
+        assert round(w, 0) == DIMS[i][0]
+        assert round(h, 0) == DIMS[i][1]
 
 
 def testSaveConfig():
