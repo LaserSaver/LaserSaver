@@ -3,42 +3,102 @@ from decimal import *
 import json
 
 
-IMAGE = 'tests/test.jpg'
+# all [x, y]
+IMAGE = 'tests/tester1.jpg'
+IMG_DIM = [5, 5]
+IMG_PIX = (359.0, 359.0)
+SCALE = [0.01392757660167130919220055710, 0.01392757660167130919220055710]
 
+IMAGE_2 = 'tests/tester2.jpg'
+IMG_DIM_2 = [8.0, 3.0]
+
+IMAGE_3 = 'tests/tester3.jpg'
+IMG_DIM_3 = [4.0, 4.0]
+
+IMAGE_4 = 'tests/tester4.jpg'
+IMG_DIM_4 = [4.0, 8.0]
+
+
+# IMAGE = 'tests/power_brick.jpg'
+# IMG_DIM = [139.2, 64.5]
+# IMG_PIX = (1494.58288574, 3298.8046875)
+# SCALE = [0.09313635351235495464600164007, 0.01955253678534128128796652196]
+
+# IMAGE_2 = 'tests/canon.jpg'
+# IMG_DIM_2 = [87.5, 69]
 
 def testCalibration():
     sd = ScaleDetection()
-    sd.calibrate(IMAGE, 30.2, 30.2)
-    w,h = (3012.616455078125, 2951.0859375)
-    assert round(sd.x_scale * Decimal(w), 1) == 30.2
-    assert round(sd.y_scale * Decimal(h), 1) == 30.2
+    sd.calibrate(IMAGE, IMG_DIM[0], IMG_DIM[1])
+    w,h = IMG_PIX
+    assert round(sd.x_scale * Decimal(w), 0) == IMG_DIM[0]
+    assert round(sd.y_scale * Decimal(h), 0) == IMG_DIM[1]
 
 
 def testCalibrationFail():
     sd = ScaleDetection()
-    f = sd.calibrate(IMAGE, 30.2, "a")
+    f = sd.calibrate(IMAGE, IMG_DIM[0], "a")
     assert f == False
 
 
 def testCalibrationFailIm():
     sd = ScaleDetection()
-    f = sd.calibrate("a", 30.2, 30.2)
+    f = sd.calibrate("a", IMG_DIM[0], IMG_DIM[1])
     assert f == False
+
 
 def testScale():
     sd = ScaleDetection()
-    sd.x_scale = 0.01002450874524511436479390460
-    sd.y_scale = 0.01023352102907033668498759679
+    sd.x_scale = SCALE[0]
+    sd.y_scale = SCALE[1]
+    w,h = sd.detectSize(IMAGE_2)
+    print round(w,0)
+    print round(h,0)
+    assert round(w, 0) == IMG_DIM_2[0]
+    assert round(h, 0) == IMG_DIM_2[1]
+
+
+def testScale2():
+    sd = ScaleDetection()
+    sd.x_scale = SCALE[0]
+    sd.y_scale = SCALE[1]
     w,h = sd.detectSize(IMAGE)
-    assert round(w, 1) == 30.2
-    assert round(h, 1) == 30.2
+    print "image 2"
+    print round(w,0)
+    print round(h,0)
+    assert round(w, 0) == IMG_DIM[0]
+    assert round(h, 0) == IMG_DIM[1]
+
+
+def testScale3():
+    sd = ScaleDetection()
+    sd.x_scale = SCALE[0]
+    sd.y_scale = SCALE[1]
+    w,h = sd.detectSize(IMAGE_3)
+    print "image 3"
+    print round(w,0)
+    print round(h,0)
+    assert round(w, 0) == IMG_DIM_3[0]
+    assert round(h, 0) == IMG_DIM_3[1]
+
+
+def testScale4():
+    sd = ScaleDetection()
+    sd.x_scale = SCALE[0]
+    sd.y_scale = SCALE[1]
+    w,h = sd.detectSize(IMAGE_4)
+    print "image 4"
+    print round(w,0)
+    print round(h,0)
+    assert round(w, 0) == IMG_DIM_4[0]
+    assert round(h, 0) == IMG_DIM_4[1]
 
 
 def testSaveConfig():
     cf = 'test.conf'
     sd = ScaleDetection()
-    sd.x_scale = 0.01002450874524511436479390460
-    sd.y_scale = 0.01023352102907033668498759679
+    sd.x_scale = SCALE[0]
+    sd.y_scale = SCALE[1]
     sd.saveConfigFile(config_file=cf)
     with open(cf, 'r') as conf:
         j = json.load(conf)
