@@ -154,7 +154,7 @@ class ScaleDetection:
         if show_conts:
             cv2.drawContours(im, [box], 0, (0,0,255), 2)
             cv2.imwrite(image+'_rec', im)
-        w, h = rectangle[1]
+        h, w = rectangle[1]
         print w
         print h
         width = Decimal(w) * Decimal(self.x_scale)
