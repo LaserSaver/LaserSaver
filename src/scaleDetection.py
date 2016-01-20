@@ -159,6 +159,4 @@ class ScaleDetection:
         print h
         width = Decimal(w) * Decimal(self.x_scale)
         height = Decimal(h) * Decimal(self.y_scale)
-        cv2.drawContours(im, [box], 0, (0,0,255),2)
-        cv2.imwrite(image+"_rec", im)
         return (width, height)
