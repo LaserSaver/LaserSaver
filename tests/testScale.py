@@ -49,7 +49,7 @@ def testScales():
         sd = ScaleDetection()
         sd.x_scale = SCALE[0]
         sd.y_scale = SCALE[1]
-        w,h = sd.detectSize(IMAGES[i], show_conts=True)
+        w,h = sd.getSize(IMAGES[i], show_conts=SAVE_IMG)
         print round(w,0)
         print round(h,0)
         assert round(w, 0) == DIMS[i][0]
@@ -81,3 +81,13 @@ def testLoadConfigFail():
     sd = ScaleDetection()
     f = sd.loadConfigFile(config_file=cf)
     assert f == False
+
+
+def testChain():
+    sd = ScaleDetection()
+    sd.calibrate(IMAGE, IMG_DIM[0], IMG_DIM[1])
+    w, h = sd.getSize(IMAGES[-1], show_conts=SAVE_IMG)
+    print round(w,0)
+    print round(h,0)
+    assert round(w, 0) == DIMS[-1][0]
+    assert round(h, 0) == DIMS[-1][1]
