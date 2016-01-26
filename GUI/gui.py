@@ -28,7 +28,7 @@ class App:
 		self.pictureButton = Button(frame, text="Take picture", command=self.take_picture)
 		self.pictureButton.pack(side=LEFT)
 
-	def getImg(self):
+	def get_img(self):
 		#Getting img from video capture
 		ret, frame = self.cam.read()
 		#Flipping horizontally 
@@ -47,13 +47,13 @@ class App:
 		if not os.path.exists("pictures") :
     			os.makedirs("pictures")
 
-		self.getImg().save("pictures/" + pictureName)
+		self.get_img().save("pictures/" + pictureName)
 
 	
 		
 	def update_panel(self):
 		#Updating panel to current image from cam
-		imgtk = ImageTk.PhotoImage(self.getImg())
+		imgtk = ImageTk.PhotoImage(self.get_img())
 		self.panel.configure(image = imgtk)
 		self.panel.image = imgtk
 		#Update capture every 10 milliseconds
