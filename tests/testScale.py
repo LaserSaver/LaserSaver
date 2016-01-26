@@ -4,7 +4,7 @@ import json
 
 
 # all [x, y]
-SAVE_IMG = False
+SAVE_IMG = True
 
 IMAGE = 'tests/tester1.jpg'
 IMG_DIM = [5, 5]
@@ -12,9 +12,10 @@ IMG_PIX = (359.0, 359.0)
 SCALE = [0.01392757660167130919220055710, 0.01392757660167130919220055710]
 
 IMAGES = ['tests/tester1.jpg', 'tests/tester2.jpg',
-          'tests/tester3.jpg', 'tests/tester4.jpg']
+          'tests/tester3.jpg', 'tests/tester4.jpg',
+          "tests/tester5.jpg", 'tests/tester9.jpg']
 # [x, y]
-DIMS = [[5, 5], [3.0, 8.0], [4.0, 4.0], [8.0, 4.0]]
+DIMS = [[5, 5], [3.0, 8.0], [4.0, 4.0], [8.0, 4.0], [14.222, 10.667], [10, 7]]
 
 # IMAGE = 'tests/power_brick.jpg'
 # IMG_DIM = [139.2, 64.5]
@@ -23,6 +24,12 @@ DIMS = [[5, 5], [3.0, 8.0], [4.0, 4.0], [8.0, 4.0]]
 
 # IMAGE_2 = 'tests/canon.jpg'
 # IMG_DIM_2 = [87.5, 69]
+
+def testDimensions():
+    sd = ScaleDetection()
+    w, h = sd.getDimensions(IMAGE)
+    assert w == IMG_PIX[0]
+    assert h == IMG_PIX[1]
 
 def testCalibration():
     sd = ScaleDetection()
@@ -50,10 +57,10 @@ def testScales():
         sd.x_scale = SCALE[0]
         sd.y_scale = SCALE[1]
         w,h = sd.getSize(IMAGES[i], show_conts=SAVE_IMG)
-        print round(w,0)
-        print round(h,0)
-        assert round(w, 0) == DIMS[i][0]
-        assert round(h, 0) == DIMS[i][1]
+        print round(w,1)
+        print round(h,1)
+        assert round(w, 1) == round(DIMS[i][0], 1)
+        assert round(h, 1) == round(DIMS[i][1], 1)
 
 
 def testSaveConfig():
@@ -89,5 +96,5 @@ def testChain():
     w, h = sd.getSize(IMAGES[-1], show_conts=SAVE_IMG)
     print round(w,0)
     print round(h,0)
-    assert round(w, 0) == DIMS[-1][0]
-    assert round(h, 0) == DIMS[-1][1]
+    assert round(w, 1) == round(DIMS[-1][0], 1)
+    assert round(h, 1) == round(DIMS[-1][1], 1)
