@@ -12,14 +12,14 @@ newlogger.info('Info Message')
 
 class logger():
     def __init__(self, loggerName = 'LaserCutter', loglevel = "info", cmdline = False, filename = "lasercutter.log"):
-    '''
-    Initialize a new logger that logs
-    Keyword Arguments:
-        loggerName (str): Name of Logger.  Default is 'Lasercutter'
-        loglevel (str): Level of Log set to 'debug' for debug mode.  Default is 'info'
-        cmdline (bool): Parameter to log to cmdline. Default is False
-        filename (str): Name of logging file.  Default is 'lasercutter.log'
-    '''
+        '''
+        Initialize a new logger that logs
+        Keyword Arguments:
+            loggerName (str): Name of Logger.  Default is 'Lasercutter'
+            loglevel (str): Level of Log set to 'debug' for debug mode.  Default is 'info'
+            cmdline (bool): Parameter to log to cmdline. Default is False
+            filename (str): Name of logging file.  Default is 'lasercutter.log'
+        '''
         if loglevel == "debug":
             level = logging.DEBUG
         else:
@@ -38,7 +38,7 @@ class logger():
         self.logger.setLevel(level)
 
     def getLogger(self):
-    '''
-    Returns: The logger initialized when creating the class
-    '''
+        '''
+        Returns: The logger initialized when creating the class
+        '''
         return self.logger
