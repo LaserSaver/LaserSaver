@@ -39,6 +39,10 @@ def find_contours(img):
     
     '''
     
+    # If code isn't being invoked directly from command line, run this code
+    if __name__ != "__main__":
+        img = cv2.imread(img,0)
+    
     # Edge detection
     edgeImage = cv2.Canny(img,200,400)
     
@@ -56,7 +60,7 @@ def find_contours(img):
     finalContours = select_contours(initial_contours, hierarchy)
 
 
-    return finalContours, edgeImage
+    return finalContours, len(finalContours), edgeImage
     
     
 def select_contours(contours, hierarchy):
@@ -106,7 +110,7 @@ def select_contours(contours, hierarchy):
             Or, at least, they should be if there weren't double contours --> all areas we find are currently negative
             Contour w/ largest absolute value should be the edge of the entire board
             '''
-            print cv2.contourArea(cnt,True)
+            # print cv2.contourArea(cnt,True)
   
             # for pnt in cnt:
               # print pnt
@@ -126,8 +130,8 @@ def select_contours(contours, hierarchy):
 
     print str(i) + " Total Contours Found"
     print str(j) + " Final Contours Found"
-    
-    print len(finalContours)
+    #
+    # print len(finalContours)
     
     return finalContours
 
@@ -154,10 +158,10 @@ def main():
     # inputImg = cv2.imread('laser1.jpg',0)
     
     # Simple image
-    # inputImg = cv2.imread('simpleLaser.jpg',0)
+    inputImg = cv2.imread('simpleLaser.jpg',0)
     
     # Real image (small)
-    inputImg = cv2.imread('smallRealBoard1.jpg',0)
+    # inputImg = cv2.imread('smallRealBoard1.jpg',0)
     
     # Real image (big)
     # inputImg = cv2.imread('realBoard1.jpg',0)
@@ -168,7 +172,7 @@ def main():
     '''
     
     # List of contours, and image of edges
-    contourList, drawnEdges = find_contours(inputImg)
+    contourList, _, drawnEdges = find_contours(inputImg)
         
     
     '''
