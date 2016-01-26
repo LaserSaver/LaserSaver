@@ -11,15 +11,21 @@ NOTES:
 '''
   
 def find_contours(img):
-    ''' Finds contours of image, and draws them
+    ''' Finds contours of given image
     
-    Utilizes Canny algorithm for edge detection
+    - Utilizes Canny algorithm for edge detection
     
-        -Threshold numbers are compared to calculated Gradient values
+        - Threshold numbers are compared to calculated Gradient values
             Max: Anything above definitely an edge
             Min: Anything below definitely NOT an edge
+            
+            - Alter threshold numbers to change accuracy
     
-    Each individual contour is a numpy array of (x,y) coordinates of boundary points of the object.
+    - Finds contours in image using cv2.findContours()
+        - Assumes a 2-level hierarchy (cv2.RETR_CCOMP)
+            - Every contour is the boundary between a hole and a feature
+        - Each individual contour is a numpy array of (x,y) coordinates of boundary points of the object
+            - cv2.CHAIN_APPROX_NONE stores every single point along contour
     
     Called from main()
         
@@ -27,39 +33,33 @@ def find_contours(img):
         img (jpg): Original image of board
     
     Returns: 
-        contours: list of found contours
-        drawing: image of drawn contours
+        finalContours: list of relevant contours
         edgeImage: the edge image the contour image was built off
     
     
     '''
     
     # Edge detection
-    # Current threshold numbers are fairly arbitrary, although they are fairly accurate
-    # We may want to alter these for more accuracy
     edgeImage = cv2.Canny(img,200,400)
     
-    # Use copy of edges1, or original gets destroyed
+    # Use copy of edges1 if we want to preserve orignal edges, as cv2.threshold() is destructive
     edgeCopy = edgeImage.copy()
     
     # Finding contours
-    # Want to use edgeCopy, as this is destructive
     ret,thresh = cv2.threshold(edgeCopy,127,255,0)
 
-    # CHAIN_APPROX_NONE will store ALL contour boundary pts --> More memory usage, but more accurate
-    # We don't really need the returned image at this point
-    # RETR_CCOMP assumes a 2-level hierarchy
+    # cv2.findContours returns an image (which we don't need), the list of identified contours, 
+    # and the contour hierarchy(how the contours relate to each other)
     _, initial_contours, hierarchy = cv2.findContours(thresh,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_NONE)
     
-    final_contours, drawing = select_contours(initial_contours, hierarchy, img)
-    
-    
+    # Selects only useful contours, and places them into a list
+    finalContours = select_contours(initial_contours, hierarchy)
 
 
-    return final_contours, drawing, edgeImage
+    return finalContours, edgeImage
     
     
-def select_contours(contours, hierarchy, img):
+def select_contours(contours, hierarchy):
     '''
     EXTRACTING CORRECT CONTOURS --- (ASSUMING THERE ARE CONTOURS OTHER THAN THOSE OF THE BOARD)
 
@@ -68,8 +68,7 @@ def select_contours(contours, hierarchy, img):
         - ALL REMAINING CONTOURS SHOULD REPRESENT FEATURES OF THE BOARD
     '''
     
-    # Where we will draw the contours
-    drawing = np.zeros(img.shape,np.uint8)
+   # NOT CURRENTLY IMPLEMENTED, AS WE HAVE NO EXAMPLE IMAGE
 
 
     '''
@@ -79,9 +78,21 @@ def select_contours(contours, hierarchy, img):
             - ONLY WANT THE ONE SET
 
     '''
-    i=0
-    j=0
+    # List of selected contours
+    finalContours = []
+    
+    # Where we will draw the contours -> Sanity check, not needed for final product
+    # drawing = np.zeros(img.shape,np.uint8)
+    
+    i=0 #Total contours found
+    j=0 #Final contours selected
     for cnt in contours:
+        
+        # There might be a contour surrounding the entire image, and we don't want that
+        # if cnt[0][0][0] == 1 and cnt[0][0][1] == 1:
+        #     print "THIS ONE IS SURROUNDING THE ENTIRE IMAGE"
+        #     cntToRem = i
+        #     break
 
         # If contour has no parent... Then it's one we want
         if hierarchy[0][i][3] == -1:
@@ -90,36 +101,35 @@ def select_contours(contours, hierarchy, img):
             print "NEW CONTOUR " + str(i)
             print hierarchy[0][i][3]
         
-            # Positive areas = features, Negative areas = holes
-            # Or, at least, they should be if there weren't double contours --> all areas we find are currently negative
-            # Contour w/ largest absolute value should be the edge of the entire board
+            '''
+            Positive contour areas = features, Negative areas = holes
+            Or, at least, they should be if there weren't double contours --> all areas we find are currently negative
+            Contour w/ largest absolute value should be the edge of the entire board
+            '''
             print cv2.contourArea(cnt,True)
-        
+  
             # for pnt in cnt:
-#                 print pnt
-    
+              # print pnt
+
             print "END CONTOUR " + str(i)
             print "--------------"
-
-            # There might be a contour surrounding the entire image, and we don't want that
-            # if cnt[0][0][0] == 1 and cnt[0][0][1] == 1:
-            #     print "THIS ONE IS SURROUNDING THE ENTIRE IMAGE"
-            #     cntToRem = i
-                #break
             
-
-            cv2.drawContours(drawing, contours, i, (255,255,255), 1)
-            cv2.imshow("Contour", drawing)
-            cv2.waitKey(0)
+            # cv2.drawContours(drawing, contours, i, (255,255,255), 1)
+            
+            # Add good contour to list
+            finalContours.append(cnt)
         
             j += 1
         
         i += 1
-    
+                
+
     print str(i) + " Total Contours Found"
     print str(j) + " Final Contours Found"
     
-    return contours, drawing
+    print len(finalContours)
+    
+    return finalContours
 
 def main():
     ''' Finds the contours from an image of the laser-cut board
@@ -157,14 +167,16 @@ def main():
     Find contours
     '''
     
-    # List of contours, and two images
-    contourList, drawnContours, drawnEdges = find_contours(inputImg)
-    
-    # Display various process images
+    # List of contours, and image of edges
+    contourList, drawnEdges = find_contours(inputImg)
+        
     
     '''
     Display images
     '''
+    drawing = np.zeros(inputImg.shape,np.uint8)
+    
+    drawnContours = cv2.drawContours(drawing, contourList, -1, (255,255,255), 1)
     
     cv2.imshow("Start", inputImg)
     # cv2.imshow("Edges", drawnEdges)
