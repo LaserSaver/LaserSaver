@@ -28,9 +28,8 @@ class jsonCreator:
         except TypeError:
             if self.logger is not None:
                 self.logger.debug("X and Y must be floats")
-            return -1
+            raise TypeError
         self.__json["scale"] = (x,y)
-        return 0
     def addContours(self, contour):
         '''
         This function will add the scale to the json object
@@ -43,7 +42,7 @@ class jsonCreator:
         except TypeError:
             if self.logger is not None:
                 self.logger.debug("Contour must be of type list")
-            return -1
+            raise TypeError
         if type(contour[0]) is list:
             for c in contour:
                 contourdict = [{"x":x, "y":y} for (x, y) in c]
@@ -51,7 +50,6 @@ class jsonCreator:
         else:
             contourdict = [{"x":x, "y":y} for (x, y) in contour]
             self.__json["contours"].append(contourdict)
-        return 0
     def getJson(self):
         '''
         Returns: A dict containing the added information.
