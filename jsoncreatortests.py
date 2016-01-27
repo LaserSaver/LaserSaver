@@ -13,14 +13,14 @@ class TestJsonCreator(unittest.TestCase):
         self.log = logger(loglevel = "info", cmdline = True).getLogger()
         self.jc = jsonCreator(logger = self.log)
         self.jc.addScale(2.,3.)
-        self.jc.addContours([5,3,4,6])
-        self.jc.addContours([[2,3], [2,6,8]])
+        self.jc.addContours([(5,3),(4,6)])
+        self.jc.addContours([[(2,3)], [(2,6),(4,8)]])
     def testContours(self):
         '''
         Verifies that the contours are set correctly
         '''
         output = self.jc.getJson()
-        self.assertItemsEqual(output.get("contours"), [[5,3,4,6], [2,3], [2,6,8]])
+        self.assertItemsEqual(output.get("contours"), [[{"x":5,"y":3},{"x":4,"y":6}], [{"x":2,"y":3}], [{"x":2,"y":6},{"x":4,"y":8}]])
     def testScale(self):
         '''
         Verifies that the scale is set correctly.
@@ -32,7 +32,7 @@ class TestJsonCreator(unittest.TestCase):
         Verifies the type checking is working correctly for the Contours
         '''
         self.assertEqual(self.jc.addContours(4), -1)
-        self.assertEqual(self.jc.addContours([5, 3]), 0)
+        self.assertEqual(self.jc.addContours([(5, 3), (4,8)]), 0)
     def testScaleTypeCheck(self):
         '''
         Verifies the type checking is working correctly for the scale.

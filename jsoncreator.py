@@ -45,9 +45,12 @@ class jsonCreator:
                 self.logger.debug("Contour must be of type list")
             return -1
         if type(contour[0]) is list:
-            self.__json["contours"] += contour
+            for c in contour:
+                contourdict = [{"x":x, "y":y} for (x, y) in c]
+                self.__json["contours"].append(contourdict)
         else:
-            self.__json["contours"].append(contour)
+            contourdict = [{"x":x, "y":y} for (x, y) in contour]
+            self.__json["contours"].append(contourdict)
         return 0
     def getJson(self):
         '''
