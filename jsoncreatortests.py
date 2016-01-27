@@ -31,14 +31,12 @@ class TestJsonCreator(unittest.TestCase):
         '''
         Verifies the type checking is working correctly for the Contours
         '''
-        self.assertEqual(self.jc.addContours(4), -1)
-        self.assertEqual(self.jc.addContours([(5, 3), (4,8)]), 0)
+        self.assertRaises(TypeError, self.jc.addContours(4))
     def testScaleTypeCheck(self):
         '''
         Verifies the type checking is working correctly for the scale.
         '''
-        self.assertEqual(self.jc.addScale(4, 2.), -1)
-        self.assertEqual(self.jc.addScale(4., 2.), 0)
+        self.assertRaises(TypeError, self.jc.addScale(4, 2.))
     def testReset(self):
         '''
         Verifies that the resetJson object is workign correclty
