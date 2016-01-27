@@ -3,7 +3,8 @@ import unittest
 from findContours import find_contours
 
 def test_no_image():
-    # assert find_contours("") == AttributeError
+    # find_contours("")
+    # assert_raises(AttributeError)
     pass
 
 def test_simple_image():
