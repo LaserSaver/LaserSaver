@@ -130,16 +130,17 @@ class ScaleDetection:
             imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
             # object will be black and background will be white
             # we need the opposite
-            imgray = (255-imgray)
+            # imgray = (255-imgray)
         except cv2.error as e:
             print("Could not create gray image, ensure the given "
                   "filename exists")
             return (None, None)
 
         # thresh is the binary image
-        #ret, thresh = cv2.threshold(imgray, 127, 255, cv2.THRESH_BINARY_INV)
-        ret, thresh = cv2.threshold(imgray, 127, 255, 0)
-        contours, hierarchy = cv2.findContours(thresh,
+        ret, thresh = cv2.threshold(imgray, 127, 255, cv2.THRESH_BINARY_INV)
+        #ret, thresh = cv2.threshold(imgray, 127, 255, 0)
+
+        _, contours, hierarchy = cv2.findContours(thresh,
                                                cv2.RETR_TREE,
                                                cv2.CHAIN_APPROX_SIMPLE)
 
@@ -150,7 +151,7 @@ class ScaleDetection:
         # red box
         # rectangle contains (x, y), (h, w), theta (angle of rotation)
         rectangle = cv2.minAreaRect(max_contour)
-        box = cv2.cv.BoxPoints(rectangle)
+        box = cv2.boxPoints(rectangle)
         box = np.int0(box)
 
         # green box
