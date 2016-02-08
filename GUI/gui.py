@@ -37,7 +37,7 @@ class App:
 	def getImg(self):
 		'''   Getting an image object from the video capture
 
-    	'''
+		'''
 		ret, frame = self.cam.read()
 		#Flipping horizontally 
 		frame = cv2.flip(frame, 1)
