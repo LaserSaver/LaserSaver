@@ -7,6 +7,12 @@ import os
 
 class App:
 	def __init__(self, master,cam):
+		''' Initializing GUI window
+
+		    adding widgets:
+		    title, video capture, exit button, and take picture button
+
+		'''
 		self.cam = cam
 		self.master = master
 
@@ -18,18 +24,20 @@ class App:
 		panel = Label(frame, width = 640, height= 480)
 		panel.pack(side=TOP)
 		self.panel = panel 
-		self.update_panel()
+		self.updatePanel()
 
 		#Exit button
 		self.exitButton = Button(frame, text="Exit", fg="red", command=master.destroy)
 		self.exitButton.pack(side=RIGHT)
 
 		#Take Picture button
-		self.pictureButton = Button(frame, text="Take picture", command=self.take_picture)
+		self.pictureButton = Button(frame, text="Take picture", command=self.takePicture)
 		self.pictureButton.pack(side=LEFT)
 
-	def get_img(self):
-		#Getting img from video capture
+	def getImg(self):
+		'''   Getting an image object from the video capture
+
+    	'''
 		ret, frame = self.cam.read()
 		#Flipping horizontally 
 		frame = cv2.flip(frame, 1)
@@ -38,8 +46,12 @@ class App:
 		cv2img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
 		return Image.fromarray(cv2img)
 
-	def take_picture(self):
-		#Saving picture to file
+	def takePicture(self):
+		''' Takes a picture from the current video capture
+		    saves the image under pictures directory as jpg 
+		    with the name current time in milliseconds since 
+		    epoch .jpg
+		'''
 		pictureName = str(int(time.time())) + '.jpg'
 		print("Picture taken: " + pictureName)
 
@@ -47,17 +59,19 @@ class App:
 		if not os.path.exists("pictures") :
     			os.makedirs("pictures")
 
-		self.get_img().save("pictures/" + pictureName)
+		self.getImg().save("pictures/" + pictureName)
 
 	
 		
-	def update_panel(self):
-		#Updating panel to current image from cam
-		imgtk = ImageTk.PhotoImage(self.get_img())
+	def updatePanel(self):
+		''' Updates the image in the video capture 
+            panel every 10 milliseconds
+        '''
+		imgtk = ImageTk.PhotoImage(self.getImg())
 		self.panel.configure(image = imgtk)
 		self.panel.image = imgtk
 		#Update capture every 10 milliseconds
-		self.master.after(10, self.update_panel)
+		self.master.after(10, self.updatePanel)
 
 
 
