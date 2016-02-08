@@ -65,8 +65,8 @@ class App:
 		
 	def updatePanel(self):
 		''' Updates the image in the video capture 
-            panel every 10 milliseconds
-        '''
+			panel every 10 milliseconds
+		'''
 		imgtk = ImageTk.PhotoImage(self.getImg())
 		self.panel.configure(image = imgtk)
 		self.panel.image = imgtk
