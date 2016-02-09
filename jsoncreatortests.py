@@ -12,6 +12,7 @@ class TestJsonCreator(unittest.TestCase):
         '''
         self.log = logger(loglevel = "info", cmdline = True).getLogger()
         self.jc = jsonCreator(logger = self.log)
+        self.jc.addUnits("cm")
         self.jc.addScale(2.,3.)
         self.jc.addContours([(5,3),(4,6)])
         self.jc.addContours([[(2,3)], [(2,6),(4,8)]])
@@ -27,16 +28,30 @@ class TestJsonCreator(unittest.TestCase):
         '''
         output = self.jc.getJson()
         self.assertEqual(output.get("scale"),(2,3))
+    def testUnits(self):
+        '''
+        Verifies that the units are set correctly.
+        '''
+        output = self.jc.getJson()
+        self.assertEqual(output.get("units"),"cm")
     def testContourTypeCheck(self):
         '''
         Verifies the type checking is working correctly for the Contours
         '''
-        self.assertRaises(TypeError, self.jc.addContours(4))
+        with self.assertRaises(TypeError):
+            self.jc.addContours(4)
     def testScaleTypeCheck(self):
         '''
         Verifies the type checking is working correctly for the scale.
         '''
-        self.assertRaises(TypeError, self.jc.addScale(4, 2.))
+        with self.assertRaises(TypeError):
+            self.jc.addScale(4, 2.)
+    def testUnitsTypeCheck(self):
+        '''
+        Verifies the type checking is working correctly for the units.
+        '''
+        with self.assertRaises(TypeError):
+            self.jc.addUnits(5)
     def testReset(self):
         '''
         Verifies that the resetJson object is workign correclty
