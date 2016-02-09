@@ -20,7 +20,6 @@ class jsonExporter():
         if logger is not None:
             self.logger = logger
         self.url = URL
-    def authorize():
+    def authorize(self, credentials):
 
     def post(self, json):
-        
