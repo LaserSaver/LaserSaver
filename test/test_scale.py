@@ -5,7 +5,7 @@ import json
 
 
 # all [x, y]
-SAVE_IMG = True
+SAVE_IMG = False
 TEST_CONF = 'test/test.conf'
 
 IMAGE = 'test/tester1.jpg'
