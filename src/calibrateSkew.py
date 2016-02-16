@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import glob
+import sys, os
 from copy import deepcopy
 
 
@@ -135,8 +136,9 @@ def correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist):
 
 
 def main():
+
     
-    testImgs = ['image_2.jpeg','image_3.jpeg', 'image2_7.jpeg','image3_10.jpeg', 'image3_30.jpeg', 'image4_1.jpeg', 'image5_1.jpeg', 'image6_1.jpeg','image7_1.jpeg','image8_1.jpeg','image9_1.jpeg','image10_1.jpeg','image11_1.jpeg','image12_1.jpeg','image13_1.jpeg','image14_1.jpeg','image15_1.jpeg','image16_1.jpeg','image17_1.jpeg','image18_1.jpeg','image19_1.jpeg','image20_1.jpeg','image21_1.jpeg']
+    testImgs = ['images/image_2.jpeg','images/image_3.jpeg', 'images/image2_7.jpeg','images/image3_10.jpeg', 'images/image3_30.jpeg', 'images/image4_1.jpeg', 'images/image5_1.jpeg', 'images/image6_1.jpeg','images/image7_1.jpeg','images/image8_1.jpeg','images/image9_1.jpeg','images/image10_1.jpeg','images/image11_1.jpeg','images/image12_1.jpeg','images/image13_1.jpeg','images/image14_1.jpeg','images/image15_1.jpeg','images/image16_1.jpeg','images/image17_1.jpeg','images/image18_1.jpeg','images/image19_1.jpeg','images/image20_1.jpeg','images/image21_1.jpeg']
 
     findCenters(testImgs)
     
