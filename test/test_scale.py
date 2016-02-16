@@ -6,6 +6,7 @@ import json
 
 # all [x, y]
 SAVE_IMG = True
+TEST_CONF = 'test/test.conf'
 
 IMAGE = 'test/tester1.jpg'
 IMG_DIM = [5, 5]
@@ -65,7 +66,7 @@ def testScales():
 
 
 def testSaveConfig():
-    cf = 'test.conf'
+    cf = TEST_CONF
     sd = ScaleDetection()
     sd.x_scale = SCALE[0]
     sd.y_scale = SCALE[1]
@@ -77,7 +78,7 @@ def testSaveConfig():
 
 
 def testLoadConfig():
-    cf = 'test.conf'
+    cf = TEST_CONF
     sd = ScaleDetection()
     sd.loadConfigFile(config_file=cf)
     assert sd.x_scale is not None
