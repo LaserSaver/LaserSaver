@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from Tkinter import *
+import ttk
 from PIL import Image, ImageTk
 import cv2
 import time
@@ -9,32 +10,63 @@ class App:
 	def __init__(self, master,cam):
 		''' Initializing GUI window
 
-		    adding widgets:
-		    title, video capture, exit button, and take picture button
+			adding widgets:
+			title, video capture, exit button, and take picture button
 
 		'''
 		self.cam = cam
 		self.master = master
 
-		#Main Frame
-		frame = LabelFrame(master,text='LazerCutter GUI')
-		frame.pack()
-		
-		#Video Capture frame
-		panel = Label(frame, width = 640, height= 480)
-		panel.pack(side=TOP)
-		self.panel = panel 
-		self.updatePanel()
+		self.max_panel_width = 600;
+		self.max_panel_height = 480;
 
-		#Exit button
-		self.exitButton = Button(frame, text="Exit", fg="red", command=master.destroy)
-		self.exitButton.pack(side=RIGHT)
+		#Main Frame
+		self.frame = LabelFrame(master,text='LazerCutter GUI')
+		self.frame.pack(side=LEFT)
+
+
+		self.numOfCams = 1
+		
+		self.panelList = []
+		
+		self.toppanel = None
+		self.bottompanel = None
+		#Video Capture frames
+		panel = Label( width = self.max_panel_width, height= self.max_panel_height)
+		self.panelList.append( panel)
+		self.updatePanel()
+		panel.pack(in_=self.frame)
+
+		panel2 = Label()
+		self.panelList.append(panel2)
+
+		panel3 = Label()
+		self.panelList.append(panel3)
+
+		panel4 = Label()
+		self.panelList.append(panel4)
+
 
 		#Take Picture button
-		self.pictureButton = Button(frame, text="Take picture", command=self.takePicture)
-		self.pictureButton.pack(side=LEFT)
+		pictureButton = Button(master, text="Take picture", command=self.takePicture)
+		pictureButton.pack(side=TOP)
 
-	def getImg(self):
+		#Cameras combo box
+		cameraLabel = Label(text="Cameras")
+		cameraLabel.pack(side=TOP)
+		self.box = ttk.Combobox(master, width=10)
+		self.box.bind("<<ComboboxSelected>>", self.numberOfCamChange)
+		self.box['values'] = ('1', '2', '3', '4')
+		self.box.current(0)
+		self.box.grid(column=0, row=0)
+		self.box.pack(side=TOP)
+
+		#Exit button
+		exitButton = Button(master, text="Exit", fg="red", command=master.destroy)
+		exitButton.pack(side=BOTTOM)
+
+
+	def getImg(self, width, height):
 		'''   Getting an image object from the video capture
 
 		'''
@@ -42,36 +74,92 @@ class App:
 		#Flipping horizontally 
 		frame = cv2.flip(frame, 1)
 		#Resizing to panel size
-		frame = cv2.resize(frame, (self.panel.winfo_width(),self.panel.winfo_height()))
+		frame = cv2.resize(frame, (width,height))
 		cv2img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
 		return Image.fromarray(cv2img)
 
 	def takePicture(self):
 		''' Takes a picture from the current video capture
-		    saves the image under pictures directory as jpg 
-		    with the name current time in milliseconds since 
-		    epoch .jpg
+			saves the image under pictures directory as jpg 
+			with the name current time in milliseconds since 
+			epoch .jpg
 		'''
 		pictureName = str(int(time.time())) + '.jpg'
 		print("Picture taken: " + pictureName)
 
 		#Checking if pictures folder and creating, if it does not
 		if not os.path.exists("pictures") :
-    			os.makedirs("pictures")
+				os.makedirs("pictures")
 
-		self.getImg().save("pictures/" + pictureName)
+		self.getImg(self.max_panel_width,self.max_panel_height ).save("pictures/" + pictureName)
 
 	
 		
 	def updatePanel(self):
 		''' Updates the image in the video capture 
-		    panel every 10 milliseconds
+			panel every 50 milliseconds
 		'''
-		imgtk = ImageTk.PhotoImage(self.getImg())
-		self.panel.configure(image = imgtk)
-		self.panel.image = imgtk
-		#Update capture every 10 milliseconds
-		self.master.after(10, self.updatePanel)
+		for i in range(0, self.numOfCams):
+			imgtk = ImageTk.PhotoImage(self.getImg(self.panelList[i].winfo_width(),self.panelList[i].winfo_height()))
+			self.panelList[i].configure(image = imgtk)
+			self.panelList[i].image = imgtk
+		#Update capture every 50 milliseconds
+		self.master.after(50, self.updatePanel)
+
+	def numberOfCamChange(self, event):
+		''' Changing number of cameras and updating the GUI to accomdate
+		'''
+		#Removing all panels
+		for i in range(0, 4):
+			self.panelList[i].pack_forget()
+
+		if self.toppanel is not None :
+			self.toppanel.pack_forget()
+
+		if self.bottompanel is not None :
+			self.bottompanel.pack_forget()
+
+		self.numOfCams = int(self.box.get()) 
+		if self.numOfCams == 1:
+			self.panelList[0].configure(width=self.max_panel_width, height=self.max_panel_height )
+			self.panelList[0].pack(in_=self.frame)
+		elif self.numOfCams == 2:
+			self.panelList[0].configure(width=self.max_panel_width/2, height=self.max_panel_height )
+			self.panelList[0].pack(in_=self.frame,side=LEFT)
+
+			self.panelList[1].configure(width=self.max_panel_width/2, height=self.max_panel_height )
+			self.panelList[1].pack(in_=self.frame, side=RIGHT)
+		elif self.numOfCams == 3:
+			self.toppanel = Label(self.frame)
+			self.toppanel.pack(side=TOP)
+
+			self.panelList[0].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
+			self.panelList[0].pack(in_=self.toppanel, side=LEFT)
+
+			self.panelList[1].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
+			self.panelList[1].pack(in_=self.toppanel,side=RIGHT)
+
+			self.panelList[2].configure(width=self.max_panel_width, height=self.max_panel_height/2 )
+			self.panelList[2].pack(in_=self.frame,side=BOTTOM)
+		elif self.numOfCams == 4:
+			self.toppanel = Label(self.frame)
+			self.toppanel.pack(side=TOP)
+
+			self.panelList[0].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
+			self.panelList[0].pack(in_=self.toppanel, side=LEFT)
+
+			self.panelList[1].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
+			self.panelList[1].pack(in_=self.toppanel,side=RIGHT)
+
+			self.bottompanel = Label(self.frame)
+			self.bottompanel.pack(side=BOTTOM)
+
+			self.panelList[2].configure(width=self.max_panel_width/2, height=(self.max_panel_height/2 ) )
+			self.panelList[2].pack(in_=self.bottompanel, side=LEFT)
+
+			self.panelList[3].configure(width=self.max_panel_width/2, height=(self.max_panel_height/2 ) )
+			self.panelList[3].pack(in_=self.bottompanel,side=RIGHT)
+
 
 
 
