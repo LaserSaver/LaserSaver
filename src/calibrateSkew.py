@@ -1,12 +1,28 @@
 import numpy as np
 import cv2
-import glob
-import sys, os
 from copy import deepcopy
+import logging
 
 
 
-def findCenters(calibImages):
+def findSkewCorrectionValues(calibImages):
+    '''
+    Takes in a series of images of a 11x4 circleGrid pattern, and calculates the matrix values
+    needed to correct for the inherent skew found in camera lenses
+    
+        - currently uses shortest path undistortion
+    
+    
+    Args: 
+        calibImages: list of circleGrid photos taken for calibration
+    
+    Returns:
+        dst: matrix of distortion coefficients
+        roi: used to crop image
+        error: The calculated error
+    '''
+    
+    logging.basicConfig(level=logging.DEBUG, format='%(message)s')
     
     
     # Shape of calibration pattern
@@ -28,30 +44,30 @@ def findCenters(calibImages):
     x = 0
 
     
-    print "Starting loop"
+    logging.debug("Starting loop")
     for fname in calibImages:
-        print "In loop"
-        print x
+        logging.debug("In loop")
+        logging.debug(x)
         img = cv2.imread(fname)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # Image must be greyscale for center finding to work.
     
-        print "Got images"
+        logging.debug("Got images")
         
         h, w = gray.shape[:2]
-        print h
-        print w
+        logging.debug(h)
+        logging.debug(w)
         
         # Find circle centers
         [ret, centers] = cv2.findCirclesGrid(gray, shape, centers, cv2.CALIB_CB_ASYMMETRIC_GRID + cv2.CALIB_CB_CLUSTERING)
     
     
-        print "Done finding centers"
-        print " "
+        logging.debug("Done finding centers")
+        logging.debug(" ")
         
         if ret == True:
         
             criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-            print "Found centers"
+            logging.debug("Found centers")
 
             centers2 = cv2.cornerSubPix(gray, centers, shape, (-1,-1), criteria)
             
@@ -62,7 +78,7 @@ def findCenters(calibImages):
             # print objpoints
 
             # Draw and display the corners
-            print "Drawing corners"
+            logging.debug("Drawing corners")
             
             img = cv2.drawChessboardCorners(img, shape, centers, ret)
             cv2.imshow('img', img)
@@ -71,9 +87,9 @@ def findCenters(calibImages):
             x = x+1
             
         else:
-            print "No corners here, bub."
-            print ret
-            print centers
+            logging.debug("No corners here, bub.")
+            logging.debug(ret)
+            logging.debug(centers)
             cv2.imshow('img', img)
             cv2.waitKey(0)
             
@@ -85,44 +101,50 @@ def findCenters(calibImages):
     ret2, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (w,h), None, None)
     
     
-    print "New image time..."
+    logging.debug("New image time...")
     
     img = cv2.imread('smallRealBoard1.jpg')
     newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
 
-    print "ROI is: "
-    print roi
+    logging.debug("ROI is: ")
+    logging.debug(roi)
 
 
-    print "Undistort time!"
+    logging.debug("Undistort time!")
 
 
-    # REMAPPING ------
+    # REMAPPING ------ Seems to cut off most of the images
     # mapx,mapy = cv2.initUndistortRectifyMap(mtx,dist,None,newcameramtx,(w,h),5)
     # dst = cv2.remap(img,mapx,mapy,cv2.INTER_LINEAR)
+    # x,y,w,h = roi
+    # dst = dst[y:y+h, x:x+w]
 
 
     # UNDISTORT ------
     dst = cv2.undistort(img, mtx, dist, None, newcameramtx)
 
 
-    print "Done undistorting..."
+    logging.debug("Done undistorting...")
 
-    print "DST is: "
-    print dst
+    logging.debug("DST is: ")
+    logging.debug(dst)
 
 
-    print "Writing new image"
+    logging.debug("Writing new image")
+    
+
     cv2.imwrite('calibresult.png',dst)
     
     error = correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist)
-    # print error
+    print error
     
-    mean_error = error/len(objpoints)
-    print mean_error
+    return dst, roi, error
     
     
 def correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist):
+    ''' Calculates error of skew correction
+            - Should be as close to 0 as possible
+    '''
     
     tot_error = 0
     for j in xrange(len(objpoints)):
@@ -137,10 +159,12 @@ def correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist):
 
 def main():
 
+    logging.basicConfig(level=logging.DEBUG, format='%(message)s')
     
     testImgs = ['images/image_2.jpeg','images/image_3.jpeg', 'images/image2_7.jpeg','images/image3_10.jpeg', 'images/image3_30.jpeg', 'images/image4_1.jpeg', 'images/image5_1.jpeg', 'images/image6_1.jpeg','images/image7_1.jpeg','images/image8_1.jpeg','images/image9_1.jpeg','images/image10_1.jpeg','images/image11_1.jpeg','images/image12_1.jpeg','images/image13_1.jpeg','images/image14_1.jpeg','images/image15_1.jpeg','images/image16_1.jpeg','images/image17_1.jpeg','images/image18_1.jpeg','images/image19_1.jpeg','images/image20_1.jpeg','images/image21_1.jpeg']
 
-    findCenters(testImgs)
+
+    _, _, _ = findSkewCorrectionValues(testImgs)
     
     print "Done"
     
