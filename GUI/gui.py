@@ -7,18 +7,23 @@ import time
 import os
 
 class App:
-	def __init__(self, master,cam):
+	def __init__(self, master):
 		''' Initializing GUI window
 
 			adding widgets:
 			title, video capture, exit button, and take picture button
 
 		'''
-		self.cam = cam
 		self.master = master
 
-		self.max_panel_width = 600;
-		self.max_panel_height = 480;
+		self.camList = []
+		self.camList.append(cv2.VideoCapture(0))
+		self.camList.append(cv2.VideoCapture(1))
+		self.camList.append(cv2.VideoCapture(2))
+		self.camList.append(cv2.VideoCapture(3))
+
+		self.max_panel_width = 600
+		self.max_panel_height = 480
 
 		#Main Frame
 		self.frame = LabelFrame(master,text='LazerCutter GUI')
@@ -66,11 +71,11 @@ class App:
 		exitButton.pack(side=BOTTOM)
 
 
-	def getImg(self, width, height):
+	def getImg(self, width, height, cam):
 		'''   Getting an image object from the video capture
 
 		'''
-		ret, frame = self.cam.read()
+		ret, frame = cam.read()
 		#Flipping horizontally 
 		frame = cv2.flip(frame, 1)
 		#Resizing to panel size
@@ -84,14 +89,16 @@ class App:
 			with the name current time in milliseconds since 
 			epoch .jpg
 		'''
-		pictureName = str(int(time.time())) + '.jpg'
-		print("Picture taken: " + pictureName)
+		pictureName = str(int(time.time()))
 
 		#Checking if pictures folder and creating, if it does not
 		if not os.path.exists("pictures") :
 				os.makedirs("pictures")
 
-		self.getImg(self.max_panel_width,self.max_panel_height ).save("pictures/" + pictureName)
+		for i in range(0, self.numOfCams):
+			fullName = pictureName+ '_cam'+str(i)+  '.jpg'
+			self.getImg(self.max_panel_width,self.max_panel_height, self.camList[i] ).save("pictures/" + fullName)
+			print("Picture taken: " + fullName)
 
 	
 		
@@ -100,7 +107,7 @@ class App:
 			panel every 50 milliseconds
 		'''
 		for i in range(0, self.numOfCams):
-			imgtk = ImageTk.PhotoImage(self.getImg(self.panelList[i].winfo_width(),self.panelList[i].winfo_height()))
+			imgtk = ImageTk.PhotoImage(self.getImg(self.panelList[i].winfo_width(),self.panelList[i].winfo_height(),self.camList[i]))
 			self.panelList[i].configure(image = imgtk)
 			self.panelList[i].image = imgtk
 		#Update capture every 50 milliseconds
@@ -164,7 +171,5 @@ class App:
 
 
 root = Tk()
-cam = cv2.VideoCapture(0)
-app = App(root,cam)
+app = App(root)
 root.mainloop()
-del cam
