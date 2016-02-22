@@ -8,16 +8,12 @@ class CalibrateSkew:
     Skew Correction
     '''
     
-    ''' UNMUTABLE CLASS VALUES '''
-    # Shape of calibration pattern
-    # Should always use an 11x4 pattern
-    shape = (4, 11)
-    
-    h, w = gray.shape[:2]
-    
     ''' CLASS METHODS '''
+    shape = (4, 11)
+    h, w = 478, 640
     
-    def createSkewMatrix(self, calibImages):
+    @staticmethod
+    def createSkewMatrix(calibImages):
         '''
         Finds matrix needed to deskew photo based on a list of images
             - also finds approximate error of matrix
@@ -35,12 +31,13 @@ class CalibrateSkew:
         
         objpoints, imgpoints = CalibrateSkew.findSkewPoints(calibImages)
         
-        _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (w,h), None, None)
+        _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (CalibrateSkew.w,CalibrateSkew.h), None, None)
         
         logging.debug("New image time...")
     
-        # img = cv2.imread('smallRealBoard1.jpg')
-        newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
+        img = cv2.imread(calibImages[0])
+        
+        newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (CalibrateSkew.w,CalibrateSkew.h), 1, (CalibrateSkew.w,CalibrateSkew.h))
 
         logging.debug("ROI is: ")
         logging.debug(roi)
@@ -68,8 +65,8 @@ class CalibrateSkew:
     
         return dst, roi, error
 
-       
-    def findSkewPoints(self, calibImages):
+    @staticmethod   
+    def findSkewPoints(calibImages):
         '''
         Takes in a series of images of a 11x4 circleGrid pattern, 
         locates their major center points,
@@ -85,13 +82,13 @@ class CalibrateSkew:
         '''
     
         logging.basicConfig(level=logging.DEBUG, format='%(message)s')
-    
+        
     
         # Initialize arrays
         centers = np.zeros((6*7), np.float32)
     
-        pattern_points = np.zeros( (np.prod(shape), 3), np.float32)
-        pattern_points[:,:2] = np.indices(shape).T.reshape(-1, 2)
+        pattern_points = np.zeros( (np.prod(CalibrateSkew.shape), 3), np.float32)
+        pattern_points[:,:2] = np.indices(CalibrateSkew.shape).T.reshape(-1, 2)
 
     
         objpoints = [] # 3d point in real world space
@@ -107,12 +104,14 @@ class CalibrateSkew:
             logging.debug(x)
             img = cv2.imread(fname)
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # Image must be greyscale for center finding to work.
+            
+            # h, w = gray.shape[:2]
     
             logging.debug("Got images")
 
         
             # Find circle centers
-            [ret, centers] = cv2.findCirclesGrid(gray, shape, centers, cv2.CALIB_CB_ASYMMETRIC_GRID + cv2.CALIB_CB_CLUSTERING)
+            [ret, centers] = cv2.findCirclesGrid(gray, CalibrateSkew.shape, centers, cv2.CALIB_CB_ASYMMETRIC_GRID + cv2.CALIB_CB_CLUSTERING)
     
     
             logging.debug("Done finding centers")
@@ -123,7 +122,7 @@ class CalibrateSkew:
                 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
                 logging.debug("Found centers")
 
-                centers2 = cv2.cornerSubPix(gray, centers, shape, (-1,-1), criteria)
+                centers2 = cv2.cornerSubPix(gray, centers, CalibrateSkew.shape, (-1,-1), criteria)
             
                 imgpoints.append(deepcopy(centers2.reshape(-1,2)))
                 objpoints.append(pattern_points)
@@ -134,7 +133,7 @@ class CalibrateSkew:
                 # Draw and display the corners
                 logging.debug("Drawing corners")
             
-                img = cv2.drawChessboardCorners(img, shape, centers, ret)
+                img = cv2.drawChessboardCorners(img, CalibrateSkew.shape, centers, ret)
                 cv2.imshow('img', img)
                 cv2.waitKey(0)
             
@@ -171,20 +170,3 @@ class CalibrateSkew:
     
         return tot_error/len(objpoints)    
 
-
-
-def main():
-
-    logging.basicConfig(level=logging.DEBUG, format='%(message)s')
-    
-    testImgs = ['images/image_2.jpeg','images/image_3.jpeg', 'images/image2_7.jpeg','images/image3_10.jpeg', 'images/image3_30.jpeg', 'images/image4_1.jpeg', 'images/image5_1.jpeg', 'images/image6_1.jpeg','images/image7_1.jpeg','images/image8_1.jpeg','images/image9_1.jpeg','images/image10_1.jpeg','images/image11_1.jpeg','images/image12_1.jpeg','images/image13_1.jpeg','images/image14_1.jpeg','images/image15_1.jpeg','images/image16_1.jpeg','images/image17_1.jpeg','images/image18_1.jpeg','images/image19_1.jpeg','images/image20_1.jpeg','images/image21_1.jpeg']
-
-
-    _, _, _ = CalibrateSkew.findSkewCorrectionValues(testImgs)
-    
-    print "Done"
-    
-    
-    
-if __name__ == "__main__":
-    main()
