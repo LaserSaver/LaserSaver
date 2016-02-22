@@ -7,29 +7,84 @@ class CalibrateSkew:
     ''' 
     Skew Correction
     '''
-    @staticmethod
-    def findSkewCorrectionValues(calibImages):
+    
+    ''' UNMUTABLE CLASS VALUES '''
+    # Shape of calibration pattern
+    # Should always use an 11x4 pattern
+    shape = (4, 11)
+    
+    h, w = gray.shape[:2]
+    
+    ''' CLASS METHODS '''
+    
+    def createSkewMatrix(self, calibImages):
         '''
-        Takes in a series of images of a 11x4 circleGrid pattern, and calculates the matrix values
-        needed to correct for the inherent skew found in camera lenses
+        Finds matrix needed to deskew photo based on a list of images
+            - also finds approximate error of matrix
+        
+        Args:
+            calibImages: list of circleGrid photos taken for calibration
+            
+        Returns:
+            dst: matrix which will correct skew when applied to an image
+            roi:
+            error: calculated error value for skew matrix
+        '''
+        
+        logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+        
+        objpoints, imgpoints = CalibrateSkew.findSkewPoints(calibImages)
+        
+        _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (w,h), None, None)
+        
+        logging.debug("New image time...")
     
-        - currently uses shortest path undistortion
+        # img = cv2.imread('smallRealBoard1.jpg')
+        newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
+
+        logging.debug("ROI is: ")
+        logging.debug(roi)
+
+
+        logging.debug("Undistorting...")
+
+        # UNDISTORT ------
+        dst = cv2.undistort(img, mtx, dist, None, newcameramtx)
+
+
+        logging.debug("Done undistorting...")
+
+        logging.debug("DST is: ")
+        logging.debug(dst)
+
+
+        logging.debug("Writing new image")
     
+
+        cv2.imwrite('calibresult.png',dst)
+    
+        error = CalibrateSkew.correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist)
+        print error
+    
+        return dst, roi, error
+
+       
+    def findSkewPoints(self, calibImages):
+        '''
+        Takes in a series of images of a 11x4 circleGrid pattern, 
+        locates their major center points,
+        and places them in two matrices
     
         Args: 
-        calibImages: list of circleGrid photos taken for calibration
+            calibImages: list of circleGrid photos taken for calibration
     
         Returns:
-        dst: matrix of distortion coefficients
-        roi: used to crop image
-        error: The calculated error
+            objpoints: 3D points in real world space
+            imgpoints: 2D points in image plane
+
         '''
     
         logging.basicConfig(level=logging.DEBUG, format='%(message)s')
-    
-    
-        # Shape of calibration pattern
-        shape = (4, 11)
     
     
         # Initialize arrays
@@ -41,8 +96,7 @@ class CalibrateSkew:
     
         objpoints = [] # 3d point in real world space
         imgpoints = [] # 2d points in image plane
-    
-    
+
 
         x = 0
 
@@ -55,10 +109,7 @@ class CalibrateSkew:
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # Image must be greyscale for center finding to work.
     
             logging.debug("Got images")
-        
-            h, w = gray.shape[:2]
-            logging.debug(h)
-            logging.debug(w)
+
         
             # Find circle centers
             [ret, centers] = cv2.findCirclesGrid(gray, shape, centers, cv2.CALIB_CB_ASYMMETRIC_GRID + cv2.CALIB_CB_CLUSTERING)
@@ -99,49 +150,11 @@ class CalibrateSkew:
                 x = x+1
 
         cv2.destroyAllWindows()
-    
-    
-        ret2, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (w,h), None, None)
-    
-    
-        logging.debug("New image time...")
-    
-        img = cv2.imread('smallRealBoard1.jpg')
-        newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
-
-        logging.debug("ROI is: ")
-        logging.debug(roi)
-
-
-        logging.debug("Undistort time!")
-
-
-        # REMAPPING ------ Seems to cut off most of the images
-        # mapx,mapy = cv2.initUndistortRectifyMap(mtx,dist,None,newcameramtx,(w,h),5)
-        # dst = cv2.remap(img,mapx,mapy,cv2.INTER_LINEAR)
-        # x,y,w,h = roi
-        # dst = dst[y:y+h, x:x+w]
-
-
-        # UNDISTORT ------
-        dst = cv2.undistort(img, mtx, dist, None, newcameramtx)
-
-
-        logging.debug("Done undistorting...")
-
-        logging.debug("DST is: ")
-        logging.debug(dst)
-
-
-        logging.debug("Writing new image")
-    
-
-        cv2.imwrite('calibresult.png',dst)
-    
-        error = CalibrateSkew.correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist)
-        print error
-    
-        return dst, roi, error
+        
+        
+        return objpoints, imgpoints
+        
+        
     
     @staticmethod
     def correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist):
