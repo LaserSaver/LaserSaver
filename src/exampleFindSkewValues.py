@@ -14,6 +14,11 @@ def main():
     print "Done"
     print "Calculated error = " + str(error)
     
+    img1 = cv2.imread('images/image_2.jpeg')
+    img2 = cv2.imread('calibresult.png')
+    cv2.imshow("ORIGINAL", img1)
+    cv2.imshow("CORRECTED", img2)
+    cv2.waitKey(0)
     
     
 if __name__ == "__main__":
