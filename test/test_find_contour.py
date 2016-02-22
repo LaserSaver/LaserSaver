@@ -6,12 +6,12 @@ def test_no_image():
     assert_raises(AttributeError, FindContours.find_all_contours, "")
 
 def test_simple_image():
-    cnts, hierarchy, _ = FindContours.find_all_contours('simpleLaser.jpg')
+    cnts, hierarchy, _ = FindContours.find_all_contours('test/simpleLaser.jpg')
     finalCnts = FindContours.select_contours(cnts, hierarchy)
     assert len(finalCnts) == 7
     
 def test_small_real_image():
-    cnts, hierarchy, _ = FindContours.find_all_contours('smallRealBoard1.jpg')
+    cnts, hierarchy, _ = FindContours.find_all_contours('test/smallRealBoard1.jpg')
     finalCnts = FindContours.select_contours(cnts, hierarchy)
     assert len(finalCnts) == 11
     
