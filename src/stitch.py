@@ -28,8 +28,8 @@ class Stitcher:
             Args:
                 self
                 images: two images to be stiched (required)
-                ratio=0.75: used for David Lowe’s ratio test when matching features (Optional)
-                reprojThresh=4.0: maximum pixel “wiggle room” allowed by the RANSAC algorithm (Optional)
+                ratio=0.75: used for David Lowe's ratio test when matching features (Optional)
+                reprojThresh=4.0: maximum pixel "wiggle room" allowed by the RANSAC algorithm (Optional)
                 showMatches=False: used to show keypoints or not (Optional)
 
             Returns:
@@ -75,7 +75,7 @@ class Stitcher:
             - Convert to grayscale
 
             - Use the Difference of Gaussian (DoG) keypoint detector and the SIFT feature extractor.
-            
+
             - Convert the keypoints from KeyPoint objects to NumPy
 
             Called from stitch()
@@ -122,7 +122,7 @@ class Stitcher:
 
             - Performs k-NN matching between the two feature vector sets using k=2 (indicating the top two matches for each feature vector are returned).
 
-            - Apply Lowe’s ratio test, which is used to determine high-quality feature matches
+            - Apply Lowe's ratio test, which is used to determine high-quality feature matches
 
             - Compute the homography between the two sets of keypoints
 
@@ -133,7 +133,7 @@ class Stitcher:
                 kpsB: keypoints from image b
                 featuresA: features from image a
                 featuresB: features from image b
-                ratio: used from Lowe’s ratio test
+                ratio: used from Lowe's ratio test
                 reprojThresh: RANSAC re-projection threshold
 
             Returns:
