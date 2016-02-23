@@ -29,6 +29,9 @@ class DetermineSkew:
         
         logging.basicConfig(level=logging.DEBUG, format='%(message)s')
         
+        if calibImages == []:
+            raise AttributeError
+        
         objpoints, imgpoints = DetermineSkew.findSkewPoints(calibImages)
         
         _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (DetermineSkew.w,DetermineSkew.h), None, None)
@@ -83,6 +86,10 @@ class DetermineSkew:
     
         logging.basicConfig(level=logging.DEBUG, format='%(message)s')
         
+        
+        if calibImages == []:
+            raise AttributeError
+        
     
         # Initialize arrays
         centers = np.zeros((6*7), np.float32)
@@ -126,9 +133,6 @@ class DetermineSkew:
             
                 imgpoints.append(deepcopy(centers2.reshape(-1,2)))
                 objpoints.append(pattern_points)
-            
-                # print imgpoints
-                # print objpoints
 
                 # Draw and display the corners
                 logging.debug("Drawing corners")
