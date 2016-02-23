@@ -3,7 +3,7 @@ import cv2
 from copy import deepcopy
 import logging
 
-class CalibrateSkew:
+class DetermineSkew:
     ''' 
     Skew Correction
     '''
@@ -29,15 +29,15 @@ class CalibrateSkew:
         
         logging.basicConfig(level=logging.DEBUG, format='%(message)s')
         
-        objpoints, imgpoints = CalibrateSkew.findSkewPoints(calibImages)
+        objpoints, imgpoints = DetermineSkew.findSkewPoints(calibImages)
         
-        _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (CalibrateSkew.w,CalibrateSkew.h), None, None)
+        _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (DetermineSkew.w,DetermineSkew.h), None, None)
         
         logging.debug("New image time...")
     
         img = cv2.imread(calibImages[0])
         
-        newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (CalibrateSkew.w,CalibrateSkew.h), 1, (CalibrateSkew.w,CalibrateSkew.h))
+        newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (DetermineSkew.w,DetermineSkew.h), 1, (DetermineSkew.w,DetermineSkew.h))
 
         logging.debug("ROI is: ")
         logging.debug(roi)
@@ -60,7 +60,7 @@ class CalibrateSkew:
 
         cv2.imwrite('calibresult.png',dst)
     
-        error = CalibrateSkew.correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist)
+        error = DetermineSkew.correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist)
         print error
     
         return dst, roi, error
@@ -87,8 +87,8 @@ class CalibrateSkew:
         # Initialize arrays
         centers = np.zeros((6*7), np.float32)
     
-        pattern_points = np.zeros( (np.prod(CalibrateSkew.shape), 3), np.float32)
-        pattern_points[:,:2] = np.indices(CalibrateSkew.shape).T.reshape(-1, 2)
+        pattern_points = np.zeros( (np.prod(DetermineSkew.shape), 3), np.float32)
+        pattern_points[:,:2] = np.indices(DetermineSkew.shape).T.reshape(-1, 2)
 
     
         objpoints = [] # 3d point in real world space
@@ -111,7 +111,7 @@ class CalibrateSkew:
 
         
             # Find circle centers
-            [ret, centers] = cv2.findCirclesGrid(gray, CalibrateSkew.shape, centers, cv2.CALIB_CB_ASYMMETRIC_GRID + cv2.CALIB_CB_CLUSTERING)
+            [ret, centers] = cv2.findCirclesGrid(gray, DetermineSkew.shape, centers, cv2.CALIB_CB_ASYMMETRIC_GRID + cv2.CALIB_CB_CLUSTERING)
     
     
             logging.debug("Done finding centers")
@@ -122,7 +122,7 @@ class CalibrateSkew:
                 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
                 logging.debug("Found centers")
 
-                centers2 = cv2.cornerSubPix(gray, centers, CalibrateSkew.shape, (-1,-1), criteria)
+                centers2 = cv2.cornerSubPix(gray, centers, DetermineSkew.shape, (-1,-1), criteria)
             
                 imgpoints.append(deepcopy(centers2.reshape(-1,2)))
                 objpoints.append(pattern_points)
@@ -133,7 +133,7 @@ class CalibrateSkew:
                 # Draw and display the corners
                 logging.debug("Drawing corners")
             
-                img = cv2.drawChessboardCorners(img, CalibrateSkew.shape, centers, ret)
+                img = cv2.drawChessboardCorners(img, DetermineSkew.shape, centers, ret)
                 cv2.imshow('img', img)
                 cv2.waitKey(0)
             
