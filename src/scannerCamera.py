@@ -66,6 +66,8 @@ class ScannerCamera:
             
             - Selects a test_img from list of calibration photos
                 - or has user take a specific photo for this use
+                    - first image taken is the test photo 
+                        --> displayed corrected to user, but won't be used in calibration
             
             - Applys dst/roi to test_img
             

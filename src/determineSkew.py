@@ -106,7 +106,7 @@ class DetermineSkew:
 
     
         logging.debug("Starting loop")
-        for fname in calibImages:
+        for fname in calibImages[1:]:
             logging.debug("In loop")
             logging.debug(x)
             img = cv2.imread(fname)
