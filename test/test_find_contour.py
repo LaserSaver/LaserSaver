@@ -17,7 +17,6 @@ def test_small_real_image():
     
 def test_large_real_image():
     pass
-    
+
 def test_complicated_image():
     pass
-    
