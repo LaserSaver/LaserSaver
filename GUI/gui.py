@@ -26,7 +26,7 @@ class App:
 		self.max_panel_height = 480
 
 		#Main Frame
-		self.frame = LabelFrame(master,text='LazerCutter GUI')
+		self.frame = LabelFrame(master,text='Video Capture')
 		self.frame.pack(side=LEFT)
 
 
@@ -36,6 +36,7 @@ class App:
 		
 		self.toppanel = None
 		self.bottompanel = None
+		
 		#Video Capture frames
 		panel = Label( width = self.max_panel_width, height= self.max_panel_height)
 		self.panelList.append( panel)
@@ -51,24 +52,69 @@ class App:
 		panel4 = Label()
 		self.panelList.append(panel4)
 
+		#Calibration tools
+		calibrationLabel = Label(master, text="Calibration")
+		calibrationLabel.pack(side=TOP)
 
-		#Take Picture button
-		pictureButton = Button(master, text="Take picture", command=self.takePicture)
-		pictureButton.pack(side=TOP)
 
 		#Cameras combo box
-		cameraLabel = Label(text="Cameras")
-		cameraLabel.pack(side=TOP)
-		self.box = ttk.Combobox(master, width=10)
-		self.box.bind("<<ComboboxSelected>>", self.numberOfCamChange)
-		self.box['values'] = ('1', '2', '3', '4')
-		self.box.current(0)
-		self.box.grid(column=0, row=0)
-		self.box.pack(side=TOP)
+		camerasPanel = Label(master)
+		camerasLabel = Label(camerasPanel, text="Cameras:")
+		camerasLabel.pack(side=LEFT)
+	
+		self.camerasBox = ttk.Combobox(camerasPanel, width=10, state="readonly")
+		self.camerasBox.bind("<<ComboboxSelected>>", self.numberOfCamChange)
+		self.camerasBox['values'] = ('1', '2', '3', '4')
+		self.camerasBox.current(0)
+		self.camerasBox.grid(column=0, row=0)
+		self.camerasBox.pack(side=RIGHT)
+		camerasPanel.pack(side=TOP)
+
+		#Width
+		vcmd = (master.register(self.validate),'%P', '%S')
+		widthPanel = Label(master)
+		widthLabel = Label(widthPanel, text="Width:")
+		widthLabel.pack(side=LEFT)
+
+		self.widthInput = Entry(widthPanel, width=11, validate = 'key', validatecommand = vcmd)
+		self.widthInput.pack(side=RIGHT)
+		widthPanel.pack(side=TOP)
+
+
+		#Height
+		heightPanel = Label(master)
+		heightLabel = Label(heightPanel, text="Height:")
+		heightLabel.pack(side=LEFT)
+
+		self.heightInput = Entry(heightPanel, width=11, validate = 'key', validatecommand = vcmd)
+		self.heightInput.pack(side=RIGHT)
+		heightPanel.pack(side=TOP)
+
+		#Units 
+		unitsPanel = Label( master)
+		calibrationLabel = Label(unitsPanel, text="Units:")
+		calibrationLabel.pack(side=LEFT)
+
+		self.unitsBox = ttk.Combobox(unitsPanel, width=10, state="readonly")
+		self.unitsBox['values'] = ('centimeters', 'inches')
+		self.unitsBox.current(0)
+		self.unitsBox.grid(column=0, row=0)
+		self.unitsBox.pack(side=RIGHT)
+		unitsPanel.pack(side=TOP)
+
+
 
 		#Exit button
 		exitButton = Button(master, text="Exit", fg="red", command=master.destroy)
 		exitButton.pack(side=BOTTOM)
+
+		#Take Picture button
+		pictureButton = Button(master, text="Take picture", command=self.takePicture)
+		pictureButton.pack(side=BOTTOM)
+
+		#Export button
+		exportButton = Button(master, text="Export", command=self.export)
+		exportButton.pack(side=BOTTOM)
 
 
 	def getImg(self, width, height, cam):
@@ -113,6 +159,26 @@ class App:
 		#Update capture every 50 milliseconds
 		self.master.after(50, self.updatePanel)
 
+	def export(self):
+		'''Will export to json data, yet to be implemented
+		'''
+
+	
+	def validate(self,value,inputtext):
+		'''Will only allow number to be inputed for entry widget used for width and height calibration
+		'''
+		if value is '':
+		   return True
+		if inputtext in '0123456789.':
+			try:
+				float(value)
+				return True
+			except ValueError:
+				return False
+		else:
+			return False
+
+
 	def numberOfCamChange(self, event):
 		''' Changing number of cameras and updating the GUI to accomdate
 		'''
@@ -126,7 +192,7 @@ class App:
 		if self.bottompanel is not None :
 			self.bottompanel.pack_forget()
 
-		self.numOfCams = int(self.box.get()) 
+		self.numOfCams = int(self.camerasBox.get()) 
 		if self.numOfCams == 1:
 			self.panelList[0].configure(width=self.max_panel_width, height=self.max_panel_height )
 			self.panelList[0].pack(in_=self.frame)
@@ -171,5 +237,6 @@ class App:
 
 
 root = Tk()
+root.wm_title("LazerCutter GUI")
 app = App(root)
 root.mainloop()
