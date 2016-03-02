@@ -4,8 +4,10 @@ import stitch
 import gui
 import determineSkew
 import scannerCamera
+import jsoncreator
 
 scaleDetect = ScaleDetection()
+jsonData = jsonCreator()
 #detSkew = DetermineSkew()
 cam1Settings = ScannerCamera() #not implemented yet?
 cam2Settings = ScannerCamera()
@@ -20,11 +22,14 @@ def scale_calibration_data():
     #load other calibration data as well
     return success
 
+def get_scale(thickness):
+    return scaleDetect.getScale()
+
 def skew_calibration(calibImages):
     dst, roi, error = DetermineSkew.createSkewMatrix(calibImages)
     return dst
 
-def skew_correction(image):
+def skew_correction(image, dst):
     a = 0
 
 def stitch_images(image1, image2):
@@ -37,8 +42,12 @@ def find_contours(image):
     finalContours = findContours.select_contours(contours, hierarchy)
     return finalContours,edgeImage
 
-def export_json(contours):
-    a = 0
+def export_json(contours, xscale, yscale, units):
+    jsonData.addUnits(units)
+    jsonData.addContours(contours)
+    jsonData.addScale(xscale, yscale)
+    return jsonData.exportJson()
+
 
 def gui_start_screen():
     a = 0
@@ -78,8 +87,6 @@ def main():
 
     image1, image2 = gui_take_pictures_screen()
 
-
-
     image1 = skew_correction(image1, dst1)
     image2 = skew_correction(image2, dst2)
 
@@ -89,9 +96,12 @@ def main():
     #what should happen if they don't like the image? Do we go back to start?
     thickness = gui_enter_thickness_screen(edgeImage)
 
-    #scale calculation?
+    #would scale just be multiplied by (height - thickness)/height?
+    xscale, yscale = get_scale(thickness)
 
-    export_json(contours)
+    units = gui_export_screen()
+
+    export_json(contours, xscale, yscale, units) #do I need to do something with return value?
 
 
 
