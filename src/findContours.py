@@ -46,7 +46,7 @@ class FindContours:
     
     
         '''
-    
+        
         img = cv2.imread(img,0)
     
         # Edge detection

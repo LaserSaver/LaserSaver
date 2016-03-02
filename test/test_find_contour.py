@@ -1,23 +1,22 @@
 import unittest
-
-from findContours import find_contours
+from nose.tools import assert_raises
+from findContours import FindContours
 
 def test_no_image():
-    # find_contours("")
-    # assert_raises(AttributeError)
-    pass
+    assert_raises(AttributeError, FindContours.find_all_contours, "")
 
 def test_simple_image():
-    _, numContours, _ = find_contours('simpleLaser.jpg')
-    assert numContours == 7
+    cnts, hierarchy, _ = FindContours.find_all_contours('test/simpleLaser.jpg')
+    finalCnts = FindContours.select_contours(cnts, hierarchy)
+    assert len(finalCnts) == 7
     
 def test_small_real_image():
-    _, numContours, _ = find_contours('smallRealBoard1.jpg')
-    assert numContours == 11
+    cnts, hierarchy, _ = FindContours.find_all_contours('test/smallRealBoard1.jpg')
+    finalCnts = FindContours.select_contours(cnts, hierarchy)
+    assert len(finalCnts) == 11
     
 def test_large_real_image():
     pass
-    
+
 def test_complicated_image():
     pass
-    
