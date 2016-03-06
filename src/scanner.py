@@ -9,8 +9,6 @@ import jsoncreator
 scaleDetect = ScaleDetection()
 jsonData = jsonCreator()
 #detSkew = DetermineSkew()
-cam1Settings = ScannerCamera() #not implemented yet?
-cam2Settings = ScannerCamera()
 
 def scale_calibration(image, objx, objy):
     success = scaleDetect.calibrate(image, objx, objy)
@@ -27,10 +25,12 @@ def get_scale(thickness):
 
 def skew_calibration(calibImages):
     dst, roi, error = DetermineSkew.createSkewMatrix(calibImages)
-    return dst
+    return dst, roi
 
-def skew_correction(image, dst):
-    a = 0
+def skew_correction(image, dst, roi, camSettings):
+    camSettings.skew_dst = dst
+    camSettings.skew_roi = roi
+    camSettings.correctSkew(image)
 
 def stitch_images(image1, image2):
     #stitcher = Stitcher()
@@ -82,13 +82,16 @@ def main():
 
     #ask user if they want to calibrate if skew calibration data doesn't exist
     calibImages1, calibImages2 = gui_skew_calibration_screen()
-    dst1 = skew_calibration(calibImages1)
-    dst2 = skew_calibration(calibImages2)
+    dst1, roi1 = skew_calibration(calibImages1)
+    dst2, roi2 = skew_calibration(calibImages2)
 
     image1, image2 = gui_take_pictures_screen()
 
-    image1 = skew_correction(image1, dst1)
-    image2 = skew_correction(image2, dst2)
+    cam1Settings = ScannerCamera()
+    cam2Settings = ScannerCamera()
+
+    image1 = skew_correction(image1, dst1, roi1, cam1Settings)
+    image2 = skew_correction(image2, dst2, roi2, cam2Settings)
 
     finalImage = stitch_images(image1, image2)
     contours, edgeImage = find_contours(finalImage)
