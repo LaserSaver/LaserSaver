@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import logging
-import CalibrateSkew
+import DetermineSkew
 
 class ScannerCamera:
     '''
@@ -10,10 +10,7 @@ class ScannerCamera:
     
     
     def __init__(self):
-        
-        # Which camera am I?
-        self.camera_number = None
-        
+
         # Camera scaling metrics
         self.x_scale = None
         self.y_scale = None
@@ -25,12 +22,31 @@ class ScannerCamera:
         # Using skew correction?
         # If camera calibration is too far off, it would definitely 
         # be better to just not use the skew correction at all
-        self.use_skew_correction = True 
+        # If saved in config file, can also be used to determine
+        # whether first time calibrating
+        self.use_skew_correction = None
      
     ''' TAKE PHOTOS '''    
     def takePhoto(self):
         
         return 0
+        
+    def takeCalibrationPhotos(self):
+        
+        testImgs = ['smallRealBoard1.JPG','images/image_2.jpeg','images/image_3.jpeg', 'images/image2_7.jpeg','images/image3_10.jpeg', 'images/image3_30.jpeg', 'images/image4_1.jpeg', 'images/image5_1.jpeg', 'images/image6_1.jpeg','images/image7_1.jpeg','images/image8_1.jpeg','images/image9_1.jpeg','images/image10_1.jpeg','images/image11_1.jpeg','images/image12_1.jpeg','images/image13_1.jpeg','images/image14_1.jpeg','images/image15_1.jpeg','images/image16_1.jpeg','images/image17_1.jpeg','images/image18_1.jpeg','images/image19_1.jpeg','images/image20_1.jpeg','images/image21_1.jpeg']
+        
+        return testImgs
+        
+        
+    ''' GET USER FEEDBACK '''
+    
+    def getCalibFeedback(self, img):
+        
+        return True
+        
+    def continueSkewCalib(self):
+        
+        return True
         
         
     ''' SKEW CORRECTION ''' 
@@ -97,6 +113,30 @@ class ScannerCamera:
 
         '''
         
+        calib_photos = takeCalibrationPhotos()
+        
+        dst, roi, error = DetermineSkew.createSkewMatrix(testImgs)
+        
+        self.skew_dst = dst
+        self.skew_roi = roi
+        
+        feedback = getCalibFeedback(testImgs[0])
+        
+        if feedback is False:
+            self.skew_dst = None
+            self.skew_roi = None
+            
+            continue_calibration = continueSkewCalib()
+            
+            if continue_calibration is True:
+                return False
+            
+            else:
+                self.use_skew_correction = False
+        
+        else:
+            self.use_skew_correction = True
+        
         return True
         
         
@@ -112,14 +152,14 @@ class ScannerCamera:
         Returns:
             corrected_img (string): photo corrected for skew
         '''
-        # if self.use_skew_correction = True:
-        #     corrected_img = ''
-        #     cv2.imwrite(corrected_img, self.dst)
-        #     return corrected_img
-        # else:
-        #     return original_img
-            
-        return 0    
+        if self.use_skew_correction is True:
+
+            corrected_img = cv2.imwrite(original_img, self.skew_dst)
+            return corrected_img
+
+        else:
+            return original_img
+ 
         
         
         
