@@ -15,6 +15,8 @@ def main():
     
     finalImage = FindContours.display_drawn_contours(input_img,finalContourList)
     
+    return finalContourList
+    
     
     
     
