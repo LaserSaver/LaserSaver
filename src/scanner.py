@@ -52,20 +52,23 @@ def export_json(contours, xscale, yscale, units):
 def gui_start_screen():
     a = 0
 
+#returns image, object width, and object height
 def gui_scale_calibration_screen():
     a = 0
 
+#returns tuple with array of calibration images for each camera
 def gui_skew_calibration_screen():
     a = 0
 
+#returns tuple with the 2 images
 def gui_take_pictures_screen():
     a = 0
 
-#Shows the board with contours
+#Returns the thickness the user enters. Takes in the image of board with contour and shows to user
 def gui_enter_thickness_screen(edgeImage):
     a = 0
 
-#Is this function needed?
+#Returns units
 def gui_export_screen():
     a = 0
 
