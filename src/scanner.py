@@ -6,8 +6,6 @@ import determineSkew
 import scannerCamera
 import jsoncreator
 
-scaleDetect = ScaleDetection()
-jsonData = jsonCreator()
 #detSkew = DetermineSkew()
 
 def scale_calibration(image, objx, objy):
@@ -48,66 +46,52 @@ def export_json(contours, xscale, yscale, units):
     jsonData.addScale(xscale, yscale)
     return jsonData.exportJson()
 
+class Scanner:
 
-def gui_start_screen():
-    a = 0
+    #Functions GUI should call:
+    def first(self):
+        scaleDetect = ScaleDetection()
+        jsonData = jsonCreator()
+        #load calibration data
+        scaleDataExists = scale_calibration_data()
 
-#returns image, object width, and object height
-def gui_scale_calibration_screen():
-    a = 0
+        #if calibration data doesn't exist, ask user to calibrate
+        if (not scaleDataExists):
+            image, objx, objy = gui_scale_calibration_screen()
+            scale_calibration(image, objx, objy)
 
-#returns tuple with array of calibration images for each camera
-def gui_skew_calibration_screen():
-    a = 0
 
-#returns tuple with the 2 images
-def gui_take_pictures_screen():
-    a = 0
+    def second(self, calibImages1, calibImages2):
 
-#Returns the thickness the user enters. Takes in the image of board with contour and shows to user
-def gui_enter_thickness_screen(edgeImage):
-    a = 0
 
-#Returns units
-def gui_export_screen():
-    a = 0
+    def main():
 
-def main():
-    gui_start_screen()
 
-    #load calibration data
-    scaleDataExists = scale_calibration_data()
+        #ask user if they want to calibrate if skew calibration data doesn't exist
+        calibImages1, calibImages2 = gui_skew_calibration_screen()
+        dst1, roi1 = skew_calibration(calibImages1)
+        dst2, roi2 = skew_calibration(calibImages2)
 
-    #if calibration data doesn't exist, ask user to calibrate
-    if (not scaleDataExists):
-        image, objx, objy = gui_scale_calibration_screen()
-        scale_calibration(image, objx, objy)
+        image1, image2 = gui_take_pictures_screen()
 
-    #ask user if they want to calibrate if skew calibration data doesn't exist
-    calibImages1, calibImages2 = gui_skew_calibration_screen()
-    dst1, roi1 = skew_calibration(calibImages1)
-    dst2, roi2 = skew_calibration(calibImages2)
+        cam1Settings = ScannerCamera()
+        cam2Settings = ScannerCamera()
 
-    image1, image2 = gui_take_pictures_screen()
+        image1 = skew_correction(image1, dst1, roi1, cam1Settings)
+        image2 = skew_correction(image2, dst2, roi2, cam2Settings)
 
-    cam1Settings = ScannerCamera()
-    cam2Settings = ScannerCamera()
+        finalImage = stitch_images(image1, image2)
+        contours, edgeImage = find_contours(finalImage)
 
-    image1 = skew_correction(image1, dst1, roi1, cam1Settings)
-    image2 = skew_correction(image2, dst2, roi2, cam2Settings)
+        #what should happen if they don't like the image? Do we go back to start?
+        thickness = gui_enter_thickness_screen(edgeImage)
 
-    finalImage = stitch_images(image1, image2)
-    contours, edgeImage = find_contours(finalImage)
+        #would scale just be multiplied by (height - thickness)/height?
+        xscale, yscale = get_scale(thickness)
 
-    #what should happen if they don't like the image? Do we go back to start?
-    thickness = gui_enter_thickness_screen(edgeImage)
+        units = gui_export_screen()
 
-    #would scale just be multiplied by (height - thickness)/height?
-    xscale, yscale = get_scale(thickness)
-
-    units = gui_export_screen()
-
-    export_json(contours, xscale, yscale, units) #do I need to do something with return value?
+        export_json(contours, xscale, yscale, units) #do I need to do something with return value?
 
 
 
