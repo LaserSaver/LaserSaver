@@ -4,7 +4,7 @@ from findContours import FindContours
 
 def main():
     
-    input_img = 'images/smallRealBoard1.jpg'
+    input_img = 'images/smallWhiteBackTest3.jpg'
     
     # List of contours, and image of edges
     initialContourList, listHierarchy, drawnEdges = FindContours.find_all_contours(input_img)
