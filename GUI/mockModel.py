@@ -7,9 +7,9 @@ class MockModel:
 		#Do your computation here on a seperate thread
 		time.sleep(5)
 
-		#After finishing computation this
-		#is important make sure to call from master.after 0 callback to make sure we call on
-		#the callback from the main thread
+		#After finishing computation it is important make sure to call
+		#master.after 0 callback to make sure we execute
+		#the callback back on the main GUI thread
 		master.after(0,callback)
 
 	def calculate(self, callback,master):
