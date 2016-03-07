@@ -1,20 +1,19 @@
-#!/usr/bin/python
-from Tkinter import *
-import ttk
-from PIL import Image, ImageTk
-import cv2
-import time
-import os
+from appUtils import *
 
-class App:
-	def __init__(self, master):
-		''' Initializing GUI window
+class MainViewController:
+	def __init__(self, master, model):
 
-			adding widgets:
+		''' 
+		    Adding widgets:
 			title, video capture, exit button, and take picture button
 
 		'''
+		#Removing all widgets from previous view
+		for child in master.winfo_children():
+			child.destroy()
+
 		self.master = master
+		self.model = model
 
 		self.camList = []
 		self.camList.append(cv2.VideoCapture(0))
@@ -105,11 +104,11 @@ class App:
 
 
 		#Exit button
-		exitButton = Button(master, text="Exit", fg="red", command=master.destroy)
+		exitButton = Button(self.master, text="Exit", fg="red", command=master.destroy)
 		exitButton.pack(side=BOTTOM)
 
 		#Take Picture button
-		pictureButton = Button(master, text="Take picture", command=self.takePicture)
+		pictureButton = Button(self.master, text="Take picture", command=self.takePicture)
 		pictureButton.pack(side=BOTTOM)
 
 		#Export button
@@ -117,17 +116,20 @@ class App:
 		exportButton.pack(side=BOTTOM)
 
 
-	def getImg(self, width, height, cam):
-		'''   Getting an image object from the video capture
-
+	def updatePanel(self):
+		''' Updates the image in the video capture 
+			panel every 50 milliseconds
 		'''
-		ret, frame = cam.read()
-		#Flipping horizontally 
-		frame = cv2.flip(frame, 1)
-		#Resizing to panel size
-		frame = cv2.resize(frame, (width,height))
-		cv2img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
-		return Image.fromarray(cv2img)
+		for i in range(0, self.numOfCams):
+			imgtk = ImageTk.PhotoImage(AppUtils.getImg(self.panelList[i].winfo_width(),self.panelList[i].winfo_height(),self.camList[i]))
+			self.panelList[i].configure(image = imgtk)
+			self.panelList[i].image = imgtk
+		#Update capture every 50 milliseconds
+		self.master.after(50, self.updatePanel)
+
+	def export(self):
+		'''Will export to json data, yet to be implemented
+		'''
 
 	def takePicture(self):
 		''' Takes a picture from the current video capture
@@ -143,26 +145,8 @@ class App:
 
 		for i in range(0, self.numOfCams):
 			fullName = pictureName+ '_cam'+str(i)+  '.jpg'
-			self.getImg(self.max_panel_width,self.max_panel_height, self.camList[i] ).save("pictures/" + fullName)
+			AppUtils.getImg(self.max_panel_width,self.max_panel_height, self.camList[i] ).save("pictures/" + fullName)
 			print("Picture taken: " + fullName)
-
-	
-		
-	def updatePanel(self):
-		''' Updates the image in the video capture 
-			panel every 50 milliseconds
-		'''
-		for i in range(0, self.numOfCams):
-			imgtk = ImageTk.PhotoImage(self.getImg(self.panelList[i].winfo_width(),self.panelList[i].winfo_height(),self.camList[i]))
-			self.panelList[i].configure(image = imgtk)
-			self.panelList[i].image = imgtk
-		#Update capture every 50 milliseconds
-		self.master.after(50, self.updatePanel)
-
-	def export(self):
-		'''Will export to json data, yet to be implemented
-		'''
-
 	
 	def validate(self,value,inputtext):
 		'''Will only allow number to be inputed for entry widget used for width and height calibration
@@ -234,9 +218,3 @@ class App:
 			self.panelList[3].pack(in_=self.bottompanel,side=RIGHT)
 
 
-
-
-root = Tk()
-root.wm_title("LazerCutter GUI")
-app = App(root)
-root.mainloop()
