@@ -9,8 +9,6 @@ class App:
 		    Setting the viewController to start view
 
 		'''
-
-		from startViewController import StartViewController
 		StartViewController(master, MockModel())
 
 
