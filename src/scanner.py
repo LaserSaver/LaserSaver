@@ -30,7 +30,7 @@ def skew_calibration(calibImages):
 def skew_correction(image, dst, roi, camSettings):
     camSettings.skew_dst = dst
     camSettings.skew_roi = roi
-    camSettings.correctSkew(image)
+    return camSettings.correctSkew(image)
 
 def stitch_images(image1, image2):
     #stitcher = Stitcher()
