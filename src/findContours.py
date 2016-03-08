@@ -64,7 +64,7 @@ class FindContours:
             return False
     
     
-    def find_all_contours(self, img1):
+    def find_all_contours(self, img1, invert, display):
         ''' Finds contours of given image
     
         - Utilizes Canny algorithm for edge detection
@@ -96,20 +96,23 @@ class FindContours:
         img1 = cv2.imread(img1,0)
         img = img1
         
-        cv2.imshow("initial image", img1)
-        cv2.waitKey(0)
+        if display == True:
+            cv2.imshow("initial image", img1)
+            cv2.waitKey(0)
         
         # Invert image
-        cv2.bitwise_xor(img1, 255, img)
+        if invert == True:
+            cv2.bitwise_xor(img1, 255, img)
 
-        cv2.imshow("second image", img)
-        cv2.waitKey(0)
+            cv2.imshow("second image", img)
+            cv2.waitKey(0)
     
         # Edge detection
         edgeImage = cv2.Canny(img, self.edge_min_thresh, self.edge_max_thresh)
         
-        cv2.imshow("edges", edgeImage)
-        cv2.waitKey(0)
+        if display == True:
+            cv2.imshow("edges", edgeImage)
+            cv2.waitKey(0)
     
         # Use copy of edges1 if we want to preserve orignal edges, as cv2.threshold() is destructive
         edgeCopy = edgeImage.copy()
