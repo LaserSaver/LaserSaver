@@ -4,13 +4,14 @@ from findContours import FindContours
 
 def main():
     
-    input_img = 'images/whiteBackTest2.png'
+    # input_img = 'images/whiteBackTest2.png'
+    input_img = 'images/smallRealBoard1.jpg'
     
     # List of contours, and image of edges
     
     exampleContours = FindContours()
     
-    initialContourList, listHierarchy, drawnEdges = exampleContours.find_all_contours(input_img)
+    initialContourList, listHierarchy, drawnEdges = exampleContours.find_all_contours(input_img, False, True)
     
     finalContourList = exampleContours.select_contours(initialContourList, listHierarchy)
     

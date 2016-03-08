@@ -104,8 +104,9 @@ class FindContours:
         if invert == True:
             cv2.bitwise_xor(img1, 255, img)
 
-            cv2.imshow("second image", img)
-            cv2.waitKey(0)
+            if display == True:
+                cv2.imshow("second image", img)
+                cv2.waitKey(0)
     
         # Edge detection
         edgeImage = cv2.Canny(img, self.edge_min_thresh, self.edge_max_thresh)
