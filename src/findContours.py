@@ -14,10 +14,57 @@ class FindContours:
         Does useful stuff with contours
     '''
     def __init__(self):
-        return
+        
+        self.edge_min_thresh = 200
+        self.edge_max_thresh = 400
     
-    @staticmethod
-    def find_all_contours(img):
+    
+    def decreaseEdgeThresh(self):
+        '''
+        Decreases the threshold for determining what is an edge
+            - Stops decreasing when values reach 0
+            
+        Returns:
+            True: if threshold could be altered
+            False: if at min threshold
+        '''
+        
+        if self.edge_min_thresh >= 50:
+            self.edge_min_thresh = self.edge_min_thresh - 50
+            self.edge_max_thresh = self.edge_max_thresh - 50
+            return True
+            
+        elif self.edge_max_thresh >= 50:
+            self.edge_max_thresh = self.edge_max_thresh - 50
+            return True
+        
+        else:
+            return False
+            
+    def increaseEdgeThresh(self):
+        '''
+        Increase the threshold for determining what is an edge
+            - Stops increasing when values reach 1000
+            
+        Returns:
+            True: if threshold could be altered
+            False: if at max threshold
+        '''
+        
+        if self.edge_max_thresh - self.edge_min_thresh < 200:
+            self.edge_max_thresh = self.edge_max_thresh + 50
+            return True
+            
+        elif self.edge_max_thresh <= 950:
+            self.edge_max_thresh = self.edge_max_thresh + 50
+            self.edge_min_thresh = self.edge_min_thresh + 50
+            return True
+        
+        else:
+            return False
+    
+    
+    def find_all_contours(self, img):
         ''' Finds contours of given image
     
         - Utilizes Canny algorithm for edge detection
@@ -46,11 +93,16 @@ class FindContours:
     
     
         '''
-        
         img = cv2.imread(img,0)
+        
+        cv2.imshow("initial image", img)
+        cv2.waitKey(0)
     
         # Edge detection
-        edgeImage = cv2.Canny(img,200,400)
+        edgeImage = cv2.Canny(img, self.edge_min_thresh, self.edge_max_thresh)
+        
+        cv2.imshow("edges", edgeImage)
+        cv2.waitKey(0)
     
         # Use copy of edges1 if we want to preserve orignal edges, as cv2.threshold() is destructive
         edgeCopy = edgeImage.copy()
