@@ -9,44 +9,45 @@ This was tested on the following Linux Systems:
 ## OpenCV Install OpenCV 3.0 with Python 2.7+ Ubuntu
 NOTE: Install Instructions [Source](http://www.pyimagesearch.com/2015/06/22/install-opencv-3-0-and-python-2-7-on-ubuntu/)
 
-### Apply Update to System
+#### Apply Update to System
 
 ```sudo apt-get update```
 
 ```sudo apt-get upgrade```
 
-### Install Developer Tools
+#### Install Developer Tools
 
 ```sudo apt-get install build-essential cmake git pkg-config```
 
-### Install I/O Packages for Reading Files
+#### Install I/O Packages for Reading Files
 
 ```sudo apt-get install libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev```
 
-### Install GUI Interface Prackage
+#### Install GUI Interface Prackage
 
 ```sudo apt-get install libgtk2.0-dev```
 
-### Install Video Stream Packages
+#### Install Video Stream Packages
 
 ```sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev```
 
-### Install Optimization Libraries
+#### Install Optimization Libraries
 
 ```sudo apt-get install libatlas-base-dev gfortran```
 
-### Install Python Package Manager Pip
+#### Install Python Package Manager Pip
 
 ```wget https://bootstrap.pypa.io/get-pip.py```
 
 ```sudo python get-pip.py```
 
-### Install Virtual Environments
+#### Install Virtual Environments
 
 ```sudo pip install virtualenv virtualenvwrapper```
+
 ```sudo rm -rf ~/.cache/pip```
 
-### Add the Following Lines to ~/.bashrc
+#### Add the Following Lines to ~/.bashrc
 
 ```
 #virtualenv and virtualenvwrapper
@@ -54,23 +55,23 @@ export WORKON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
 ```
 
-### Reload the Contents of ~/.bashrc
+#### Reload the Contents of ~/.bashrc
 
 ```source ~/.bashrc```
 
-### Create a Vitual Environment for OpenCV
+#### Create a Vitual Environment for OpenCV
 
 ```mkvirtualenv cv```
 
-### Install Python 2.7+ Development Tools
+#### Install Python 2.7+ Development Tools
 
 ```sudo apt-get install python2.7-dev```
 
-### Install NumPy
+#### Install NumPy
 
 ```pip install numpy```
 
-### Pull Code from OpenCV Repository into Home Directory
+#### Pull Code from OpenCV Repository into Home Directory
 
 ```
 cd ~ 
@@ -79,7 +80,7 @@ cd opencv
 git checkout 3.0.0
 ```
 
-### Pull Extra OpenCV Libraries
+#### Pull Extra OpenCV Libraries
 
 ```
 cd ~
@@ -88,8 +89,7 @@ cd opencv_contrib
 git checkout 3.0.0
 ```
 
-### Build OpenCV
-
+#### Build OpenCV
 ```
 cd ~/opencv
 mkdir build
@@ -102,24 +102,23 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D BUILD_EXAMPLES=ON ..
 ```
 
-### Make OpenCV
+#### Make OpenCV
 
 ``` make ```
 
-
-### Install OpenCV
+#### Install OpenCV
 
 ```sudo make install```
 
 ```sudo ldconfig```
 
-### Set OpenCV for Use in VirtualEnvironment
+#### Set OpenCV for Use in VirtualEnvironment
 
 ```cd ~/.virtualenvs/cv/lib/python2.7/site-packages/```
 
 ```ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so```
 
-### Verify Install
+#### Verify Install
 
 Change to the Virtual Environment
 
