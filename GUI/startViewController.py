@@ -1,27 +1,38 @@
 from appUtils import *
 from mainViewController import MainViewController
 
+
+class StartView(Frame):
+	def __init__(self, master, controller):
+		Frame.__init__(self, master)
+
+		calibrationLabel = Label(self, text="This is the Start View")
+		calibrationLabel.pack(side=TOP)
+
+		self.startButton = Button(self, text="Start", fg="red", command=controller.start)
+		self.startButton.pack(side=BOTTOM)
+		
+		panel = Label(self, width = 100, height= 35)
+		panel.pack(side=TOP)
+
+
 class StartViewController:
 	def __init__(self, master, model):
-		#Removing all widgets from previous view
-		for child in master.winfo_children():
-			child.destroy()
-
 		self.master = master
 		self.model = model
 
-		calibrationLabel = Label(master, text="This is the Start View")
-		calibrationLabel.pack(side=TOP)
+		self.view = StartView(master, self)
+		self.view.pack()
 
-		self.startButton = Button(master, text="Start", fg="red", command=self.start)
-		self.startButton.pack(side=BOTTOM)
 
 	def start(self):
-		self.startButton.pack_forget()
-		progressbar = ttk.Progressbar(orient=HORIZONTAL, length=100, mode='determinate')
-		progressbar.pack(side=BOTTOM)
+		self.view.startButton.pack_forget()
+		progressbar = ttk.Progressbar(self.view, orient=HORIZONTAL, length=500, mode='determinate')
+		progressbar.pack(side=TOP)
 		progressbar.start()
 		self.model.calculate(self.finish, self.master)
 
 	def finish(self):
+		#Removing the current view
+		self.view.pack_forget()
 		MainViewController(self.master, self.model)

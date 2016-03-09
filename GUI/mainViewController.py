@@ -1,25 +1,15 @@
 from appUtils import *
 
-class MainViewController:
-	def __init__(self, master, model):
 
+class MainView(Frame):
+	def __init__(self, master, controller):
 		''' 
 		    Adding widgets:
 			title, video capture, exit button, and take picture button
 
 		'''
-		#Removing all widgets from previous view
-		for child in master.winfo_children():
-			child.destroy()
-
+		Frame.__init__(self, master)
 		self.master = master
-		self.model = model
-
-		self.camList = []
-		self.camList.append(cv2.VideoCapture(0))
-		self.camList.append(cv2.VideoCapture(1))
-		self.camList.append(cv2.VideoCapture(2))
-		self.camList.append(cv2.VideoCapture(3))
 
 		self.max_panel_width = 600
 		self.max_panel_height = 480
@@ -27,9 +17,6 @@ class MainViewController:
 		#Main Frame
 		self.frame = LabelFrame(master,text='Video Capture')
 		self.frame.pack(side=LEFT)
-
-
-		self.numOfCams = 1
 		
 		self.panelList = []
 		
@@ -39,7 +26,6 @@ class MainViewController:
 		#Video Capture frames
 		panel = Label( width = self.max_panel_width, height= self.max_panel_height)
 		self.panelList.append( panel)
-		self.updatePanel()
 		panel.pack(in_=self.frame)
 
 		panel2 = Label()
@@ -62,7 +48,7 @@ class MainViewController:
 		camerasLabel.pack(side=LEFT)
 	
 		self.camerasBox = ttk.Combobox(camerasPanel, width=10, state="readonly")
-		self.camerasBox.bind("<<ComboboxSelected>>", self.numberOfCamChange)
+		self.camerasBox.bind("<<ComboboxSelected>>", controller.numberOfCamChange)
 		self.camerasBox['values'] = ('1', '2', '3', '4')
 		self.camerasBox.current(0)
 		self.camerasBox.grid(column=0, row=0)
@@ -101,19 +87,112 @@ class MainViewController:
 		self.unitsBox.pack(side=RIGHT)
 		unitsPanel.pack(side=TOP)
 
-
-
 		#Exit button
-		exitButton = Button(self.master, text="Exit", fg="red", command=master.destroy)
+		exitButton = Button(master, text="Exit", fg="red", command=master.destroy)
 		exitButton.pack(side=BOTTOM)
 
 		#Take Picture button
-		pictureButton = Button(self.master, text="Take picture", command=self.takePicture)
+		pictureButton = Button(master, text="Take picture", command=controller.takePicture)
 		pictureButton.pack(side=BOTTOM)
 
 		#Export button
-		exportButton = Button(master, text="Export", command=self.export)
+		exportButton = Button(master, text="Export", command=controller.export)
 		exportButton.pack(side=BOTTOM)
+
+	def validate(self,value,inputtext):
+		'''Will only allow number to be inputed for entry widget used for width and height calibration
+		'''
+		if value is '':
+		   return True
+		if inputtext in '0123456789.':
+			try:
+				float(value)
+				return True
+			except ValueError:
+				return False
+		else:
+			return False
+
+	def changeNumOfPanels(self, numOfPanels):
+		''' Changing number of cameras and updating the GUI to accomdate
+		'''
+		#Removing all panels
+		for i in range(0, 4):
+			self.panelList[i].pack_forget()
+
+		if self.view.toppanel is not None :
+			self.toppanel.pack_forget()
+
+		if self.view.bottompanel is not None :
+			self.bottompanel.pack_forget()
+
+		self.numOfCams = int(self.camerasBox.get()) 
+		if numOfPanels == 1:
+			self.panelList[0].configure(width=self.max_panel_width, height=self.max_panel_height )
+			self.panelList[0].pack(in_=self.frame)
+		elif numOfPanelss == 2:
+			self.panelList[0].configure(width=self.max_panel_width/2, height=self.max_panel_height )
+			self.panelList[0].pack(in_=self.frame,side=LEFT)
+
+			self.panelList[1].configure(width=self.max_panel_width/2, height=self.max_panel_height )
+			self.panelList[1].pack(in_=self.frame, side=RIGHT)
+		elif numOfPanels == 3:
+			self.toppanel = Label(self.frame)
+			self.toppanel.pack(side=TOP)
+
+			self.panelList[0].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
+			self.panelList[0].pack(in_=self.toppanel, side=LEFT)
+
+			self.panelList[1].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
+			self.panelList[1].pack(in_=self.toppanel,side=RIGHT)
+
+			self.panelList[2].configure(width=self.max_panel_width, height=self.max_panel_height/2 )
+			self.panelList[2].pack(in_=self.frame,side=BOTTOM)
+		elif numOfPanels == 4:
+			self.toppanel = Label(self.frame)
+			self.toppanel.pack(side=TOP)
+
+			self.panelList[0].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
+			self.panelList[0].pack(in_=self.toppanel, side=LEFT)
+
+			self.panelList[1].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
+			self.panelList[1].pack(in_=self.toppanel,side=RIGHT)
+
+			self.bottompanel = Label(self.frame)
+			self.bottompanel.pack(side=BOTTOM)
+
+			self.panelList[2].configure(width=self.max_panel_width/2, height=(self.max_panel_height/2 ) )
+			self.panelList[2].pack(in_=self.bottompanel, side=LEFT)
+
+			self.panelList[3].configure(width=self.max_panel_width/2, height=(self.max_panel_height/2 ) )
+			self.panelList[3].pack(in_=self.bottompanel,side=RIGHT)
+
+class MainViewController:
+	def __init__(self, master, model):
+
+		''' 
+		    Adding widgets:
+			title, video capture, exit button, and take picture button
+
+		'''
+		self.img_width_res = 600
+		self.img_height_res = 480
+
+		self.master = master
+		self.model = model
+
+		self.numOfCams = 1
+
+		self.camList = []
+		self.camList.append(cv2.VideoCapture(0))
+		self.camList.append(cv2.VideoCapture(1))
+		self.camList.append(cv2.VideoCapture(2))
+		self.camList.append(cv2.VideoCapture(3))
+
+		self.view = MainView(master, self)
+
+		self.updatePanel()
+		self.view.pack()
 
 
 	def updatePanel(self):
@@ -121,9 +200,9 @@ class MainViewController:
 			panel every 50 milliseconds
 		'''
 		for i in range(0, self.numOfCams):
-			imgtk = ImageTk.PhotoImage(AppUtils.getImg(self.panelList[i].winfo_width(),self.panelList[i].winfo_height(),self.camList[i]))
-			self.panelList[i].configure(image = imgtk)
-			self.panelList[i].image = imgtk
+			imgtk = ImageTk.PhotoImage(AppUtils.getImg(self.view.panelList[i].winfo_width(),self.view.panelList[i].winfo_height(),self.camList[i]))
+			self.view.panelList[i].configure(image = imgtk)
+			self.view.panelList[i].image = imgtk
 		#Update capture every 50 milliseconds
 		self.master.after(50, self.updatePanel)
 
@@ -145,76 +224,13 @@ class MainViewController:
 
 		for i in range(0, self.numOfCams):
 			fullName = pictureName+ '_cam'+str(i)+  '.jpg'
-			AppUtils.getImg(self.max_panel_width,self.max_panel_height, self.camList[i] ).save("pictures/" + fullName)
+			AppUtils.getImg(self.img_width_res,self.img_height_res, self.camList[i] ).save("pictures/" + fullName)
 			print("Picture taken: " + fullName)
 	
-	def validate(self,value,inputtext):
-		'''Will only allow number to be inputed for entry widget used for width and height calibration
-		'''
-		if value is '':
-		   return True
-		if inputtext in '0123456789.':
-			try:
-				float(value)
-				return True
-			except ValueError:
-				return False
-		else:
-			return False
 
 
 	def numberOfCamChange(self, event):
 		''' Changing number of cameras and updating the GUI to accomdate
 		'''
-		#Removing all panels
-		for i in range(0, 4):
-			self.panelList[i].pack_forget()
-
-		if self.toppanel is not None :
-			self.toppanel.pack_forget()
-
-		if self.bottompanel is not None :
-			self.bottompanel.pack_forget()
-
-		self.numOfCams = int(self.camerasBox.get()) 
-		if self.numOfCams == 1:
-			self.panelList[0].configure(width=self.max_panel_width, height=self.max_panel_height )
-			self.panelList[0].pack(in_=self.frame)
-		elif self.numOfCams == 2:
-			self.panelList[0].configure(width=self.max_panel_width/2, height=self.max_panel_height )
-			self.panelList[0].pack(in_=self.frame,side=LEFT)
-
-			self.panelList[1].configure(width=self.max_panel_width/2, height=self.max_panel_height )
-			self.panelList[1].pack(in_=self.frame, side=RIGHT)
-		elif self.numOfCams == 3:
-			self.toppanel = Label(self.frame)
-			self.toppanel.pack(side=TOP)
-
-			self.panelList[0].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
-			self.panelList[0].pack(in_=self.toppanel, side=LEFT)
-
-			self.panelList[1].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
-			self.panelList[1].pack(in_=self.toppanel,side=RIGHT)
-
-			self.panelList[2].configure(width=self.max_panel_width, height=self.max_panel_height/2 )
-			self.panelList[2].pack(in_=self.frame,side=BOTTOM)
-		elif self.numOfCams == 4:
-			self.toppanel = Label(self.frame)
-			self.toppanel.pack(side=TOP)
-
-			self.panelList[0].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
-			self.panelList[0].pack(in_=self.toppanel, side=LEFT)
-
-			self.panelList[1].configure( width=self.max_panel_width/2, height=self.max_panel_height/2 )
-			self.panelList[1].pack(in_=self.toppanel,side=RIGHT)
-
-			self.bottompanel = Label(self.frame)
-			self.bottompanel.pack(side=BOTTOM)
-
-			self.panelList[2].configure(width=self.max_panel_width/2, height=(self.max_panel_height/2 ) )
-			self.panelList[2].pack(in_=self.bottompanel, side=LEFT)
-
-			self.panelList[3].configure(width=self.max_panel_width/2, height=(self.max_panel_height/2 ) )
-			self.panelList[3].pack(in_=self.bottompanel,side=RIGHT)
-
-
+		self.numOfCams = int(self.view.camerasBox.get()) 
+		self.view.changeNumOfPanels(numOfCams)
