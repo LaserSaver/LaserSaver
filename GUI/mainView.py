@@ -15,7 +15,7 @@ class MainView(Frame):
 		self.max_panel_height = 480
 
 		#Main Frame
-		self.frame = LabelFrame(master,text='Video Capture')
+		self.frame = LabelFrame(self,text='Video Capture')
 		self.frame.pack(side=LEFT)
 		
 		self.panelList = []
@@ -38,12 +38,12 @@ class MainView(Frame):
 		self.panelList.append(panel4)
 
 		#Calibration tools
-		calibrationLabel = Label(master, text="Calibration")
+		calibrationLabel = Label(self, text="Calibration")
 		calibrationLabel.pack(side=TOP)
 
 
 		#Cameras combo box
-		camerasPanel = Label(master)
+		camerasPanel = Label(self)
 		camerasLabel = Label(camerasPanel, text="Cameras:")
 		camerasLabel.pack(side=LEFT)
 	
@@ -57,7 +57,7 @@ class MainView(Frame):
 
 		#Width
 		vcmd = (master.register(self.validate),'%P', '%S')
-		widthPanel = Label(master)
+		widthPanel = Label(self)
 		widthLabel = Label(widthPanel, text="Width:")
 		widthLabel.pack(side=LEFT)
 
@@ -67,7 +67,7 @@ class MainView(Frame):
 
 
 		#Height
-		heightPanel = Label(master)
+		heightPanel = Label(self)
 		heightLabel = Label(heightPanel, text="Height:")
 		heightLabel.pack(side=LEFT)
 
@@ -76,7 +76,7 @@ class MainView(Frame):
 		heightPanel.pack(side=TOP)
 
 		#Units 
-		unitsPanel = Label( master)
+		unitsPanel = Label( self)
 		calibrationLabel = Label(unitsPanel, text="Units:")
 		calibrationLabel.pack(side=LEFT)
 
@@ -88,15 +88,15 @@ class MainView(Frame):
 		unitsPanel.pack(side=TOP)
 
 		#Exit button
-		exitButton = Button(master, text="Exit", fg="red", command=master.destroy)
+		exitButton = Button(self, text="Exit", fg="red", command=master.destroy)
 		exitButton.pack(side=BOTTOM)
 
 		#Take Picture button
-		pictureButton = Button(master, text="Take picture", command=controller.takePicture)
+		pictureButton = Button(self, text="Take picture", command=controller.takePicture)
 		pictureButton.pack(side=BOTTOM)
 
 		#Export button
-		exportButton = Button(master, text="Export", command=controller.export)
+		exportButton = Button(self, text="Export", command=controller.export)
 		exportButton.pack(side=BOTTOM)
 
 	def validate(self,value,inputtext):
@@ -168,7 +168,7 @@ class MainView(Frame):
 			self.panelList[3].pack(in_=self.bottompanel,side=RIGHT)
 
 class MainViewController:
-	def __init__(self, master, model):
+	def __init__(self, master):
 
 		''' 
 		    Adding widgets:
@@ -179,7 +179,6 @@ class MainViewController:
 		self.img_height_res = 480
 
 		self.master = master
-		self.model = model
 
 		self.numOfCams = 1
 

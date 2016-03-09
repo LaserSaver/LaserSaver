@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from appUtils import *
-from startViewController import StartViewController
+from promptSkewView import PromptSkewViewController
 
 class App:
 	def __init__(self, master):
@@ -9,10 +9,11 @@ class App:
 		    Setting the viewController to start view
 
 		'''
-		StartViewController(master, MockModel())
+		PromptSkewViewController(master)
 
 
 root = Tk()
 root.wm_title("LazerCutter GUI")
+root.geometry('{}x{}'.format(400, 400))
 app = App(root)
 root.mainloop()

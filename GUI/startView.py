@@ -1,5 +1,6 @@
 from appUtils import *
 from mainViewController import MainViewController
+from mockModel import MockModel
 
 
 class StartView(Frame):
@@ -17,12 +18,13 @@ class StartView(Frame):
 
 
 class StartViewController:
-	def __init__(self, master, model):
+	def __init__(self, master):
 		self.master = master
-		self.model = model
+		self.model = MockModel()
 
 		self.view = StartView(master, self)
 		self.view.pack()
+
 
 
 	def start(self):
@@ -30,9 +32,9 @@ class StartViewController:
 		progressbar = ttk.Progressbar(self.view, orient=HORIZONTAL, length=500, mode='determinate')
 		progressbar.pack(side=TOP)
 		progressbar.start()
-		self.model.calculate(self.finish, self.master)
+		AppUtils.computeOnSeprateThread(self.master, self.finish, self.model.calculate, [])
 
 	def finish(self):
-		#Removing the current view
+		#Removing the current viewå
 		self.view.pack_forget()
-		MainViewController(self.master, self.model)
+		MainViewController(self.master)
