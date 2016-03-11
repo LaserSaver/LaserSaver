@@ -10,8 +10,10 @@ from threading import Thread
 
 class AppUtils: 
 	@staticmethod
-	def getImg(width, height, cam):
+	def getImg(cam, width=640, height=400):
 		'''   Getting an image object from the video capture
+			  Width and Height are optional and their default will
+			  be used as the standard resolution we use for the photos
 
 		'''
 		ret, frame = cam.read()
@@ -20,17 +22,25 @@ class AppUtils:
 		#Resizing to panel size
 		frame = cv2.resize(frame, (width,height))
 		cv2img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
-		return Image.fromarray(cv2img)
+		return cv2img
 
 	@staticmethod
-	def computeOnSeprateThread(master, callback, function, kargs):
-		thread = Thread(target = AppUtils.computationThread, args=[master, callback, function, kargs])
+	def getTkinterImg(cam, width, height):
+		return ImageTk.PhotoImage(Image.fromarray(AppUtils.getImg(cam,width,height)))
+
+	@staticmethod
+	def converImgToTkinterImg(img, width, height):
+		return ImageTk.PhotoImage(Image.fromarray(cv2.resize(img, (width, height))))
+
+	@staticmethod
+	def computeOnSeprateThread(master, callback, function, args):
+		thread = Thread(target = AppUtils.computationThread, args=[master, callback, function, args])
 		#Starting seperate thread
 		thread.start()
 
 	@staticmethod
-	def computationThread(master, callback, function, kargs):
-		wentWell = function()
+	def computationThread(master, callback, function, args):
+		retVal = function(*args)
 
 		#Performing call back on main thread
-		master.after(0,callback(wentWell))
+		master.after(0,callback, retVal)

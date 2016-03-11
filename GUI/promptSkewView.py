@@ -1,6 +1,6 @@
 from appUtils import *
 from contoursView import ContoursViewController 
-from skewView import SkewViewController 
+from skewView import SkewViewController
 
 class PromptSkewView(Frame):
 	def __init__(self, master, controller):
