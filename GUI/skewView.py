@@ -48,7 +48,9 @@ class SkewViewController:
 		self.photos = []
 
 		self.view = SkewView(master, self, camNumber)
-		self.cam = cv2.VideoCapture(camNumber)
+
+		#Change 0 to cam number currently only have one camera
+		self.cam = cv2.VideoCapture(0)
 		self.view.pack(expand=YES,fill=BOTH)
 
 		self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)

@@ -1,8 +1,8 @@
 from appUtils import *
-from skewView import SkewViewController
 from contoursView import ContoursViewController
+from exportView import ExportViewController
 
-class ValidationSkewView(Frame):
+class ValidationContoursSkewView(Frame):
 	def __init__(self, master, controller, img, camNumber):
 		Frame.__init__(self, master)
 
@@ -20,17 +20,13 @@ class ValidationSkewView(Frame):
 		self.imgPanel.bind("<Configure>", lambda e: configImgPanel(img, self.imgPanel) )
 		self.imgPanel.pack(side=TOP)
 
-
-		self.skipButton = Button(self, text="Skip For Now", command=controller.skipClicked)
-		self.skipButton.pack(side=BOTTOM)
-
 		self.redoButton = Button(self, text="No! Return to calibrating camera #" + str(camNumber +1), command=controller.redoClicked)
 		self.redoButton.pack(side=BOTTOM)
 
 		if camNumber < 1:
 			continueText = "Yes! Continue to calibrating camera #" + str(camNumber +2)
 		else :
-			continueText = "Yes! Continue to contours calibration"
+			continueText = "Yes! Continue to export screen"
 
 
 		self.continuteButton = Button(self, text=continueText, command=controller.continueClicked)
@@ -39,28 +35,25 @@ class ValidationSkewView(Frame):
 
 
 
-class ValidationSkewViewController:
+class ValidationContoursViewController:
 	def __init__(self, master, img, camNumber):
 		self.master = master
 
 		self.camNumber = camNumber
 
-		self.view = ValidationSkewView(master, self, img, camNumber)
+		self.view = ValidationContoursSkewView(master, self, img, camNumber)
 		self.view.pack(expand=YES,fill=BOTH)
 
 	def continueClicked(self):
 		self.view.pack_forget()
 		if self.camNumber < 1:
-			SkewViewController(self.master, self.camNumber +1)
+			ContoursViewController(self.master, self.camNumber +1)
 		else :
-			ContoursViewController(self.master, 0)
+			ExportViewController(self.master)
 
 
 	def redoClicked(self):
 		self.view.pack_forget()
-		SkewViewController(self.master, self.camNumber)
+		ContoursViewController(self.master, self.camNumber)
 
-	def skipClicked(self):
-		self.view.pack_forget()
-		ContoursViewController(self.master)
 		

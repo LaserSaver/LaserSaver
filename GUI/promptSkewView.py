@@ -38,4 +38,4 @@ class PromptSkewViewController:
 
 	def skipClicked(self):
 		self.view.pack_forget()
-		ContoursViewController(self.master)
+		ContoursViewController(self.master,0)
