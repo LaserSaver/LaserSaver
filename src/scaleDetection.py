@@ -146,7 +146,6 @@ class ScaleDetection:
 
         # thresh is the binary image
         ret, thresh = cv2.threshold(imgray, 127, 255, cv2.THRESH_BINARY_INV)
-        #ret, thresh = cv2.threshold(imgray, 127, 255, 0)
 
         _, contours, hierarchy = cv2.findContours(thresh,
                                                cv2.RETR_TREE,
