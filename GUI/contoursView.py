@@ -5,16 +5,15 @@ class ContoursView(Frame):
 	def __init__(self, master, controller, camNumber):
 		Frame.__init__(self, master)
 
-		skewLabel = Label(self, text="Calibrating Contours for Camera #" + str(camNumber+1) , font="-weight bold")
+		skewLabel = Label(self, text="Calibrating contours for camera #" + str(camNumber+1) , font="-weight bold")
 		skewLabel.pack(side=TOP)
 
 
-		boardLabel = Label(self, text="Place Board in Bed" , font="-weight bold")
+		boardLabel = Label(self, text="Place board in bed" , font="-weight bold")
 		boardLabel.pack(side=TOP)
 
-
-
 		def resizeVideoCapturePanel(videoCapturePanel, controller):
+			controller.updatePanel()
 			videoCapturePanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-100)
 			controller.updatePanel()
 
@@ -22,12 +21,12 @@ class ContoursView(Frame):
 		self.videoCapturePanel.bind("<Configure>", lambda e: resizeVideoCapturePanel(self.videoCapturePanel, controller) )
 		self.videoCapturePanel.pack(side=TOP)
 
-		self.photoButton = Button(self, text="Take Photo", command=controller.takePhotoClicked)
+		self.photoButton = Button(self, text="Take photo", command=controller.takePhotoClicked)
 		self.photoButton.pack(side=BOTTOM)
 
 
 class ContoursViewController:
-	def __init__(self, master, camNumber):
+	def __init__(self, master, camNumber=0):
 		self.master = master
 
 		self.camNumber = camNumber
@@ -86,8 +85,8 @@ class ContoursViewController:
 		processingLabel.pack(side=BOTTOM)
 
 	def calibrationDone(self, img):
+		self.view.pack_forget()
 		#Had to import here to prevent cyclical refrencing
 		from validationContoursView import ValidationContoursViewController
-		self.view.pack_forget()
 		ValidationContoursViewController(self.master, img, self.camNumber)
 		

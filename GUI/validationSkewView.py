@@ -6,13 +6,13 @@ class ValidationSkewView(Frame):
 	def __init__(self, master, controller, img, camNumber):
 		Frame.__init__(self, master)
 
-		skewLabel = Label(self, text="Does this look okay?", font="-weight bold")
-		skewLabel.pack(side=TOP)
+		promptLabel = Label(self, text="Does this look okay?", font="-weight bold")
+		promptLabel.pack(side=TOP)
 
 
 		def configImgPanel(img, imgPanel):
-			resizdeImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-100)
-			imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-100, relief=RIDGE, borderwidth=2, image = resizdeImg)
+			resizdeImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-125)
+			imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-125, relief=RIDGE, borderwidth=2, image = resizdeImg)
 			imgPanel.image = resizdeImg
 
 		self.imgPanel = Label(self)
@@ -21,16 +21,16 @@ class ValidationSkewView(Frame):
 		self.imgPanel.pack(side=TOP)
 
 
-		self.skipButton = Button(self, text="Skip For Now", command=controller.skipClicked)
+		self.skipButton = Button(self, text="Skip for now", command=controller.skipClicked)
 		self.skipButton.pack(side=BOTTOM)
 
-		self.redoButton = Button(self, text="No! Return to calibrating camera #" + str(camNumber +1), command=controller.redoClicked)
+		self.redoButton = Button(self, text="No, return to calibrating camera #" + str(camNumber +1), command=controller.redoClicked)
 		self.redoButton.pack(side=BOTTOM)
 
 		if camNumber < 1:
-			continueText = "Yes! Continue to calibrating camera #" + str(camNumber +2)
+			continueText = "Yes, continue to calibrating camera #" + str(camNumber +2)
 		else :
-			continueText = "Yes! Continue to contours calibration"
+			continueText = "Yes, continue to contours calibration"
 
 
 		self.continuteButton = Button(self, text=continueText, command=controller.continueClicked)
@@ -53,7 +53,7 @@ class ValidationSkewViewController:
 		if self.camNumber < 1:
 			SkewViewController(self.master, self.camNumber +1)
 		else :
-			ContoursViewController(self.master, 0)
+			ContoursViewController(self.master)
 
 
 	def redoClicked(self):

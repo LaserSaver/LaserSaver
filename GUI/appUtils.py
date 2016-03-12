@@ -1,6 +1,5 @@
 '''This class will contain all imports that the app needs as well as useful methods'''
 from Tkinter import *
-from mockModel import MockModel
 import ttk
 from PIL import Image, ImageTk
 import cv2

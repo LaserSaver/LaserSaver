@@ -1,8 +1,7 @@
 from appUtils import *
 
-
 class ExportView(Frame):
-	def __init__(self, master, controller):
+	def __init__(self, master, controller,formParams):
 		''' 
 		    Adding widgets:
 			title, video capture, exit button, and take picture button
@@ -12,38 +11,57 @@ class ExportView(Frame):
 		self.master = master
 
 		#Video Capture frame for both cameras
-		self.frame = LabelFrame(self,text='Video Capture')
+		self.frame = Label(self )
 		self.frame.pack(side=LEFT)
-		
-		panel = Label(self.frame, width = self.max_panel_width, height= self.max_panel_height)
-		self.panelList.append( panel)
-		panel.pack(side=LEFT)
 
-		panel = Label(self.frame, width = self.max_panel_width, height= self.max_panel_height)
-		self.panelList.append( panel)
-		panel.pack(side=RIGHT)
+
+		panelWidth = (master.winfo_width()-150)
+		panelHeight = (master.winfo_height() -10)/2
+
+		self.videoPanel1 = Label(self.frame, width=panelWidth, height=panelHeight)
+		self.videoPanel1.pack(side=TOP)
+
+		self.videoPanel2 = Label(self.frame, width=panelWidth, height=panelHeight)
+		self.videoPanel2.pack(side=BOTTOM)
+
+		def resizeVideoCapturePanels(videoPanel1, videoPanel2,controller):
+			controller.updatePanels()
+			panelWidth = (master.winfo_width()-150)
+			panelHeight = (master.winfo_height() -10)/2
+
+			videoPanel1.configure(width=panelWidth, height=panelHeight)
+			videoPanel2.configure(width=panelWidth, height=panelHeight)
+			controller.updatePanels()
+
+		self.frame.bind("<Configure>", lambda e: resizeVideoCapturePanels(self.videoPanel1, self.videoPanel2, controller) )
 
 		#Calibration tools
 		calibrationLabel = Label(self, text="Calibration")
 		calibrationLabel.pack(side=TOP)
 
 		#Width
+		onEditVar= StringVar()
+		onEditVar.set(str(formParams['width']))
+		onEditVar.trace("w", lambda name, index, mode, onEditVar=onEditVar: self.updateExportButton())
 		vcmd = (master.register(self.validate),'%P', '%S')
 		widthPanel = Label(self)
 		widthLabel = Label(widthPanel, text="Width:")
 		widthLabel.pack(side=LEFT)
 
-		self.widthInput = Entry(widthPanel, width=11, validate = 'key', validatecommand = vcmd)
+		self.widthInput = Entry(widthPanel, width=11, validate = 'key', validatecommand = vcmd, textvariable=onEditVar)
 		self.widthInput.pack(side=RIGHT)
 		widthPanel.pack(side=TOP)
 
 
 		#Height
+		onEditVar= StringVar()
+		onEditVar.set(str(formParams['height']))
+		onEditVar.trace("w", lambda name, index, mode, onEditVar=onEditVar: self.updateExportButton())
 		heightPanel = Label(self)
 		heightLabel = Label(heightPanel, text="Height:")
 		heightLabel.pack(side=LEFT)
 
-		self.heightInput = Entry(heightPanel, width=11, validate = 'key', validatecommand = vcmd)
+		self.heightInput = Entry(heightPanel, width=11, validate = 'key', validatecommand = vcmd, textvariable=onEditVar)
 		self.heightInput.pack(side=RIGHT)
 		heightPanel.pack(side=TOP)
 
@@ -54,18 +72,14 @@ class ExportView(Frame):
 
 		self.unitsBox = ttk.Combobox(unitsPanel, width=10, state="readonly")
 		self.unitsBox['values'] = ('centimeters', 'inches')
-		self.unitsBox.current(0)
-		self.unitsBox.grid(column=0, row=0)
+		self.unitsBox['state'] = 'readonly'
+		self.unitsBox.set(formParams['units'])
 		self.unitsBox.pack(side=RIGHT)
 		unitsPanel.pack(side=TOP)
 
-		#Exit button
-		exitButton = Button(self, text="Exit", fg="red", command=master.destroy)
-		exitButton.pack(side=BOTTOM)
-
 		#Export button
-		exportButton = Button(self, text="Export pictures", command=controller.export)
-		exportButton.pack(side=BOTTOM)
+		self.exportButton = Button(self, text="Take photos and export", wraplength=80,  command=controller.exportClicked)
+		self.exportButton.pack(side=BOTTOM)
 
 	def validate(self,value,inputtext):
 		'''Will only allow number to be inputed for entry widget used for width and height calibration
@@ -81,30 +95,26 @@ class ExportView(Frame):
 		else:
 			return False
 
+	def updateExportButton(self):
+		if self.heightInput.get() is '' or self.widthInput.get() is '':
+			self.exportButton.configure( state=DISABLED)
+		else :
+			self.exportButton.configure( state=NORMAL)
+
+
+
 class ExportViewController:
-	def __init__(self, master):
-
-		''' 
-		    Adding widgets:
-			title, video capture, exit button, and take picture button
-
-		'''
-		self.img_width_res = 600
-		self.img_height_res = 480
-
+	def __init__(self, master, formParams={'width':0.0,'height':0.0,'units':'centimeters'}):
 		self.master = master
 
-		self.numOfCams = 2
-
-		self.camList = []
-		self.camList.append(cv2.VideoCapture(0))
+		self.cam1 = cv2.VideoCapture(0)
 
 		#Change this to one for now same cam
-		self.camList.append(cv2.VideoCapture(0))
+		self.cam2 = cv2.VideoCapture(0)
 	
-		self.view = ExportView(master, self)
+		self.view = ExportView(master, self, formParams)
 
-		self.updatePanels()
+		self.continiousUpdatePanel()
 		self.view.pack()
 
 
@@ -116,15 +126,29 @@ class ExportViewController:
 	def updatePanels(self):
 		''' Updates the images in the video capture 
 		'''
-		for i in range(0, self.numOfCams):
-			imgtk = ImageTk.PhotoImage(AppUtils.getImg(self.view.panelList[i].winfo_width(),self.view.panelList[i].winfo_height(),self.camList[i]))
-			self.view.panelList[i].configure(image = imgtk)
-			self.view.panelList[i].image = imgtk
+		imgtk = AppUtils.getTkinterImg(self.cam1,self.view.videoPanel1.winfo_width(),self.view.videoPanel1.winfo_height())
+		self.view.videoPanel1.configure(image = imgtk)
+		self.view.videoPanel1.image = imgtk
 
-	def export(self):
-		'''Will export to json data, yet to be implemented
+		imgtk = AppUtils.getTkinterImg(self.cam2,self.view.videoPanel2.winfo_width(),self.view.videoPanel2.winfo_height())
+		self.view.videoPanel2.configure(image = imgtk)
+		self.view.videoPanel2.image = imgtk
+
+
+
+	def exportClicked(self):
+		'''Move to validation export view
 		'''
+		self.view.pack_forget()
+		img1 = AppUtils.getImg(self.cam1)
+		img2 = AppUtils.getImg(self.cam2)
 
+		formParams ={'width':float(self.view.widthInput.get()),'height':float(self.view.heightInput.get()),'units':self.view.unitsBox.get()}
+		from validationExportView import ValidationExportViewController
+		ValidationExportViewController(self.master, formParams, img1, img2)
+
+
+ 
 	def takePicture(self):
 		''' Takes a picture from the current video capture
 			saves the image under pictures directory as jpg 

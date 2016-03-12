@@ -5,9 +5,7 @@ from promptSkewView import PromptSkewViewController
 class App:
 	def __init__(self, master):
 		''' Initializing GUI window
-
-		    Setting the viewController to start view
-
+		    Setting the viewController to promptSkewView 
 		'''
 		PromptSkewViewController(master)
 

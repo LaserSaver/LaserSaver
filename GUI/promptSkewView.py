@@ -16,10 +16,10 @@ class PromptSkewView(Frame):
 		instructions.bind("<Configure>", lambda e: instructions.configure(width=master.winfo_width()-50))
 
 
-		self.skipButton = Button(self, text="Skip For Now", command=controller.skipClicked)
+		self.skipButton = Button(self, text="Skip for now", command=controller.skipClicked)
 		self.skipButton.pack(side=BOTTOM)
 		
-		self.calibrateButton = Button(self, text="Calibrate Skew", command=controller.calibrateClicked)
+		self.calibrateButton = Button(self, text="Calibrate skew", command=controller.calibrateClicked)
 		self.calibrateButton.pack(side=BOTTOM)
 
 
@@ -34,8 +34,8 @@ class PromptSkewViewController:
 
 	def calibrateClicked(self):
 		self.view.pack_forget()
-		SkewViewController(self.master, 0)
+		SkewViewController(self.master)
 
 	def skipClicked(self):
 		self.view.pack_forget()
-		ContoursViewController(self.master,0)
+		ContoursViewController(self.master)

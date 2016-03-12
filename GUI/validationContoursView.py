@@ -2,12 +2,12 @@ from appUtils import *
 from contoursView import ContoursViewController
 from exportView import ExportViewController
 
-class ValidationContoursSkewView(Frame):
+class ValidationContoursView(Frame):
 	def __init__(self, master, controller, img, camNumber):
 		Frame.__init__(self, master)
 
-		skewLabel = Label(self, text="Does this look okay?", font="-weight bold")
-		skewLabel.pack(side=TOP)
+		promptLabel = Label(self, text="Does this look okay?", font="-weight bold")
+		promptLabel.pack(side=TOP)
 
 
 		def configImgPanel(img, imgPanel):
@@ -20,13 +20,13 @@ class ValidationContoursSkewView(Frame):
 		self.imgPanel.bind("<Configure>", lambda e: configImgPanel(img, self.imgPanel) )
 		self.imgPanel.pack(side=TOP)
 
-		self.redoButton = Button(self, text="No! Return to calibrating camera #" + str(camNumber +1), command=controller.redoClicked)
+		self.redoButton = Button(self, text="No, return to calibrating camera #" + str(camNumber +1), command=controller.redoClicked)
 		self.redoButton.pack(side=BOTTOM)
 
 		if camNumber < 1:
-			continueText = "Yes! Continue to calibrating camera #" + str(camNumber +2)
+			continueText = "Yes, continue to calibrating camera #" + str(camNumber +2)
 		else :
-			continueText = "Yes! Continue to export screen"
+			continueText = "Yes, continue to export screen"
 
 
 		self.continuteButton = Button(self, text=continueText, command=controller.continueClicked)
@@ -41,7 +41,7 @@ class ValidationContoursViewController:
 
 		self.camNumber = camNumber
 
-		self.view = ValidationContoursSkewView(master, self, img, camNumber)
+		self.view = ValidationContoursView(master, self, img, camNumber)
 		self.view.pack(expand=YES,fill=BOTH)
 
 	def continueClicked(self):
