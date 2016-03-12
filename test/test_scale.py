@@ -52,8 +52,8 @@ def testScales():
         sd.y_scale = SCALE[1]
         sd.units = UNIT
         w,h,unit = sd.getSize(IMAGES[i], show_conts=SAVE_IMG)
-        print round(w,1)
-        print round(h,1)
+        print "Width: {}".format(round(w,1))
+        print "Height: {}".format(round(h,1))
         assert round(w, 1) == round(DIMS[i][0], 1)
         assert round(h, 1) == round(DIMS[i][1], 1)
 
