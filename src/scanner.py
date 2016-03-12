@@ -105,7 +105,7 @@ def export_json(contours, xscale, yscale, units):
 
 class Scanner:
     #Functions GUI should call:
-    def scale_calibration(self, image1, image2, objx, objy, units):
+    def scaleCalibration(self, image1, image2, objx, objy, units):
         """
         Calibrates scale detection object and returns it
         Args:
@@ -123,7 +123,7 @@ class Scanner:
         return scaleDetect #returned in order to be passed to detect_contours
 
 
-    def skew_calibration(self, calibImages1, calibImages2):
+    def skewCalibration(self, calibImages1, calibImages2):
         """
         skew calibration
         Args:
@@ -139,7 +139,7 @@ class Scanner:
         dst2, roi2 = skew_calibration(calibImages2)
         return dst1, roi1, dst2, roi2 #returns these to be put in next function
 
-    def detect_contours(self, image1, image2, dst1, roi1, dst2, roi2, scaleDetect):
+    def detectContours(self, image1, image2, dst1, roi1, dst2, roi2, scaleDetect):
         """
         The rest of the logic to stitch the image
         Args:
@@ -165,7 +165,7 @@ class Scanner:
         units = scaleDetect.units
         export_json(contours, xscale, yscale, units) #do I need to do something with return value?
 
-    def does_config_exist(self):
+    def doesConfigExist(self):
         """
         Checks to see if we have run calibration yet
         Args:
