@@ -12,32 +12,28 @@ class ExportView(Frame):
 
 		#Video Capture frame for both cameras
 		self.frame = Label(self )
-		self.frame.pack(side=LEFT)
+		self.frame.pack(side=TOP)
 
 
-		panelWidth = (master.winfo_width()-150)
-		panelHeight = (master.winfo_height() -10)/2
+		panelWidth = (master.winfo_width()-10)/2
+		panelHeight = (master.winfo_height() -150)
 
 		self.videoPanel1 = Label(self.frame, width=panelWidth, height=panelHeight)
-		self.videoPanel1.pack(side=TOP)
+		self.videoPanel1.pack(side=LEFT)
 
 		self.videoPanel2 = Label(self.frame, width=panelWidth, height=panelHeight)
-		self.videoPanel2.pack(side=BOTTOM)
+		self.videoPanel2.pack(side=RIGHT)
 
 		def resizeVideoCapturePanels(videoPanel1, videoPanel2,controller):
 			controller.updatePanels()
-			panelWidth = (master.winfo_width()-150)
-			panelHeight = (master.winfo_height() -10)/2
+			panelWidth = (master.winfo_width()-10)/2
+			panelHeight = (master.winfo_height() -150)
 
 			videoPanel1.configure(width=panelWidth, height=panelHeight)
 			videoPanel2.configure(width=panelWidth, height=panelHeight)
 			controller.updatePanels()
 
 		self.frame.bind("<Configure>", lambda e: resizeVideoCapturePanels(self.videoPanel1, self.videoPanel2, controller) )
-
-		#Calibration tools
-		calibrationLabel = Label(self, text="Calibration")
-		calibrationLabel.pack(side=TOP)
 
 		#Width
 		onEditVar= StringVar()
@@ -78,7 +74,7 @@ class ExportView(Frame):
 		unitsPanel.pack(side=TOP)
 
 		#Export button
-		self.exportButton = Button(self, text="Take photos and export", wraplength=80,  command=controller.exportClicked)
+		self.exportButton = Button(self, text="Calibrate Scale", wraplength=80,  command=controller.exportClicked)
 		self.exportButton.pack(side=BOTTOM)
 
 	def validate(self,value,inputtext):
