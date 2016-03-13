@@ -1,6 +1,6 @@
 from appUtils import *
 from contoursView import ContoursViewController
-from exportView import ExportViewController
+from exportView import ScaleViewController
 
 class ValidationContoursView(Frame):
 	def __init__(self, master, controller, img, camNumber):

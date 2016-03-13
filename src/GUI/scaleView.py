@@ -1,14 +1,18 @@
 from appUtils import *
+from baseView import BaseView
 
-class ExportView(Frame):
+class ScaleView(BaseView):
 	def __init__(self, master, controller,formParams):
 		''' 
 		    Adding widgets:
 			title, video capture, exit button, and take picture button
 
 		'''
-		Frame.__init__(self, master)
-		self.master = master
+		BaseView.__init__(self, master)
+
+		scaleLabel = Label(self, text="Scale calibration", font="-weight bold")
+		scaleLabel.pack(side=TOP)
+
 
 		#Video Capture frame for both cameras
 		self.frame = Label(self )
@@ -16,7 +20,7 @@ class ExportView(Frame):
 
 
 		panelWidth = (master.winfo_width()-10)/2
-		panelHeight = (master.winfo_height() -150)
+		panelHeight = (master.winfo_height() -175)
 
 		self.videoPanel1 = Label(self.frame, width=panelWidth, height=panelHeight)
 		self.videoPanel1.pack(side=LEFT)
@@ -27,7 +31,7 @@ class ExportView(Frame):
 		def resizeVideoCapturePanels(videoPanel1, videoPanel2,controller):
 			controller.updatePanels()
 			panelWidth = (master.winfo_width()-10)/2
-			panelHeight = (master.winfo_height() -150)
+			panelHeight = (master.winfo_height() -175)
 
 			videoPanel1.configure(width=panelWidth, height=panelHeight)
 			videoPanel2.configure(width=panelWidth, height=panelHeight)
@@ -74,8 +78,8 @@ class ExportView(Frame):
 		unitsPanel.pack(side=TOP)
 
 		#Export button
-		self.exportButton = Button(self, text="Calibrate Scale", wraplength=80,  command=controller.exportClicked)
-		self.exportButton.pack(side=BOTTOM)
+		self.photosButton = Button(self, text="Take photos", wraplength=80,  command=controller.photosClicked)
+		self.photosButton.pack(side=BOTTOM)
 
 	def validate(self,value,inputtext):
 		'''Will only allow number to be inputed for entry widget used for width and height calibration
@@ -93,72 +97,7 @@ class ExportView(Frame):
 
 	def updateExportButton(self):
 		if self.heightInput.get() is '' or self.widthInput.get() is '':
-			self.exportButton.configure( state=DISABLED)
+			self.photosButton.configure( state=DISABLED)
 		else :
-			self.exportButton.configure( state=NORMAL)
+			self.photosButton.configure( state=NORMAL)
 
-
-
-class ExportViewController:
-	def __init__(self, master, formParams={'width':0.0,'height':0.0,'units':'centimeters'}):
-		self.master = master
-
-		self.cam1 = cv2.VideoCapture(0)
-
-		#Change this to one for now same cam
-		self.cam2 = cv2.VideoCapture(0)
-	
-		self.view = ExportView(master, self, formParams)
-
-		self.continiousUpdatePanel()
-		self.view.pack()
-
-
-	def continiousUpdatePanel(self):
-		self.updatePanels()
-		#Update capture every 50 milliseconds
-		self.master.after(50, self.continiousUpdatePanel)
-
-	def updatePanels(self):
-		''' Updates the images in the video capture 
-		'''
-		imgtk = AppUtils.getTkinterImg(self.cam1,self.view.videoPanel1.winfo_width(),self.view.videoPanel1.winfo_height())
-		self.view.videoPanel1.configure(image = imgtk)
-		self.view.videoPanel1.image = imgtk
-
-		imgtk = AppUtils.getTkinterImg(self.cam2,self.view.videoPanel2.winfo_width(),self.view.videoPanel2.winfo_height())
-		self.view.videoPanel2.configure(image = imgtk)
-		self.view.videoPanel2.image = imgtk
-
-
-
-	def exportClicked(self):
-		'''Move to validation export view
-		'''
-		self.view.pack_forget()
-		img1 = AppUtils.getImg(self.cam1)
-		img2 = AppUtils.getImg(self.cam2)
-
-		formParams ={'width':float(self.view.widthInput.get()),'height':float(self.view.heightInput.get()),'units':self.view.unitsBox.get()}
-		from validationExportView import ValidationExportViewController
-		ValidationExportViewController(self.master, formParams, img1, img2)
-
-
- 
-	def takePicture(self):
-		''' Takes a picture from the current video capture
-			saves the image under pictures directory as jpg 
-			with the name current time in milliseconds since 
-			epoch .jpg
-		'''
-		pictureName = str(int(time.time()))
-
-		#Checking if pictures folder and creating, if it does not
-		if not os.path.exists("pictures") :
-				os.makedirs("pictures")
-
-		for i in range(0, self.numOfCams):
-			fullName = pictureName+ '_cam'+str(i)+  '.jpg'
-			AppUtils.getImg(self.img_width_res,self.img_height_res, self.camList[i] ).save("pictures/" + fullName)
-			print("Picture taken: " + fullName)
-	
