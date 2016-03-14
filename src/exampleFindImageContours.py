@@ -1,21 +1,25 @@
 import cv2
 import numpy as np
-from findContours import FindContours
+from contourDetection import ContourDetection
 
 def main():
     
+    # input_img = 'images/whiteBackTest2.png'
     input_img = 'images/smallRealBoard1.jpg'
     
     # List of contours, and image of edges
-    initialContourList, listHierarchy, drawnEdges = FindContours.find_all_contours(input_img)
     
-    finalContourList = FindContours.select_contours(initialContourList, listHierarchy)
+    exampleContours = ContourDetection()
+    
+    initial_contour_list, list_hierarchy, drawn_edges = exampleContours.findAllContours(input_img, True)
+    
+    final_contour_list = exampleContours.selectContours(initial_contour_list, list_hierarchy)
     
     input_img = cv2.imread('images/smallRealBoard1.jpg', 0)
     
-    finalImage = FindContours.display_drawn_contours(input_img,finalContourList)
+    finalImage = exampleContours.displayDrawnContours(input_img,final_contour_list)
     
-    return finalContourList
+    return final_contour_list
     
     
     

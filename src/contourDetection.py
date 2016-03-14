@@ -9,15 +9,62 @@ NOTES:
             - Press any key to dismiss image windows (when image windows are in focus)
         - Takes a few extra seconds to print out contour coordinates
 '''
-class FindContours:
+class ContourDetection:
     '''
         Does useful stuff with contours
     '''
     def __init__(self):
-        return
+        
+        self.edge_min_thresh = 200
+        self.edge_max_thresh = 400
     
-    @staticmethod
-    def find_all_contours(img):
+    
+    def decreaseEdgeThresh(self):
+        '''
+        Decreases the threshold for determining what is an edge
+            - Stops decreasing when values reach 0
+            
+        Returns:
+            True: if threshold was altered
+            False: if at min threshold (threshold not altered)
+        '''
+        
+        if self.edge_min_thresh >= 50:
+            self.edge_min_thresh = self.edge_min_thresh - 50
+            self.edge_max_thresh = self.edge_max_thresh - 50
+            return True
+            
+        elif self.edge_max_thresh >= 50:
+            self.edge_max_thresh = self.edge_max_thresh - 50
+            return True
+        
+        else:
+            return False
+            
+    def increaseEdgeThresh(self):
+        '''
+        Increase the threshold for determining what is an edge
+            - Stops increasing when values reach 1000
+            
+        Returns:
+            True: if threshold was be altered
+            False: if at max threshold (threshold not altered)
+        '''
+        
+        if self.edge_max_thresh - self.edge_min_thresh < 200:
+            self.edge_max_thresh = self.edge_max_thresh + 50
+            return True
+            
+        elif self.edge_max_thresh <= 950:
+            self.edge_max_thresh = self.edge_max_thresh + 50
+            self.edge_min_thresh = self.edge_min_thresh + 50
+            return True
+        
+        else:
+            return False
+    
+    
+    def findAllContours(self, img, display):
         ''' Finds contours of given image
     
         - Utilizes Canny algorithm for edge detection
@@ -38,6 +85,7 @@ class FindContours:
         
         Args:
             img (string): Original image of board
+            display (bool): Whether or not edge images will be displayed
     
         Returns: 
             initial_contours: list of all contours in image
@@ -46,26 +94,33 @@ class FindContours:
     
     
         '''
-        
         img = cv2.imread(img,0)
+        
+        if display == True:
+            cv2.imshow("initial image", img)
+            cv2.waitKey(0)
     
         # Edge detection
-        edgeImage = cv2.Canny(img,200,400)
+        edge_image = cv2.Canny(img, self.edge_min_thresh, self.edge_max_thresh)
+        
+        if display == True:
+            cv2.imshow("edges", edge_image)
+            cv2.waitKey(0)
     
         # Use copy of edges1 if we want to preserve orignal edges, as cv2.threshold() is destructive
-        edgeCopy = edgeImage.copy()
+        edge_copy = edge_image.copy()
     
         # Finding contours
-        ret,thresh = cv2.threshold(edgeCopy,127,255,0)
+        ret,thresh = cv2.threshold(edge_copy,127,255,0)
 
         # cv2.findContours returns an image (which we don't need), the list of identified contours, 
         # and the contour hierarchy(how the contours relate to each other)
         _, initial_contours, hierarchy = cv2.findContours(thresh,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_NONE)
 
-        return initial_contours, hierarchy, edgeImage
+        return initial_contours, hierarchy, edge_image
     
     @staticmethod
-    def select_contours(contours, hierarchy):
+    def selectContours(contours, hierarchy):
         '''Selects the relevant contours from set of all contours found in an image
         
         - Loops through every contour found in an initial image
@@ -90,8 +145,6 @@ class FindContours:
             - REMOVE CONTOURS WHOSE X AND Y VALUES ARE NOT WITHIN THOSE OF THE LARGEST CONTOUR
             - ALL REMAINING CONTOURS SHOULD REPRESENT FEATURES OF THE BOARD
         '''
-    
-       # NOT CURRENTLY IMPLEMENTED, AS WE HAVE NO EXAMPLE IMAGE
 
 
         '''
@@ -106,7 +159,7 @@ class FindContours:
         logging.basicConfig(level=logging.DEBUG, format='%(message)s')
         
         # List of selected contours
-        finalContours = []
+        final_contours = []
     
 
         i=0 #Total contours found
@@ -131,7 +184,7 @@ class FindContours:
                 logging.debug("--------------")
                 
                 # Add good contour to list
-                finalContours.append(cnt)
+                final_contours.append(cnt)
         
                 j += 1
         
@@ -141,10 +194,10 @@ class FindContours:
         logging.debug(str(i) + " Total Contours Found")
         logging.debug(str(j) + " Final Contours Found")
     
-        return finalContours
+        return final_contours
         
     @staticmethod
-    def display_drawn_contours(inputImg, contourList):
+    def displayDrawnContours(input_img, contour_list):
         '''Draws given contours on a new image, and displays the image to the user
         
         Args:
@@ -155,10 +208,10 @@ class FindContours:
             drawing: image of the given contours
         '''
         
-        drawing = np.zeros(inputImg.shape,np.uint8)
-        drawnContours = cv2.drawContours(drawing, contourList, -1, (255,255,255), 1)
+        drawing = np.zeros(input_img.shape,np.uint8)
+        drawn_contours = cv2.drawContours(drawing, contour_list, -1, (255,255,255), 1)
         
-        cv2.imshow("Contours", drawnContours)
+        cv2.imshow("Contours", drawn_contours)
         
         # Any key press closes all display windows (while windows are in focus)
         cv2.waitKey(0)
