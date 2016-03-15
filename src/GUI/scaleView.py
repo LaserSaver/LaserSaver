@@ -71,7 +71,7 @@ class ScaleView(BaseView):
 		calibrationLabel.pack(side=LEFT)
 
 		self.unitsBox = ttk.Combobox(unitsPanel, width=10, state="readonly")
-		self.unitsBox['values'] = ('centimeters', 'inches')
+		self.unitsBox['values'] = ('cm', 'in', 'mm')
 		self.unitsBox['state'] = 'readonly'
 		self.unitsBox.set(formParams['units'])
 		self.unitsBox.pack(side=RIGHT)

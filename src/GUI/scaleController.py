@@ -2,7 +2,7 @@ from appUtils import *
 from scaleView import ScaleView
 
 class ScaleController:
-	def __init__(self, master, formParams={'width':0.0,'height':0.0,'units':'centimeters'}):
+	def __init__(self, master, formParams={'width':0.0,'height':0.0,'units':'cm'}):
 		self.master = master
 
 		self.cam1 = AppUtils.getCam1()
