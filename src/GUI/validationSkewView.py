@@ -10,18 +10,14 @@ class ValidationSkewView(BaseView):
 
 
 		def configImgPanel(img, imgPanel):
-			resizdeImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-145)
-			imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-145, relief=RIDGE, borderwidth=2, image = resizdeImg)
+			resizdeImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-115)
+			imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-115, relief=RIDGE, borderwidth=2, image = resizdeImg)
 			imgPanel.image = resizdeImg
 
 		self.imgPanel = Label(self)
 		configImgPanel(img, self.imgPanel)
 		self.imgPanel.bind("<Configure>", lambda e: configImgPanel(img, self.imgPanel) )
 		self.imgPanel.pack(side=TOP)
-
-
-		self.skipButton = Button(self, text="Skip", command=controller.skipClicked)
-		self.skipButton.pack(side=BOTTOM)
 
 		self.redoButton = Button(self, text="No, return to calibrating camera #" + str(camNumber +1), command=controller.redoClicked)
 		self.redoButton.pack(side=BOTTOM)

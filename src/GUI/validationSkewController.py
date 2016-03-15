@@ -23,8 +23,3 @@ class ValidationSkewController:
 	def redoClicked(self):
 		self.view.pack_forget()
 		SkewController(self.master, self.camNumber)
-
-	def skipClicked(self):
-		self.view.pack_forget()
-		ScaleController(self.master)
-		

@@ -8,6 +8,25 @@ import os
 from threading import Thread
 
 class AppUtils: 
+
+	#Creating cam1 and cam2 as singleton objects that can be reused across the app
+	cam1 = None
+	cam2 = None
+	
+	@staticmethod
+	def getCam1():
+		if AppUtils.cam1 is None:
+			AppUtils.cam1 = cv2.VideoCapture(0)
+		return AppUtils.cam1
+
+	@staticmethod
+	def getCam2():
+		#No second camera using 0 for now change to 1
+		if AppUtils.cam2 is None:
+			AppUtils.cam2 = cv2.VideoCapture(0)
+		return AppUtils.cam2
+
+
 	@staticmethod
 	def getImg(cam, width=640, height=400):
 		'''   Getting an image object from the video capture

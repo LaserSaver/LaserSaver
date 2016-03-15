@@ -5,21 +5,24 @@ class ScaleController:
 	def __init__(self, master, formParams={'width':0.0,'height':0.0,'units':'centimeters'}):
 		self.master = master
 
-		self.cam1 = cv2.VideoCapture(0)
-
-		#Change this to one for now same cam
-		self.cam2 = cv2.VideoCapture(0)
+		self.cam1 = AppUtils.getCam1()
+		self.cam2 = AppUtils.getCam2()
 	
 		self.view = ScaleView(master, self, formParams)
+		self.view.pack(expand=YES,fill=BOTH)
 
 		self.continiousUpdatePanel()
-		self.view.pack()
 
 
 	def continiousUpdatePanel(self):
+		if self.view.winfo_manager() == "":
+			#If view is removed stop updating the panel
+			self.master.after_cancel(self.updatePanelID)
+			return
+
 		self.updatePanels()
 		#Update capture every 50 milliseconds
-		self.master.after(50, self.continiousUpdatePanel)
+		self.updatePanelID = self.master.after(50, self.continiousUpdatePanel)
 
 	def updatePanels(self):
 		''' Updates the images in the video capture 

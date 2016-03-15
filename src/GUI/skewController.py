@@ -14,7 +14,10 @@ class SkewController:
 		self.view = SkewView(master, self, camNumber)
 
 		#Change 0 to cam number currently only have one camera
-		self.cam = cv2.VideoCapture(0)
+		if camNumber == 0:
+			self.cam = AppUtils.getCam1()
+		else :
+			self.cam = AppUtils.getCam2()
 		self.view.pack(expand=YES,fill=BOTH)
 
 		self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)
@@ -22,6 +25,11 @@ class SkewController:
 		self.continiousUpdatePanel()
 
 	def continiousUpdatePanel(self):
+		if self.view.winfo_manager() == "":
+			#If view is removed stop updating the panel
+			self.master.after_cancel(self.updatePanelID)
+			return
+		
 		self.updatePanel()
 		self.updatePanelID = self.master.after(50,self.continiousUpdatePanel )
 
@@ -69,13 +77,14 @@ class SkewController:
 			progressbar.pack(side=BOTTOM)
 			progressbar.start()
 
-			AppUtils.computeOnSeprateThread(self.master, self.calibrationDone, self.model.calculate ,[self.photos])
-
 			processingLabel = Label(self.view, text="Processing...")
 			processingLabel.pack(side=BOTTOM)
 
+			AppUtils.computeOnSeprateThread(self.master, self.calibrationDone, self.model.calculate ,[self.photos])
+
+
 	def calibrationDone(self, img):
+		self.view.pack_forget()
 		#Had to import here to prevent cyclical refrencing
 		from validationSkewController import ValidationSkewController
-		self.view.pack_forget()
 		ValidationSkewController(self.master, img, self.camNumber)
