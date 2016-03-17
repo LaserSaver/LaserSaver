@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import logging
-import DetermineSkew
+from determineSkew import DetermineSkew
 
 class ScannerCamera:
     '''
@@ -98,7 +98,8 @@ class ScannerCamera:
         '''
         
         if self.use_skew_correction is None:
-
+            
+            # This means that the image we are using for calibration is permanently rewritten with the skew matrix
             corrected_img = cv2.imwrite(original_img, self.skew_dst)
             return corrected_img
             
