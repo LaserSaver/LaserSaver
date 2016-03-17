@@ -106,9 +106,12 @@ class DetermineSkew:
 
     
         logging.debug("Starting loop")
+        
         for fname in calibImages[1:]:
+            
             logging.debug("In loop")
             logging.debug(x)
+            
             img = cv2.imread(fname)
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # Image must be greyscale for center finding to work.
             
