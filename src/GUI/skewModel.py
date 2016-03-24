@@ -1,4 +1,5 @@
 import time
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import scanner
 class SkewModel:
 	def calculate(self, imgList):

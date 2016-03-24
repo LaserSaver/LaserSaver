@@ -1,4 +1,5 @@
 import time
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import scanner
 class ScaleModel:
 	def calculate(self, img1, img2, width, height, units):

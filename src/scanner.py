@@ -102,6 +102,15 @@ def export_json(contours, xscale, yscale, units):
     return jsonData.exportJson()
 
 class Scanner:
+    #in case we want to pass around 1 scanner object instead of the individual objects
+    def __init__(self):
+        '''
+        Initialize a new Scanner object
+        '''
+        cam1Settings = None
+        cam2Settings = None
+        scaleDetectObj = None
+
     #Functions GUI should call:
     def scaleCalibration(self, image1, image2, objx, objy, units):
         """
@@ -145,7 +154,7 @@ class Scanner:
             cam2Settings: ScannerCamera object for camera 2
             scaleDetect: scale detection object previously used
         Returns:
-            Nothing?
+            finalImage: image to be displayed to user to confirm it is correct
         """
         cam1Settings = ScannerCamera()
         cam2Settings = ScannerCamera()
