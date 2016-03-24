@@ -1,5 +1,5 @@
 import time
-class ExportModel:
+class ScaleModel:
 	def calculate(self, img1, img2, width, height, units):
 		time.sleep(5)
 

@@ -1,13 +1,13 @@
 #!/usr/bin/python
 from appUtils import *
-from promptSkewView import PromptSkewViewController
+from homeController import HomeController
 
 class App:
 	def __init__(self, master):
 		''' Initializing GUI window
-		    Setting the viewController to promptSkewView 
+		    Setting the viewController to WelcomeController 
 		'''
-		PromptSkewViewController(master)
+		HomeController(master)
 
 
 root = Tk()
