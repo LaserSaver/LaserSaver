@@ -62,8 +62,6 @@ def skew_correction(image, dst, roi, camSettings):
     Returns:
         True on success, False on failure
     """
-    camSettings.skew_dst = dst
-    camSettings.skew_roi = roi
     return camSettings.correctSkew(image)
 
 def stitch_images(image1, image2):
@@ -129,22 +127,22 @@ class Scanner:
         Args:
             calibImages: calibration images for camera 1 (any number)
         Returns:
-            dst: skew correction matrix for camera 1
-            roi:
+            camSettings: ScannerCamera object
         """
         dst, roi = skew_calibration(calibImages)
-        return dst, roi#returns these to be put in next function
+        camSettings = ScannerCamera()
+        camSettings.skew_dst = dst
+        camSettings.skew_roi = roi
+        return camSettings#returns this to be put in next function
 
-    def processImages(self, image1, image2, dst1, roi1, dst2, roi2, scaleDetect):
+    def processImages(self, image1, image2, cam1Settings, cam2Settings, scaleDetect):
         """
         The rest of the logic to stitch the image
         Args:
             image1: image from camera 1
             image2: image from camera 2
-            dst1: skew correction matrix for camera 1
-            roi1:
-            dst2: skew correction matrix for camera 1
-            roi2:
+            cam1Settings: ScannerCamera object for camera 1
+            cam2Settings: ScannerCamera object for camera 2
             scaleDetect: scale detection object previously used
         Returns:
             Nothing?
@@ -152,14 +150,15 @@ class Scanner:
         cam1Settings = ScannerCamera()
         cam2Settings = ScannerCamera()
 
-        image1 = skew_correction(image1, dst1, roi1, cam1Settings)
-        image2 = skew_correction(image2, dst2, roi2, cam2Settings)
+        image1 = skew_correction(image1, cam1Settings)
+        image2 = skew_correction(image2, cam2Settings)
 
         finalImage = stitch_images(image1, image2)
         contours, edgeImage = find_contours(finalImage)
         xscale, yscale = get_scale(scaleDetect)
         units = scaleDetect.units
         export_json(contours, xscale, yscale, units) #do I need to do something with return value?
+        return finalImage #do we want to show the contours on this as well?
 
     def doesConfigExist(self):
         """
