@@ -6,7 +6,7 @@ class HomeController:
 		self.master = master
 
 		#Assume there is a config file for now
-		isReady = True
+		isReady = False
 		self.view = HomeView(master, self, isReady)
 		self.view.pack(expand=YES,fill=BOTH)
 

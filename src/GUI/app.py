@@ -4,12 +4,15 @@ from homeController import HomeController
 
 class App:
 	def __init__(self, master):
-		''' Initializing GUI window
-		    Setting the viewController to WelcomeController 
+		''' Setting the viewController to HomeViewController
+		    
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
 		'''
 		HomeController(master)
 
 
+#Initializing GUI window
 root = Tk()
 root.wm_title("LazerCutter GUI")
 root.geometry('{}x{}'.format(400, 400))
