@@ -4,6 +4,11 @@ from contoursModel import ContoursModel
 
 class ContoursController:
 	def __init__(self, master):
+		''' Sets up the contours view and initializes both cameras to use for video capture
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		'''
 		self.master = master
 		
 		self.cam1 = AppUtils.getCam1()
@@ -19,7 +24,10 @@ class ContoursController:
 
 	def takingPicturesEffect(self, case=0):
 		'''
-			This is used to create the flash effect when taking picture 
+			This is used to create the flash effect when taking picture
+
+			Args:
+				case(int): The current step in the animation 
 		'''
 		if case == 0:
 			#Stopping video capture disable take photo button
@@ -61,7 +69,7 @@ class ContoursController:
 
 
 	def takePhotosClicked(self):
-		'''Move to validation export view
+		'''Takes two pictures and performs contours processing on them on seperate thread
 		'''
 		img1 = AppUtils.getImg(self.cam1)
 		img2 = AppUtils.getImg(self.cam2)
@@ -81,6 +89,11 @@ class ContoursController:
 		AppUtils.computeOnSeprateThread(self.master, self.processingDone, self.model.calculate ,[img1, img2])
 
 	def processingDone(self, img):
+		'''Moves to validation contoursView
+
+			Args:
+				img(Image): The image computed from the model function
+		'''
 		self.view.pack_forget()
 
 		from validationContoursController import ValidationContoursController 

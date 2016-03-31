@@ -3,6 +3,12 @@ from baseView import BaseView
 
 class ContoursView(BaseView):
 	def __init__(self, master, controller):
+		''' Sets up the contours view 
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	controller(ContoursController object): The controller which will be in charge of the view is setup to send callbacks
+		'''
 		BaseView.__init__(self, master)
 
 		label = Label(self, text="Take phots" , font="-weight bold")
