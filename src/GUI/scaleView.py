@@ -3,10 +3,12 @@ from baseView import BaseView
 
 class ScaleView(BaseView):
 	def __init__(self, master, controller,formParams):
-		''' 
-		    Adding widgets:
-			title, video capture, exit button, and take picture button
+		''' Sets up the ScaleView
 
+		  Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	controller(ScaleController object): The controller which will be in charge of the view
+		    	formParams(Dictionary): The current form params
 		'''
 		BaseView.__init__(self, master)
 
@@ -96,6 +98,8 @@ class ScaleView(BaseView):
 			return False
 
 	def updateExportButton(self):
+		'''If the fields for width and height are empty the export button will be set to DISABLED
+		'''
 		if self.heightInput.get() is '' or self.widthInput.get() is '':
 			self.photosButton.configure( state=DISABLED)
 		else :

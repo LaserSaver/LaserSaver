@@ -3,6 +3,12 @@ from baseView import BaseView
 
 class PromptSkewView(BaseView):
 	def __init__(self, master, controller):
+		''' Sets up The PromptSkewView 
+		    
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	controller(PromptSkewController object): The controller which will be in charge of the view
+		'''
 		BaseView.__init__(self, master)
 
 		promptLabel = Label(self, text="Would you like to calibrate for skew?", font="-weight bold")

@@ -3,6 +3,13 @@ from baseView import BaseView
 
 class ExportView(BaseView):
 	def __init__(self, master, controller, jsonText):
+		''' Sets up the export view 
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	controller(ExportController object): The controller which will be in charge of the view
+		    	jsonText(String): The json text which is displayed to the user after export
+		'''
 		BaseView.__init__(self, master)
 
 		label = Label(self, text="Congrutlations, successfully exported JSON", font="-weight bold")

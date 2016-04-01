@@ -3,6 +3,13 @@ from baseView import BaseView
 
 class SkewView(BaseView):
 	def __init__(self, master, controller, camNumber):
+		''' Sets up the skew view
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	controller(SkewController object): The controller which will be in charge of the view
+		    	camNumber(int): The current camera being calibrated
+		'''
 		BaseView.__init__(self, master)
 
 		skewLabel = Label(self, text="Skew calibration for camera #" + str(camNumber+1), font="-weight bold")
@@ -27,6 +34,12 @@ class SkewView(BaseView):
 
 
 	def updateButtons(self, currentNumOfPhotos, totalPhotos):
+		'''An update buttons function that updates the buttons everytime there is an update with the number of photos takes
+
+			Args:
+				currentNumOfPhotos(int): The total number of photos currently taken
+				totalPhotos(int): The total amount of photos needed to complete calibration
+		'''
 		if currentNumOfPhotos < totalPhotos:
 		    self.photoButton.configure( text = "Take photo ("+ str(currentNumOfPhotos) + "/" + str(totalPhotos) + ")")
 		else:

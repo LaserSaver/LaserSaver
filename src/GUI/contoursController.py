@@ -23,8 +23,7 @@ class ContoursController:
 
 
 	def takingPicturesEffect(self, case=0):
-		'''
-			This is used to create the flash effect when taking picture
+		'''This is used to create the flash effect when taking picture
 
 			Args:
 				case(int): The current step in the animation 
@@ -47,6 +46,8 @@ class ContoursController:
 
 
 	def continiousUpdatePanel(self):
+		'''Calls on updatePanels continiously every 50 milliseconds
+		'''
 		if self.view.winfo_manager() == "":
 			#If view is removed stop updating the panel
 			self.master.after_cancel(self.updatePanelID)

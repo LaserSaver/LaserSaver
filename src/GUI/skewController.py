@@ -4,6 +4,12 @@ from skewModel import SkewModel
 
 class SkewController:
 	def __init__(self, master, camNumber=0):
+		''' The skew controller in charge of updating the skew model
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	camNumber(int): The current camera being calibrated
+		'''
 		self.master = master
 		self.camNumber = camNumber;
 
@@ -25,6 +31,8 @@ class SkewController:
 		self.continiousUpdatePanel()
 
 	def continiousUpdatePanel(self):
+		'''Calls on updatePanel continiously every 50 milliseconds
+		'''
 		if self.view.winfo_manager() == "":
 			#If view is removed stop updating the panel
 			self.master.after_cancel(self.updatePanelID)
@@ -34,17 +42,23 @@ class SkewController:
 		self.updatePanelID = self.master.after(50,self.continiousUpdatePanel )
 
 	def updatePanel(self):
+		''' Updates the image in the video capture 
+		'''
 		imgtk = AppUtils.getTkinterImg(self.cam,self.view.videoCapturePanel.winfo_width(),self.view.videoCapturePanel.winfo_height())
 		self.view.videoCapturePanel.configure(image = imgtk)
 		self.view.videoCapturePanel.image = imgtk
 
 	def undoClicked(self):
+		'''When the undobutton is clicked removes one of the images from the list
+		'''
 		self.photos.pop()
 		self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)
 
 	def takingPictureEffect(self, case=0):
-		'''
-			This is used to create the flash effect when taking picture 
+		'''This is used to create the flash effect when taking picture
+
+			Args:
+				case(int): The current step in the animation 
 		'''
 		if case == 0:
 			#Stopping video capture disable take photo button
@@ -62,6 +76,8 @@ class SkewController:
 
 
 	def takePhotoClicked(self):
+		'''When the take photo button is clicked
+		'''
 		if len(self.photos) < self.numberOfPhotosRequired:
 			#Taking a photo
 			self.takingPictureEffect()
@@ -84,6 +100,11 @@ class SkewController:
 
 
 	def calibrationDone(self, img):
+		'''Called back from the model processing
+			
+			Args:
+				img(Image): The image returned from the model's processing
+		'''
 		self.view.pack_forget()
 		#Had to import here to prevent cyclical refrencing
 		from validationSkewController import ValidationSkewController

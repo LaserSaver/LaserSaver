@@ -3,6 +3,12 @@ from scaleView import ScaleView
 
 class ScaleController:
 	def __init__(self, master, formParams={'width':0.0,'height':0.0,'units':'cm'}):
+		''' The scale controller in charge of updating the scale model
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	formParams(Dictonary): The params that fill the form
+		'''
 		self.master = master
 
 		self.cam1 = AppUtils.getCam1()
@@ -15,6 +21,8 @@ class ScaleController:
 
 
 	def continiousUpdatePanel(self):
+		'''Calls on updatePanels continiously every 50 milliseconds
+		'''
 		if self.view.winfo_manager() == "":
 			#If view is removed stop updating the panel
 			self.master.after_cancel(self.updatePanelID)

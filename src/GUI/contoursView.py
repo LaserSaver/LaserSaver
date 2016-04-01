@@ -7,7 +7,7 @@ class ContoursView(BaseView):
 		 
 		    Args:
 		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
-		    	controller(ContoursController object): The controller which will be in charge of the view is setup to send callbacks
+		    	controller(ContoursController object): The controller which will be in charge of the view
 		'''
 		BaseView.__init__(self, master)
 
