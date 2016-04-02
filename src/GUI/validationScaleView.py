@@ -3,6 +3,14 @@ from baseView import BaseView
 
 class ValidationScaleView(BaseView):
 	def __init__(self, master, controller, img, img2):
+		''' Sets up the validation scale view screen
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	controller(ValidationScaleController object): The controller which will be in charge of the view
+		    	img1(Image): Confirm taken image from camera 1
+		    	img2(Image): Confirm taken image from camera 2 
+		'''
 		BaseView.__init__(self, master)
 
 		promptLabel = Label(self, text="Does this look okay?", font="-weight bold")

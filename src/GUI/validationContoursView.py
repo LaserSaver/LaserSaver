@@ -3,6 +3,13 @@ from baseView import BaseView
 
 class ValidationContoursView(BaseView):
 	def __init__(self, master, controller, img):
+		''' Sets up the validation contours view screen
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	controller(ValidationContoursController object): The controller which will be in charge of the view
+		    	img(Image): The resulting image from the contours model processing
+		'''
 		BaseView.__init__(self, master)
 
 		promptLabel = Label(self, text="Does this look okay?", font="-weight bold")

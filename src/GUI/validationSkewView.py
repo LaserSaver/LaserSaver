@@ -3,6 +3,14 @@ from baseView import BaseView
 
 class ValidationSkewView(BaseView):
 	def __init__(self, master, controller, img, camNumber):
+		''' Sets up the skew validation contours view screen
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	controller(ValidationSkewController object): The controller which will be in charge of the view
+		    	img(Image): The resulting image from the skew model processing
+		    	camNumber(Int): Current camera that is being calibrated
+		'''
 		BaseView.__init__(self, master)
 
 		promptLabel = Label(self, text="Does this look okay?", font="-weight bold")

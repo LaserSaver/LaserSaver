@@ -5,6 +5,16 @@ from scaleModel import ScaleModel
 
 class ValidationScaleController:
 	def __init__(self, master, formParams, img1, img2):
+		''' The validation scale controller in charge of asking the user whether the images he took are fit to
+			be processed by the scale model
+		 
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	formParams(Dictonary): The params that fill the form
+		    	img1(Image): Confirm taken image from camera 1
+		    	img2(Image): Confirm taken image from camera 2
+		'''
 		self.master = master
 
 		self.view = ValidationScaleView(master, self, img1, img2)
@@ -18,7 +28,7 @@ class ValidationScaleController:
 		self.img2 = img2
 
 	def yesClicked(self):
-		#Submitting for calibration
+		'''Yes button clicked start processing by the scale model'''
 		self.view.yesButton.pack_forget()
 		self.view.noButton.pack_forget()
 			
@@ -33,10 +43,16 @@ class ValidationScaleController:
 		self.view.processingLabel.pack(side=BOTTOM)
 
 	def noClicked(self):
+		'''No Button clicked go back to the previous step'''
 		self.view.pack_forget()
 		ScaleController(self.master, self.formParams)
 
 	def finishCalibrating(self, wentWell):
+		'''Called on when the scale model finished processing and updates the view accordingly
+
+			Args:
+				wentlWell(Bool): Tells the controller whether or not the scale model was sucessfully calibrated
+		''' 
 		self.view.processingLabel.pack_forget()
 		self.view.progressbar.pack_forget()
 		
