@@ -3,6 +3,7 @@ import numpy as np
 import logging
 from determineSkew import DetermineSkew
 
+
 class ScannerCamera:
     '''
     Class for determining and storing intrinsic camera values

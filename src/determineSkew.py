@@ -34,11 +34,14 @@ class DetermineSkew:
         
         objpoints, imgpoints = DetermineSkew.findSkewPoints(calibImages)
         
+        if imgpoints == [] or objpoints == []:
+            raise AttributeError
+        
         _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (DetermineSkew.w,DetermineSkew.h), None, None)
         
         logging.debug("New image time...")
     
-        img = cv2.imread(calibImages[0])
+        img = calibImages[0]
         
         newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (DetermineSkew.w,DetermineSkew.h), 1, (DetermineSkew.w,DetermineSkew.h))
 
@@ -67,6 +70,7 @@ class DetermineSkew:
         print error
     
         return dst, roi, error
+
 
     @staticmethod   
     def findSkewPoints(calibImages):
@@ -111,8 +115,9 @@ class DetermineSkew:
             
             logging.debug("In loop")
             logging.debug(x)
-            
-            img = cv2.imread(fname)
+
+            img = fname
+
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # Image must be greyscale for center finding to work.
             
             # h, w = gray.shape[:2]
@@ -141,21 +146,21 @@ class DetermineSkew:
                 logging.debug("Drawing corners")
             
                 img = cv2.drawChessboardCorners(img, DetermineSkew.shape, centers, ret)
-                cv2.imshow('img', img)
-                cv2.waitKey(0)
-            
+                # cv2.imshow('img', img)
+#                 cv2.waitKey(0)
+#
                 x = x+1
             
             else:
                 logging.debug("No corners here, bub.")
                 logging.debug(ret)
                 logging.debug(centers)
-                cv2.imshow('img', img)
-                cv2.waitKey(0)
+                # cv2.imshow('img', img)
+#                 cv2.waitKey(0)
             
                 x = x+1
 
-        cv2.destroyAllWindows()
+        # cv2.destroyAllWindows()
         
         
         return objpoints, imgpoints

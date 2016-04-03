@@ -1,0 +1,222 @@
+import cv2
+import numpy as np
+import logging
+
+
+'''
+NOTES:
+        - Will display grayscale version of original image, as well as a contour-only image
+            - Press any key to dismiss image windows (when image windows are in focus)
+        - Takes a few extra seconds to print out contour coordinates
+'''
+class ContourDetection:
+    '''
+        Does useful stuff with contours
+    '''
+    def __init__(self):
+        
+        self.edge_min_thresh = 200
+        self.edge_max_thresh = 400
+    
+    
+    def decreaseEdgeThresh(self):
+        '''
+        Decreases the threshold for determining what is an edge
+            - Stops decreasing when values reach 0
+            
+        Returns:
+            True: if threshold was altered
+            False: if at min threshold (threshold not altered)
+        '''
+        
+        if self.edge_min_thresh >= 50:
+            self.edge_min_thresh = self.edge_min_thresh - 50
+            self.edge_max_thresh = self.edge_max_thresh - 50
+            return True
+            
+        elif self.edge_max_thresh >= 50:
+            self.edge_max_thresh = self.edge_max_thresh - 50
+            return True
+        
+        else:
+            return False
+            
+    def increaseEdgeThresh(self):
+        '''
+        Increase the threshold for determining what is an edge
+            - Stops increasing when values reach 1000
+            
+        Returns:
+            True: if threshold was be altered
+            False: if at max threshold (threshold not altered)
+        '''
+        
+        if self.edge_max_thresh - self.edge_min_thresh < 200:
+            self.edge_max_thresh = self.edge_max_thresh + 50
+            return True
+            
+        elif self.edge_max_thresh <= 950:
+            self.edge_max_thresh = self.edge_max_thresh + 50
+            self.edge_min_thresh = self.edge_min_thresh + 50
+            return True
+        
+        else:
+            return False
+    
+    
+    def findAllContours(self, img, display):
+        ''' Finds contours of given image
+    
+        - Utilizes Canny algorithm for edge detection
+    
+            - Threshold numbers are compared to calculated Gradient values
+                Max: Anything above definitely an edge
+                Min: Anything below definitely NOT an edge
+            
+                - Alter threshold numbers to change accuracy
+    
+        - Finds contours in image using cv2.findContours()
+            - Assumes a 2-level hierarchy (cv2.RETR_CCOMP)
+                - Every contour is the boundary between a hole and a feature
+            - Each individual contour is a numpy array of (x,y) coordinates of boundary points of the object
+                - cv2.CHAIN_APPROX_NONE stores every single point along contour
+    
+        Called from main()
+        
+        Args:
+            img (string): Original image of board
+            display (bool): Whether or not edge images will be displayed
+    
+        Returns: 
+            initial_contours: list of all contours in image
+            hierarchy: initial_contours hierarchy
+            edgeImage: the edge image the contours were built off
+    
+    
+        '''
+        img = cv2.imread(img,0)
+        
+        if display == True:
+            cv2.imshow("initial image", img)
+            cv2.waitKey(0)
+    
+        # Edge detection
+        edge_image = cv2.Canny(img, self.edge_min_thresh, self.edge_max_thresh)
+        
+        if display == True:
+            cv2.imshow("edges", edge_image)
+            cv2.waitKey(0)
+    
+        # Use copy of edges1 if we want to preserve orignal edges, as cv2.threshold() is destructive
+        edge_copy = edge_image.copy()
+    
+        # Finding contours
+        ret,thresh = cv2.threshold(edge_copy,127,255,0)
+
+        # cv2.findContours returns an image (which we don't need), the list of identified contours, 
+        # and the contour hierarchy(how the contours relate to each other)
+        _, initial_contours, hierarchy = cv2.findContours(thresh,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_NONE)
+
+        return initial_contours, hierarchy, edge_image
+    
+    @staticmethod
+    def selectContours(contours, hierarchy):
+        '''Selects the relevant contours from set of all contours found in an image
+        
+        - Loops through every contour found in an initial image
+            - identifies where each contour sits in the overall hierarchy
+                - if contour has no parent, this is a contour we want to return
+                    => add it to finalContours
+        
+        Args:
+            contours: list of all contours of an image
+            hierarchy: contours hierarchy
+            
+        Returns:
+            finalContours: list of every contour of interest
+        
+        '''
+        
+        
+        '''
+        EXTRACTING CORRECT CONTOURS --- (ASSUMING THERE ARE CONTOURS OTHER THAN THOSE OF THE BOARD)
+
+            - FIND CONTOUR W/ LARGEST AREA --> THIS SHOULD BE THE SHEET ITSELF
+            - REMOVE CONTOURS WHOSE X AND Y VALUES ARE NOT WITHIN THOSE OF THE LARGEST CONTOUR
+            - ALL REMAINING CONTOURS SHOULD REPRESENT FEATURES OF THE BOARD
+        '''
+
+
+        '''
+        LOOP THROUGH ALL CONTOURS AND ONLY DRAW ONE SET OF CORRECT CONTOURS
+   
+            - THERE ARE MULTIPLE DIFFERENT CONTOURS AROUND EACH EDGE
+                - ONLY WANT THE ONE SET
+
+        '''
+        
+        #LOGGING
+        logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+        
+        # List of selected contours
+        final_contours = []
+    
+
+        i=0 #Total contours found
+        j=0 #Final contours selected
+        for cnt in contours:
+
+            # If contour has no parent... Then it's one we want
+            if hierarchy[0][i][3] == -1:
+    
+                logging.debug("--------------")
+                logging.debug("NEW CONTOUR " + str(i))
+                logging.debug(hierarchy[0][i][3])
+        
+                '''
+                Positive contour areas = features, Negative areas = holes
+                Or, at least, they should be if there weren't double contours --> all areas we find are currently negative
+                Contour w/ largest absolute value should be the edge of the entire board
+                '''
+                logging.debug("Contour area: " + str(cv2.contourArea(cnt,True)) )
+
+                logging.debug("END CONTOUR " + str(i))
+                logging.debug("--------------")
+                
+                # Add good contour to list
+                final_contours.append(cnt)
+        
+                j += 1
+        
+            i += 1
+                
+
+        logging.debug(str(i) + " Total Contours Found")
+        logging.debug(str(j) + " Final Contours Found")
+    
+        return final_contours
+        
+    @staticmethod
+    def displayDrawnContours(input_img, contour_list):
+        '''Draws given contours on a new image, and displays the image to the user
+        
+        Args:
+            inputImg (string): the original photo
+            contourList: list of contours found in photo
+        
+        Returns:
+            drawing: image of the given contours
+        '''
+        
+        drawing = np.zeros(input_img.shape,np.uint8)
+        drawn_contours = cv2.drawContours(drawing, contour_list, -1, (255,255,255), 1)
+        
+        cv2.imshow("Contours", drawn_contours)
+        
+        # Any key press closes all display windows (while windows are in focus)
+        cv2.waitKey(0)
+        
+        return drawing
+
+    
+
