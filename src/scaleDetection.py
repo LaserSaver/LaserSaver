@@ -18,14 +18,15 @@ class ScaleDetection:
         '''
         x_scale = None
         y_scale = None
+        units = None
 
     def getScale(self):
         '''
         Returns tuple of (self.x_scale, self.y_scale)
         '''
-        return (self.x_scale, self.y_scale)
+        return (self.x_scale, self.y_scale, self.units)
 
-    def calibrate(self, image, known_x, known_y, show_conts=False):
+    def calibrate(self, image, known_x, known_y, unit, show_conts=False):
         '''
         Given an image of an object of known size sets the x and y scale
         Args:
@@ -51,24 +52,29 @@ class ScaleDetection:
         except InvalidOperation:
             print "known_x and known_y must be numbers, retry calibration"
             return False
-        #print("(x_scl, y_scl): ({}, {})".format(self.x_scale, self.y_scale))
-        logger.debug("(x_scl, y_scl): ({}, {})".format(self.x_scale, self.y_scale))
+        self.units = unit
+        logger.debug("(x_scl, y_scl, units): ({}, {}, {})".format(self.x_scale,
+                                                                  self.y_scale,
+                                                                  self.units))
         return True
 
 
 
     def saveConfigFile(self, config_file="scale.config"):
         """
-        saves a dictionary {"x_scale": self.x_scale, "y_scale": self.y_scale}
+        saves a dictionary {"x_scale": self.x_scale,
+                            "y_scale": self.y_scale,
+                            "units": self.units}
         Args:
             config_file (string): location of config file,
                        defaults to configs/scale.config.
         Returns:
             True on success, False on failure
         """
-        data = {"x_scale": self.x_scale, "y_scale": self.y_scale}
+        data = {"x_scale": self.x_scale,
+                "y_scale": self.y_scale,
+                "units": self.units}
         with open(config_file, 'w') as conf:
-            json.dump(data, conf)
         return True
 
     def loadConfigFile(self, config_file="scale.config"):
@@ -88,6 +94,7 @@ class ScaleDetection:
             return False
         self.x_scale = config["x_scale"]
         self.y_scale = config["y_scale"]
+        self.units = config["units"]
         return True
 
 
@@ -110,7 +117,7 @@ class ScaleDetection:
         (w, h) = self.getDimensions(image, show_conts=show_conts)
         width = Decimal(w) * Decimal(self.x_scale)
         height = Decimal(h) * Decimal(self.y_scale)
-        return (width, height)
+        return (width, height, self.units)
 
 
     def getDimensions(self, image, show_conts=False):
