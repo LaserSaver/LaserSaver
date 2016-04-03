@@ -38,7 +38,7 @@ class DetermineSkew:
         
         logging.debug("New image time...")
     
-        img = cv2.imread(calibImages[0])
+        img = calibImages[0]
         
         newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (DetermineSkew.w,DetermineSkew.h), 1, (DetermineSkew.w,DetermineSkew.h))
 
@@ -109,7 +109,7 @@ class DetermineSkew:
         for fname in calibImages[1:]:
             logging.debug("In loop")
             logging.debug(x)
-            img = cv2.imread(fname)
+            img = fname
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # Image must be greyscale for center finding to work.
             
             # h, w = gray.shape[:2]

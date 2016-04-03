@@ -75,6 +75,7 @@ class ScaleDetection:
                 "y_scale": self.y_scale,
                 "units": self.units}
         with open(config_file, 'w') as conf:
+            json.dump(data, conf)
         return True
 
     def loadConfigFile(self, config_file="scale.config"):

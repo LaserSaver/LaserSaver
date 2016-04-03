@@ -1,9 +1,9 @@
-import findContours
-import scaleDetection
-import stitch
-import determineSkew
-import scannerCamera
-import jsoncreator
+from findContours import FindContours
+from scaleDetection import ScaleDetection
+from stitch import Stitcher
+from determineSkew import DetermineSkew
+from scannerCamera import ScannerCamera
+from jsoncreator import jsonCreator
 
 def scale_calibration(scaleDetect, image, objx, objy, units):
     """
@@ -51,7 +51,8 @@ def skew_calibration(calibImages):
     Returns:
         True on success, False on failure
     """
-    dst, roi, error = DetermineSkew.createSkewMatrix(calibImages)
+    detskew = DetermineSkew()
+    dst, roi, error = detskew.createSkewMatrix(calibImages)
     return dst, roi
 
 def skew_correction(image, dst, roi, camSettings):
@@ -72,7 +73,8 @@ def stitch_images(image1, image2):
     Returns:
         True on success, False on failure
     """
-    return Stitcher.stitch((image1,image2)) #correct order for images?
+    stitcher = Stitcher()
+    return stitcher.stitch((image1,image2)) #correct order for images?
 
 def find_contours(image):
     """
@@ -83,7 +85,8 @@ def find_contours(image):
         True on success, False on failure
     """
     #findContours = FindContours()
-    contours, hierarchy, edgeImage = FindContours.find_all_contours(image)
+    fd = FindContours()
+    contours, hierarchy, edgeImage = fd.find_all_contours(image)
     finalContours = findContours.select_contours(contours, hierarchy)
     return finalContours,edgeImage
 
