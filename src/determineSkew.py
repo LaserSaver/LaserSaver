@@ -34,6 +34,9 @@ class DetermineSkew:
         
         objpoints, imgpoints = DetermineSkew.findSkewPoints(calibImages)
         
+        if imgpoints == [] or objpoints == []:
+            raise AttributeError
+        
         _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (DetermineSkew.w,DetermineSkew.h), None, None)
         
         logging.debug("New image time...")
@@ -138,21 +141,21 @@ class DetermineSkew:
                 logging.debug("Drawing corners")
             
                 img = cv2.drawChessboardCorners(img, DetermineSkew.shape, centers, ret)
-                cv2.imshow('img', img)
-                cv2.waitKey(0)
-            
+                # cv2.imshow('img', img)
+#                 cv2.waitKey(0)
+#
                 x = x+1
             
             else:
                 logging.debug("No corners here, bub.")
                 logging.debug(ret)
                 logging.debug(centers)
-                cv2.imshow('img', img)
-                cv2.waitKey(0)
+                # cv2.imshow('img', img)
+#                 cv2.waitKey(0)
             
                 x = x+1
 
-        cv2.destroyAllWindows()
+        # cv2.destroyAllWindows()
         
         
         return objpoints, imgpoints
