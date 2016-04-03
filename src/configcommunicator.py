@@ -38,43 +38,62 @@ class configcommunicator():
     def setScale(self, value):
         '''
         Set the scale
-        Args: True if calibration has been completed
+        Args:
+            value (dict): Scale calibration object
         '''
         if type(value) is not dict:
             raise TypeError
         self.config.set("Scale Calibration", "scale", json.dumps(value))
 
     def getScale(self):
+        '''
+        Retrieve scale calibration
+        Returns:
+            Scale Calibration (dict)
+        '''
         return json.loads(self.config.get("Scale Calibration", "scale"))
 
     def setSkipSkew(self, value):
+        '''
+        Set the skip_skew value
+        Args:
+            value (bool): Boolean indicating if skew calibration has been skipped
+        '''
         if type(value) is not bool:
             raise TypeError
         self.config.set("Skew Calibration", "skip_skew", str(value))
 
     def getSkipSkew(self):
+        '''
+        Get the skip_skew value
+        Returns:
+            Boolean indicating if skew calibration has been skipped
+        '''
         return bool(self.config.get("Skew Calibration", "skip_skew"))
 
     def setSkew(self, value, camera_num):
+        '''
+        Set the skew calibration
+        Args:
+            value (list): Skew calibration settings
+            camera_num (int): Camera which skew calibration corresponds too
+        '''
         self.config.set("Skew Calibration", "camera" + str(camera_num), json.dumps({'skew':value}))
         self.config.set("Skew Calibration", "skip_skew", str(False))
 
     def getSkew(self, camera_num):
+        '''
+        Set the skew calibration
+        Args:
+            camera_num (int): Camera which skew calibration corresponds too
+        Returns:
+            Skew calibration (list) for camera_num
+        '''
         return json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('skew')
 
     def saveConfig(self):
+        '''
+        Save the Config file to filename.
+        '''
         with open(self.filename, 'wb') as fp:
             self.config.write(fp)
-
-if __name__ == "__main__":
-    cc = configcommunicator()
-    print cc.checkValidity()
-    #print cc.getSkipSkew()
-    #print cc.getSkipSkew()
-    #cc.setScale({'x':5,'y':4})
-    #cc.setSkew([[50, 3, 4],[5,2,4]], 1)
-    #cc.setSkew([[500, 30, 40],[50,20,40]], 2)
-    print cc.getSkipSkew()
-    print cc.getSkew(1)
-    print cc.getSkew(2)
-    cc.saveConfig()
