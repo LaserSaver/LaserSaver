@@ -4,6 +4,7 @@ from stitch import Stitcher
 from determineSkew import DetermineSkew
 from scannerCamera import ScannerCamera
 from jsoncreator import jsonCreator
+from configcommunicator import ConfigCommunicator
 
 def scale_calibration(scaleDetect, image, objx, objy, units):
     """
@@ -147,15 +148,13 @@ class Scanner:
         camSettings.skew_roi = roi
         return camSettings#returns this to be put in next function
 
-    def processImages(self, image1, image2, cam1Settings, cam2Settings, scaleDetect):
+    def processImages(self, image1, image2):
         """
         The rest of the logic to stitch the image
         Args:
             image1: image from camera 1
             image2: image from camera 2
-            cam1Settings: ScannerCamera object for camera 1
-            cam2Settings: ScannerCamera object for camera 2
-            scaleDetect: scale detection object previously used
+
         Returns:
             finalImage: image to be displayed to user to confirm it is correct
         """

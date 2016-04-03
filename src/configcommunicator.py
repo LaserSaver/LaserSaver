@@ -2,7 +2,7 @@ import configparser
 import json
 
 
-class configcommunicator():
+class ConfigCommunicator():
     def __init__(self, filename = 'LaserCutterConfig.conf'):
         '''
         Initialize a config communicator object
