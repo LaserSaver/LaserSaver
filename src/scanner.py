@@ -1,3 +1,4 @@
+<<<<<<< Local Changes
 from findContours import FindContours
 from scaleDetection import ScaleDetection
 from stitch import Stitcher
@@ -18,8 +19,11 @@ def scale_calibration(scaleDetect, image, objx, objy, units):
     Returns:
         True on success, False on failure
     """
+    configCom = ConfigCommunicator()
+    
     success = scaleDetect.calibrate(image, objx, objy, units)
-    scaleDetect.saveConfigFile()
+    configCom.setScale(scaleDetect)
+    
     return success
 
 def scale_calibration_data():
@@ -44,19 +48,24 @@ def get_scale(scaleDetect):
     """
     return scaleDetect.getScale()
 
-def skew_calibration(calibImages):
+def skew_calibration(calibImages, camera_number):
     """
     desc
     Args:
-        None
+        calibImages
+        camera_number
     Returns:
-        True on success, False on failure
+        None
     """
-    detskew = DetermineSkew()
-    dst, roi, error = detskew.createSkewMatrix(calibImages)
-    return dst, roi
+    
+    scanner_camera = ScannerCamera(camera_number)
+    scanner_camera.setSkewCorrectionValues(calibImages)
+    
+    configCom = ConfigCommunicator()
+    configCom.setSkew(scanner_camera, camera_number)
 
-def skew_correction(image, dst, roi, camSettings):
+
+def skew_correction(image, camSettings):
     """
     desc
     Args:
@@ -134,19 +143,17 @@ class Scanner:
         return scaleDetect #returned in order to be passed to detect_contours
 
 
-    def skewCalibration(self, calibImages):
+    def skewCalibration(self, calibImages, camera_number):
         """
         Skew calibration. Should be run on each camera
         Args:
             calibImages: calibration images for camera 1 (any number)
         Returns:
-            camSettings: ScannerCamera object
+            None
         """
-        dst, roi = skew_calibration(calibImages)
-        camSettings = ScannerCamera()
-        camSettings.skew_dst = dst
-        camSettings.skew_roi = roi
-        return camSettings#returns this to be put in next function
+        
+        skew_calibration(calibImages, camera_number)
+
 
     def processImages(self, image1, image2):
         """
@@ -158,8 +165,12 @@ class Scanner:
         Returns:
             finalImage: image to be displayed to user to confirm it is correct
         """
-        cam1Settings = ScannerCamera()
-        cam2Settings = ScannerCamera()
+        configCom = ConfigCommunicator()
+
+        cam1Settings = configCom.getSkew(1)
+        cam2Settings = configCom.getSkew(2)
+        
+        scaleDetect = configCom.getScale()
 
         image1 = skew_correction(image1, cam1Settings)
         image2 = skew_correction(image2, cam2Settings)
@@ -182,4 +193,5 @@ class Scanner:
         if (scale_calibration_data()):
             return True
         else:
-            return False
+            return False=======
+>>>>>>> External Changes
