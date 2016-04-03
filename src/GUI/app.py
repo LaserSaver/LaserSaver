@@ -1,18 +1,15 @@
 #!/usr/bin/python
 from appUtils import *
-from homeController import HomeController
+from promptSkewView import PromptSkewViewController
 
 class App:
 	def __init__(self, master):
-		''' Setting the viewController to HomeViewController
-		    
-		    Args:
-		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		''' Initializing GUI window
+		    Setting the viewController to promptSkewView 
 		'''
-		HomeController(master)
+		PromptSkewViewController(master)
 
 
-#Initializing GUI window
 root = Tk()
 root.wm_title("LazerCutter GUI")
 root.geometry('{}x{}'.format(400, 400))
