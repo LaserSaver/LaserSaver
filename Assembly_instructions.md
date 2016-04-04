@@ -1,3 +1,5 @@
+![alt tag](https://raw.githubusercontent.com/lazercutter/LaserCutter/GUI/imgs/Rig.jpg)
+
 The instructions presented in the subsequent pages are for the prototype our team has created. As such there are a number of changes an individual can, and should, make based on the tools and materials available to him or her.
 
 ![alt tag](https://raw.githubusercontent.com/lazercutter/LaserCutter/GUI/imgs/Materials.png)
