@@ -1,92 +1,43 @@
 from appUtils import *
-from contoursModel import ContoursModel
+from baseView import BaseView
 
-class ContoursView(Frame):
-	def __init__(self, master, controller, camNumber):
-		Frame.__init__(self, master)
-
-		skewLabel = Label(self, text="Calibrating contours for camera #" + str(camNumber+1) , font="-weight bold")
-		skewLabel.pack(side=TOP)
-
-
-		boardLabel = Label(self, text="Place board in bed" , font="-weight bold")
-		boardLabel.pack(side=TOP)
-
-		def resizeVideoCapturePanel(videoCapturePanel, controller):
-			controller.updatePanel()
-			videoCapturePanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-100)
-			controller.updatePanel()
-
-		self.videoCapturePanel = Label( self, width=master.winfo_width()-50, height=master.winfo_height()-100 , relief=RIDGE, borderwidth=2)
-		self.videoCapturePanel.bind("<Configure>", lambda e: resizeVideoCapturePanel(self.videoCapturePanel, controller) )
-		self.videoCapturePanel.pack(side=TOP)
-
-		self.photoButton = Button(self, text="Take photo", command=controller.takePhotoClicked)
-		self.photoButton.pack(side=BOTTOM)
-
-
-class ContoursViewController:
-	def __init__(self, master, camNumber=0):
-		self.master = master
-
-		self.camNumber = camNumber
-		#Change 0 to cam number currently only have one camera
-		self.cam = cv2.VideoCapture(0)
-
-		self.view = ContoursView(master, self, camNumber)
-		self.view.pack()
-		self.continiousUpdatePanel()
-
-	def continiousUpdatePanel(self):
-		self.updatePanel()
-		self.updatePanelID = self.master.after(50,self.continiousUpdatePanel )
-
-	def updatePanel(self):
-		imgtk = AppUtils.getTkinterImg(self.cam,self.view.videoCapturePanel.winfo_width(),self.view.videoCapturePanel.winfo_height())
-		self.view.videoCapturePanel.configure(image = imgtk)
-		self.view.videoCapturePanel.image = imgtk
-
-	def undoClicked(self):
-		self.photos.pop()
-		self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)
-
-	def takingPictureEffect(self, case=0):
+class ContoursView(BaseView):
+	def __init__(self, master, controller):
+		''' Sets up the contours view 
+		 
+		    Args:
+		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	controller(ContoursController object): The controller which will be in charge of the view
 		'''
-			This is used to create the flash effect when taking picture 
-		'''
-		if case == 0:
-			#Stopping video capture disable take photo button
-			self.master.after_cancel(self.updatePanelID)
-			self.master.after(50, self.takingPictureEffect, 1)
-		elif case == 1:
-			#Setting image to none
-			self.view.videoCapturePanel.configure(image = None)
-			self.view.videoCapturePanel.image = None
-			self.master.after(50, self.takingPictureEffect, 2)
-		else :
-			self.continiousUpdatePanel()
+		BaseView.__init__(self, master)
+
+		label = Label(self, text="Take phots" , font="-weight bold")
+		label.pack(side=TOP)
+
+		#Video Capture frame for both cameras
+		self.frame = Label(self )
+		self.frame.pack(side=TOP)
 
 
-	def takePhotoClicked(self):
-		#Submitting for calibration
-		self.view.photoButton.pack_forget()
+		panelWidth = (master.winfo_width()-10)/2
+		panelHeight = (master.winfo_height() -100)
 
-		self.takingPictureEffect()
-				
-		progressbar = ttk.Progressbar(self.view, orient=HORIZONTAL, length=self.master.winfo_width()-50, mode='determinate')
-		progressbar.bind("<Configure>", lambda e: progressbar.configure(length=self.master.winfo_width()-50) )
-		progressbar.pack(side=BOTTOM)
-		progressbar.start()
+		self.videoPanel1 = Label(self.frame, width=panelWidth, height=panelHeight)
+		self.videoPanel1.pack(side=LEFT)
 
-		img = AppUtils.getImg(self.cam)
-		AppUtils.computeOnSeprateThread(self.master, self.calibrationDone, ContoursModel().calculate, [img])
+		self.videoPanel2 = Label(self.frame, width=panelWidth, height=panelHeight)
+		self.videoPanel2.pack(side=RIGHT)
 
-		processingLabel = Label(self.view, text="Processing...")
-		processingLabel.pack(side=BOTTOM)
+		def resizeVideoCapturePanels(videoPanel1, videoPanel2,controller):
+			controller.updatePanels()
+			panelWidth = (master.winfo_width()-10)/2
+			panelHeight = (master.winfo_height() -100)
 
-	def calibrationDone(self, img):
-		self.view.pack_forget()
-		#Had to import here to prevent cyclical refrencing
-		from validationContoursView import ValidationContoursViewController
-		ValidationContoursViewController(self.master, img, self.camNumber)
-		
+			videoPanel1.configure(width=panelWidth, height=panelHeight)
+			videoPanel2.configure(width=panelWidth, height=panelHeight)
+			controller.updatePanels()
+
+		self.frame.bind("<Configure>", lambda e: resizeVideoCapturePanels(self.videoPanel1, self.videoPanel2, controller) )
+
+		self.photosButton = Button(self, text="Take photos", command=controller.takePhotosClicked)
+		self.photosButton.pack(side=BOTTOM)
