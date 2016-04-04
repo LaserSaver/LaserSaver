@@ -74,10 +74,8 @@ class ScaleDetection:
         data = {"x_scale": self.x_scale,
                 "y_scale": self.y_scale,
                 "units": self.units}
-                
-        # with open(config_file, 'w') as conf:
-        #     json.dump(data, conf)
-
+        with open(config_file, 'w') as conf:
+            json.dump(data, conf)
         return True
 
     def loadConfigFile(self, config_file="scale.config"):
@@ -135,7 +133,7 @@ class ScaleDetection:
             object in pixels. Returns (None, None) if
             unsuccessful.
         '''
-        im = image
+        im = cv2.imread(image)
         try:
             imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
             # object will be black and background will be white
