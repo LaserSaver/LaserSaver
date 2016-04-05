@@ -7,12 +7,12 @@ import json
 SAVE_IMG = False
 TEST_CONF = 'test/test.conf'
 
-IMAGE = 'test/tester1.jpg'
+FILENAME = 'test/tester1.jpg'
 IMG_DIM = [5, 5]
 IMG_PIX = (359.0, 359.0)
 SCALE = [0.01392757660167130919220055710, 0.01392757660167130919220055710]
 
-IMAGES = ['test/tester1.jpg', 'test/tester2.jpg',
+FILENAMES = ['test/tester1.jpg', 'test/tester2.jpg',
           'test/tester3.jpg', 'test/tester4.jpg',
           "test/tester5.jpg", 'test/tester9.jpg']
 # [x, y]
@@ -21,13 +21,15 @@ UNIT = "in"
 
 def testDimensions():
     sd = ScaleDetection()
-    w, h = sd.getDimensions(IMAGE)
+    im = sd.openImage(FILENAME)
+    w, h = sd.getDimensions(im)
     assert w == IMG_PIX[0]
     assert h == IMG_PIX[1]
 
 def testCalibration():
     sd = ScaleDetection()
-    sd.calibrate(IMAGE, IMG_DIM[0], IMG_DIM[1], UNIT)
+    im = sd.openImage(FILENAME)
+    sd.calibrate(im, IMG_DIM[0], IMG_DIM[1], UNIT)
     w,h = IMG_PIX
     assert round(sd.x_scale * Decimal(w), 0) == IMG_DIM[0]
     assert round(sd.y_scale * Decimal(h), 0) == IMG_DIM[1]
@@ -35,7 +37,8 @@ def testCalibration():
 
 def testCalibrationFail():
     sd = ScaleDetection()
-    f = sd.calibrate(IMAGE, IMG_DIM[0], "a", UNIT)
+    im = sd.openImage(FILENAME)
+    f = sd.calibrate(im, IMG_DIM[0], "a", UNIT)
     assert f == False
 
 
@@ -46,12 +49,13 @@ def testCalibrationFailIm():
 
 
 def testScales():
-    for i in range(0, len(IMAGES)):
+    for i in range(0, len(FILENAMES)):
         sd = ScaleDetection()
         sd.x_scale = SCALE[0]
         sd.y_scale = SCALE[1]
         sd.units = UNIT
-        w,h,unit = sd.getSize(IMAGES[i], show_conts=SAVE_IMG)
+        im = sd.openImage(FILENAMES[i])
+        w,h,unit = sd.getSize(im, show_conts=SAVE_IMG)
         print "Width: {}".format(round(w,1))
         print "Height: {}".format(round(h,1))
         assert round(w, 1) == round(DIMS[i][0], 1)
@@ -90,8 +94,10 @@ def testLoadConfigFail():
 
 def testChain():
     sd = ScaleDetection()
-    sd.calibrate(IMAGE, IMG_DIM[0], IMG_DIM[1], UNIT)
-    w, h, unit = sd.getSize(IMAGES[-1], show_conts=SAVE_IMG)
+    im = sd.openImage(FILENAME)
+    sd.calibrate(im, IMG_DIM[0], IMG_DIM[1], UNIT)
+    im = sd.openImage(FILENAMES[-1])
+    w, h, unit = sd.getSize(im, show_conts=SAVE_IMG)
     print "Width: {}".format(round(w,1))
     print "Height: {}".format(round(h,1))
     assert round(w, 1) == round(DIMS[-1][0], 1)

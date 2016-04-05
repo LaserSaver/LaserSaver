@@ -26,6 +26,20 @@ class ScaleDetection:
         '''
         return (self.x_scale, self.y_scale, self.units)
 
+    def openImage(self, filename):
+        '''
+        Given the filename of an image, returns the image object
+        Args:
+            filename (string): filename of image
+        Returns:
+            cv2 image object, None on failure
+        '''
+        try:
+            image = cv2.imread(filename)
+        except:
+            image = None
+        return image
+
     def calibrate(self, image, known_x, known_y, unit, show_conts=False):
         '''
         Given an image of an object of known size sets the x and y scale
@@ -74,7 +88,7 @@ class ScaleDetection:
         data = {"x_scale": self.x_scale,
                 "y_scale": self.y_scale,
                 "units": self.units}
-                
+
         # with open(config_file, 'w') as conf:
         #     json.dump(data, conf)
 
@@ -141,7 +155,7 @@ class ScaleDetection:
             # object will be black and background will be white
             # we need the opposite
             # imgray = (255-imgray)
-        except cv2.error as e:
+        except:
             print("Could not create gray image, ensure the given "
                   "filename exists")
             return (None, None)
