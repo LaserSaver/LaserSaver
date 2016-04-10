@@ -22,9 +22,11 @@ def scale_calibration(scaleDetect, image, objx, objy, units):
     
     success = scaleDetect.calibrate(image, objx, objy, units)
     
-    dict = {'x_scale': objx, 'y_scale': objy, 'units': units}
+    dictionary = {'x_scale': str(scaleDetect.x_scale), 'y_scale': str(scaleDetect.y_scale), 'units': scaleDetect.units}
     
-    configCom.setScale(dict)
+    configCom.setScale(dictionary)
+    
+    configCom.saveConfig()
     
     return success
 
@@ -63,8 +65,11 @@ def skew_calibration(calibImages, camera_number):
     scanner_camera = ScannerCamera(camera_number)
     scanner_camera.setSkewCorrectionValues(calibImages)
     
+    # Config file
     configCom = ConfigCommunicator()
-    configCom.setSkew(scanner_camera, camera_number)
+    configCom.setSkew(scanner_camera.dst, camera_number)
+    
+    configCom.saveConfig()
 
 
 def skew_correction(image, camSettings):
@@ -168,20 +173,31 @@ class Scanner:
         """
         configCom = ConfigCommunicator()
 
-        cam1Settings = configCom.getSkew(1)
-        #cam2Settings = configCom.getSkew(2)
+        # Grabs skew info from config, and creates instance of ScannerCamera()
+        dst = configCom.getSkew(1)
         
-        scaleDetect = configCom.getScale()
+        skewObject = ScannerCamera(1)
+        skewObject.setDst(dst)
+        
+        
+        # Grabs scale info from config
+        dictionary = configCom.getScale()
+        
+        scale_detect = ScaleDetection()
+        scale_detect.setScale(dictionary['x_scale'], dictionary['y_scale'], dictionary['units'])
 
-        image1 = skew_correction(image1, cam1Settings)
-        image2 = skew_correction(image2, cam2Settings)
+
+        # Process board image
+        
+        image1 = skew_correction(image1, skewObject)
 
         #finalImage = stitch_images(image1, image2)
         finalImage = image1
         contours, edgeImage = find_contours(finalImage)
-        xscale, yscale = get_scale(scaleDetect)
-        units = scaleDetect.units
+        xscale, yscale, units = get_scale(scale_detect)
         export_json(contours, xscale, yscale, units) #do I need to do something with return value?
+        
+        
         return finalImage #do we want to show the contours on this as well?
 
     def doesConfigExist(self):

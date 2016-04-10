@@ -26,6 +26,13 @@ class ScaleDetection:
         Returns tuple of (self.x_scale, self.y_scale)
         '''
         return (self.x_scale, self.y_scale, self.units)
+        
+    def setScale(self, x_scale, y_scale, units):
+        
+        self.x_scale = x_scale
+        self.y_scale = y_scale
+        self.units = units
+
 
     def openImage(self, filename):
         '''
