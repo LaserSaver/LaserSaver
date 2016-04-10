@@ -11,90 +11,68 @@ NOTE: Install Instructions [Source](http://www.pyimagesearch.com/2015/06/22/inst
 
 #### Apply Update to System
 
-```sudo apt-get update```
+```$ sudo apt-get update```
 
-```sudo apt-get upgrade```
+```$ sudo apt-get upgrade```
 
 #### Install Developer Tools
 
-```sudo apt-get install build-essential cmake git pkg-config```
+```$ sudo apt-get install build-essential cmake git pkg-config```
 
 #### Install I/O Packages for Reading Files
 
-```sudo apt-get install libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev```
+```$ sudo apt-get install libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev```
 
 #### Install GUI Interface Prackage
 
-```sudo apt-get install libgtk2.0-dev```
+```$ sudo apt-get install libgtk2.0-dev```
 
 #### Install Video Stream Packages
 
-```sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev```
+```$ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev```
 
 #### Install Optimization Libraries
 
-```sudo apt-get install libatlas-base-dev gfortran```
+```$ sudo apt-get install libatlas-base-dev gfortran```
 
 #### Install Python Package Manager Pip
 
-```wget https://bootstrap.pypa.io/get-pip.py```
+```$ wget https://bootstrap.pypa.io/get-pip.py```
 
-```sudo python get-pip.py```
-
-#### Install Virtual Environments
-
-```sudo pip install virtualenv virtualenvwrapper```
-
-```sudo rm -rf ~/.cache/pip```
-
-#### Add the Following Lines to ~/.bashrc
-
-```
-#virtualenv and virtualenvwrapper
-export WORKON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
-```
-
-#### Reload the Contents of ~/.bashrc
-
-```source ~/.bashrc```
-
-#### Create a Vitual Environment for OpenCV
-
-```mkvirtualenv cv```
+```$ sudo python get-pip.py```
 
 #### Install Python 2.7+ Development Tools
 
-```sudo apt-get install python2.7-dev```
+```$ sudo apt-get install python2.7-dev```
 
 #### Install NumPy
 
-```pip install numpy```
+```$ pip install numpy```
 
 #### Pull Code from OpenCV Repository into Home Directory
 
 ```
-cd ~ 
-git clone https://github.com/Itseez/opencv.git
-cd opencv
-git checkout 3.0.0
+$ cd ~ 
+$ git clone https://github.com/Itseez/opencv.git
+$ cd opencv
+$ git checkout 3.0.0
 ```
 
 #### Pull Extra OpenCV Libraries
 
 ```
-cd ~
-git clone https://github.com/Itseez/opencv_contrib.git
-cd opencv_contrib
-git checkout 3.0.0
+$ cd ~
+$ git clone https://github.com/Itseez/opencv_contrib.git
+$ cd opencv_contrib
+$ git checkout 3.0.0
 ```
 
 #### Build OpenCV
 ```
-cd ~/opencv
-mkdir build
-cd build
-cmake -D CMAKE_BUILD_TYPE=RELEASE \
+$ cd ~/opencv
+$ mkdir build
+$ cd build
+$ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D CMAKE_INSTALL_PREFIX=/usr/local \
 	-D INSTALL_C_EXAMPLES=ON \
 	-D INSTALL_PYTHON_EXAMPLES=ON \
@@ -104,37 +82,27 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 #### Make OpenCV
 
-``` make ```
+```$ make ```
 
 #### Install OpenCV
 
-```sudo make install```
+```$ sudo make install```
 
-```sudo ldconfig```
-
-#### Set OpenCV for Use in VirtualEnvironment
-
-```cd ~/.virtualenvs/cv/lib/python2.7/site-packages/```
-
-```ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so```
+```$ sudo ldconfig```
 
 #### Verify Install
 
-Change to the Virtual Environment
-
-```workon cv```
-
 Start Python
 
-``` python ```
+```$ python ```
 
 Import OpenCV
 
-``` import cv2 ```
+```> import cv2 ```
 
 Check Version
 
-``` cv2.__version__ ```
+```> cv2.__version__ ```
 
 Verify the Response is: *'3.0.0'*
 
