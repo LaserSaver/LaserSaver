@@ -7,5 +7,5 @@ setup(  name = "Lasersaver",
         author_email = "acordero1532@gmail.com",
         license = "BSD",
         packages = find_packages(),
-        install_requires = ['numpy', 'decimal', 'json', 'logging', 'configparser', 'imutils', 'PIL']
+        install_requires = ['numpy', 'decimal', 'json', 'logging', 'configparser', 'imutils', 'Pillow']
 )
