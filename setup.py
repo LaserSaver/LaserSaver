@@ -8,5 +8,5 @@ setup(  name = "Lasersaver",
         license = "BSD",
         packages = find_packages('src'),
         package_dir = {'':'src'},
-        install_requires = ['numpy', 'decimal', 'json', 'logging', 'configparser', 'imutils', 'Pillow']
+        install_requires = ['numpy', 'decimal', 'logging', 'configparser', 'imutils', 'Pillow']
 )
