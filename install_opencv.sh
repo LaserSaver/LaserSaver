@@ -88,7 +88,7 @@ cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D WITH_V4L=ON -D WITH_QT=ON -D WITH_OPENGL=ON ..
 
 # Compiling project
-make -j $(nproc)
+make
 
 # Installing libraries
 sudo make install
