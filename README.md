@@ -7,9 +7,9 @@ This will include all instructions for building the physical scanner as well as 
 # Install Instructions for Dependencies
 These are the instructions for installing the dependencies for the project.
 
-[Click Here to Install] (https://github.com/lazercutter/LaserCutter/blob/development/Dependency_Instructions.md)
+[Click Here to Install] (Dependency_Instructions.md)
 
 # Hardware Shopping List
 The parts needed to construct the scanner.
 
-[Click Here for the Shopping List] (https://github.com/lazercutter/LaserCutter/blob/development/Shopping_List.md)
+[Click Here for the Shopping List] (Shopping_List.md)
