@@ -1,7 +1,16 @@
 import time
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from scanner import Scanner
 class SkewModel:
-	def calculate(self, imgList):
-		time.sleep(5)
-
-		#For now return the last image in the list
-		return imgList.pop()
+    def __init__(self):
+	    self.scanner = Scanner()
+    
+    def calculate(self, imgList):
+        try:
+            self.scanner.skewCalibration(imgList)
+        except AttributeError:
+            print "No going"
+            
+        return imgList.pop()
