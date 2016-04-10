@@ -7,7 +7,7 @@ class App:
 		''' Setting the viewController to HomeViewController
 		    
 		    Args:
-		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+		    	master(Tk object): The top level widget of Tk which is the main window of an application
 		'''
 		HomeController(master)
 
