@@ -6,7 +6,7 @@ setup(  name = "Lasersaver",
         author = "LaserCutter Group",
         author_email = "acordero1532@gmail.com",
         license = "BSD",
-        packages = find_packages('src')
-        package_dir = {'':'src'}
+        packages = find_packages('src'),
+        package_dir = {'':'src'},
         install_requires = ['numpy', 'decimal', 'json', 'logging', 'configparser', 'imutils', 'Pillow']
 )
