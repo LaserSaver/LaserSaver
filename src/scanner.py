@@ -22,9 +22,11 @@ def scale_calibration(scaleDetect, image, objx, objy, units):
     
     success = scaleDetect.calibrate(image, objx, objy, units)
     
-    dictionary = {'x_scale': objx, 'y_scale': objy, 'units': units}
+    dictionary = {'x_scale': str(scaleDetect.x_scale), 'y_scale': str(scaleDetect.y_scale), 'units': scaleDetect.units}
     
     configCom.setScale(dictionary)
+    
+    configCom.saveConfig()
     
     return success
 
@@ -66,6 +68,8 @@ def skew_calibration(calibImages, camera_number):
     # Config file
     configCom = ConfigCommunicator()
     configCom.setSkew(scanner_camera.dst, camera_number)
+    
+    configCom.saveConfig()
 
 
 def skew_correction(image, camSettings):
