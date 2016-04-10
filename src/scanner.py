@@ -21,7 +21,10 @@ def scale_calibration(scaleDetect, image, objx, objy, units):
     configCom = ConfigCommunicator()
     
     success = scaleDetect.calibrate(image, objx, objy, units)
-    configCom.setScale(scaleDetect)
+    
+    dict = {'x_scale': objx, 'y_scale': objy, 'units': units}
+    
+    configCom.setScale(dict)
     
     return success
 
