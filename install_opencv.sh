@@ -26,30 +26,30 @@ log(){
 	echo "$timestamp $1" >> $logfile 2>&1
 }
 
-# Iniciando a instala��o do OpenCV 3.0.0
-log "Iniciando a instala��o do OpenCV 3.0.0"
+# Initiate installation of OpenCV 3.0.0
+log "Initiate installation of OpenCV 3.0.0"
 
 
 #----------------------------------------------------------
-# Assegurando um ambiente atualizado
+# Ensuring environment is upgraded
 #----------------------------------------------------------
 
-# Informa ao usu�rio a pr�xima a��o
+# Infrom user that apt-get is being updated
 log "Execute apt-get update and apt-get upgrade"
 
-# Executa a a��o
+# Performs update
 sudo apt-get update
 sudo apt-get upgrade
 
 
 #----------------------------------------------------------
-# Instalando os pacotes das depend�ncias
+# Installing Package Dependencies
 #----------------------------------------------------------
 
 log "Installing dependencies"
 
-# Executeo
-sudo apt-get -y install libopencv-dev build-essential cmake git libgtk2.0-dev pkg-config python-dev python-numpy libdc1394-22 libdc1394-22-dev libjpeg-dev libpng12-dev libtiff4-dev libjasper-dev libavcodec-dev libavformat-dev libswscale-dev libxine-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libv4l-dev libtbb-dev libqt4-dev libfaac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev x264 v4l-utils unzip
+# Execute
+sudo apt-get -y install libopencv-dev build-essential cmake git libgtk2.0-dev pkg-config python-dev python-numpy libdc1394-22 libdc1394-22-dev libjpeg-dev libpng12-dev libtiff4-dev libjasper-dev libavcodec-dev libavformat-dev libswscale-dev libxine-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libv4l-dev libtbb-dev libqt4-dev libfaac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev x264 v4l-utils python-tk python-imaging-tk python-setuptools unzip
 
 
 #----------------------------------------------------------
@@ -58,13 +58,13 @@ sudo apt-get -y install libopencv-dev build-essential cmake git libgtk2.0-dev pk
 
 log "Downloading OpenCV 3.0.0"
 
-# Defini��o de constante
+# Define constant
 FOLDER_NAME="opencv"
 
-# Cria um novo diret�rio para armazenar o c�digo-fonte
+# Create a new directory to store the source code
 mkdir ${FOLDER_NAME}
 
-# Entra no diret�rio
+# Enter the Directory
 cd ${FOLDER_NAME}
 
 # Downloading opencv 3.0

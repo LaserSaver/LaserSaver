@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(  name = "Lasersaver",
         version = "0.1",
@@ -6,7 +6,7 @@ setup(  name = "Lasersaver",
         author = "LaserCutter Group",
         author_email = "acordero1532@gmail.com",
         license = "BSD",
-        packages = ["LaserCutter"],
-        package_dir = {"LaserCutter" : 'src'},
+        packages = find_packages('src')
+        package_dir = {'':'src'}
         install_requires = ['numpy', 'decimal', 'json', 'logging', 'configparser', 'imutils', 'Pillow']
 )
