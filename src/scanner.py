@@ -4,6 +4,7 @@ from stitch import Stitcher
 from determineSkew import DetermineSkew
 from scannerCamera import ScannerCamera
 from jsoncreator import jsonCreator
+from configcommunicator import ConfigCommunicator
 
 def scale_calibration(scaleDetect, image, objx, objy, units):
     """
