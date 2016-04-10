@@ -1,4 +1,3 @@
-<<<<<<< Local Changes
 from findContours import FindContours
 from scaleDetection import ScaleDetection
 from stitch import Stitcher
@@ -125,21 +124,20 @@ class Scanner:
         scaleDetectObj = None
 
     #Functions GUI should call:
-    def scaleCalibration(self, image1, image2, objx, objy, units):
+    def scaleCalibration(self, image1, objx, objy, units):
         """
         Calibrates scale detection object and returns it
         Args:
             image1: image from camera 1 for scale detection
-            image2: image from camera 2 for scale detection
             objx: width of calibration object
             objy: height of calibration object
             units (string): units to use
         Returns:
             scaleDetect: ScaleDetection object needed later
         """
-        image = stitch_images(image1, image2)
+        #image = stitch_images(image1, image2)
         scaleDetect = ScaleDetection()
-        scale_calibration(scaleDetect, image, objx, objy, units)
+        scale_calibration(scaleDetect, image1, objx, objy, units)
         return scaleDetect #returned in order to be passed to detect_contours
 
 
@@ -155,12 +153,11 @@ class Scanner:
         skew_calibration(calibImages, camera_number)
 
 
-    def processImages(self, image1, image2):
+    def processImages(self, image1):
         """
         The rest of the logic to stitch the image
         Args:
             image1: image from camera 1
-            image2: image from camera 2
 
         Returns:
             finalImage: image to be displayed to user to confirm it is correct
@@ -168,14 +165,15 @@ class Scanner:
         configCom = ConfigCommunicator()
 
         cam1Settings = configCom.getSkew(1)
-        cam2Settings = configCom.getSkew(2)
+        #cam2Settings = configCom.getSkew(2)
         
         scaleDetect = configCom.getScale()
 
         image1 = skew_correction(image1, cam1Settings)
         image2 = skew_correction(image2, cam2Settings)
 
-        finalImage = stitch_images(image1, image2)
+        #finalImage = stitch_images(image1, image2)
+        finalImage = image1
         contours, edgeImage = find_contours(finalImage)
         xscale, yscale = get_scale(scaleDetect)
         units = scaleDetect.units
@@ -194,4 +192,3 @@ class Scanner:
             return True
         else:
             return False=======
->>>>>>> External Changes
