@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import logging
 import json
+import time
 from decimal import *
 
 
@@ -53,9 +54,12 @@ class ScaleDetection:
             True on success, False on failure
         '''
         (w, h) = self.getDimensions(image, show_conts=show_conts)
-        if w is None or h is None:
-            print "w or h is None"
+        if w is None or h is None :
+            print "width or height is None"
             return False
+        if float(w) is 0 or float(h) is 0:
+            print "width or height is 0"
+            return false
 
         # size in pixels is proportional to real scale
         # this scale times pixels can now determin scale
@@ -183,7 +187,7 @@ class ScaleDetection:
 
         if show_conts:
             cv2.drawContours(im, [box], 0, (0,0,255), 2)
-            cv2.imwrite(image+'_rec', im)
+            cv2.imwrite(str(time.time())+".jpg", im)
         h, w = rectangle[1]
         logger.debug("h: {}, w: {}".format(h, w))
         # print"h: {}, w: {}".format(h, w)
