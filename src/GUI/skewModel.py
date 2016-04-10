@@ -9,8 +9,9 @@ class SkewModel:
     
     def calculate(self, imgList):
         try:
-            self.scanner.skewCalibration(imgList)
+            self.scanner.skewCalibration(imgList,1)
         except AttributeError:
             print "No going"
             
         return imgList.pop()
+
