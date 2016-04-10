@@ -71,7 +71,6 @@ class DetermineSkew:
     
         return dst, roi, error
 
-
     @staticmethod   
     def findSkewPoints(calibImages):
         '''
@@ -110,14 +109,10 @@ class DetermineSkew:
 
     
         logging.debug("Starting loop")
-        
         for fname in calibImages[1:]:
-            
             logging.debug("In loop")
             logging.debug(x)
-
             img = fname
-
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # Image must be greyscale for center finding to work.
             
             # h, w = gray.shape[:2]

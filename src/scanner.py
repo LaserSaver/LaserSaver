@@ -21,7 +21,10 @@ def scale_calibration(scaleDetect, image, objx, objy, units):
     configCom = ConfigCommunicator()
     
     success = scaleDetect.calibrate(image, objx, objy, units)
-    configCom.setScale(scaleDetect)
+    
+    dict = {'x_scale': objx, 'y_scale': objy, 'units': units}
+    
+    configCom.setScale(dict)
     
     return success
 
@@ -154,6 +157,7 @@ class Scanner:
 
 
     def processImages(self, image1):
+
         """
         The rest of the logic to stitch the image
         Args:
@@ -191,4 +195,4 @@ class Scanner:
         if (scale_calibration_data()):
             return True
         else:
-            return False=======
+            return False

@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import logging
 import json
+import time
 from decimal import *
 
 
@@ -26,6 +27,20 @@ class ScaleDetection:
         '''
         return (self.x_scale, self.y_scale, self.units)
 
+    def openImage(self, filename):
+        '''
+        Given the filename of an image, returns the image object
+        Args:
+            filename (string): filename of image
+        Returns:
+            cv2 image object, None on failure
+        '''
+        try:
+            image = cv2.imread(filename)
+        except:
+            image = None
+        return image
+
     def calibrate(self, image, known_x, known_y, unit, show_conts=False):
         '''
         Given an image of an object of known size sets the x and y scale
@@ -39,9 +54,12 @@ class ScaleDetection:
             True on success, False on failure
         '''
         (w, h) = self.getDimensions(image, show_conts=show_conts)
-        if w is None or h is None:
-            print "w or h is None"
+        if w is None or h is None :
+            print "width or height is None"
             return False
+        if float(w) is 0 or float(h) is 0:
+            print "width or height is 0"
+            return false
 
         # size in pixels is proportional to real scale
         # this scale times pixels can now determin scale
@@ -74,8 +92,10 @@ class ScaleDetection:
         data = {"x_scale": self.x_scale,
                 "y_scale": self.y_scale,
                 "units": self.units}
-        with open(config_file, 'w') as conf:
-            json.dump(data, conf)
+
+        # with open(config_file, 'w') as conf:
+        #     json.dump(data, conf)
+
         return True
 
     def loadConfigFile(self, config_file="scale.config"):
@@ -133,20 +153,19 @@ class ScaleDetection:
             object in pixels. Returns (None, None) if
             unsuccessful.
         '''
-        im = cv2.imread(image)
+        im = image
         try:
             imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
             # object will be black and background will be white
             # we need the opposite
             # imgray = (255-imgray)
-        except cv2.error as e:
+        except:
             print("Could not create gray image, ensure the given "
                   "filename exists")
             return (None, None)
 
         # thresh is the binary image
         ret, thresh = cv2.threshold(imgray, 127, 255, cv2.THRESH_BINARY_INV)
-        #ret, thresh = cv2.threshold(imgray, 127, 255, 0)
 
         _, contours, hierarchy = cv2.findContours(thresh,
                                                cv2.RETR_TREE,
@@ -168,7 +187,7 @@ class ScaleDetection:
 
         if show_conts:
             cv2.drawContours(im, [box], 0, (0,0,255), 2)
-            cv2.imwrite(image+'_rec', im)
+            cv2.imwrite(str(time.time())+".jpg", im)
         h, w = rectangle[1]
         logger.debug("h: {}, w: {}".format(h, w))
         # print"h: {}, w: {}".format(h, w)
