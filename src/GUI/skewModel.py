@@ -12,6 +12,6 @@ class SkewModel:
         try:
             self.scanner.skewCalibration(imgList,1)
         except AttributeError:
-            print "No going"
-            
+           print "No going"
+
         return imgList.pop()
