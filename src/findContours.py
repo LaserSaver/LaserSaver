@@ -161,6 +161,8 @@ class FindContours:
         drawnContours = cv2.drawContours(drawing, contourList, -1, (255,255,255), 1)
 
         # THIS IS A HACK!!!!
+        # For some reason we are unable to display the drawCountours in the 
+        #  GUI so the two lines below are a hack!
         cv2.imwrite("contours.jpg", drawnContours)
 
         img = cv2.imread("contours.jpg", 0)
