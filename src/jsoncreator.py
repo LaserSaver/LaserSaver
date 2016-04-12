@@ -77,12 +77,14 @@ class jsonCreator:
         '''
         return self.__json
 
-    def exportJson(self):
+    def exportJson(self, filename = "final.json"):
         '''
-        This function is a placeholder for when it will eventually be exported over the internet.
-        Returns: A json object that has been dumped into a string for exporting
+        This function exports the json object to the specified filename
+        Args:
+            filename (str): The filename that the json should be exported to
         '''
-        return json.dumps(self.__json)
+        with open(filename, w) as fp:
+            fp.write(json.dumps(self.__json))
 
     def resetJson(self):
         '''
