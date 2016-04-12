@@ -45,26 +45,27 @@ class jsonCreator:
             raise TypeError
         self.__json["scale"] = (x,y)
 
-    def addContours(self, contour):
+    def addContours(self, contours):
         '''
         This function will add the scale to the json object
         Args:
             contour (list): the contour(s) to be added this can be a list of vertices or a list of contours (list of lists)
         '''
         try:
-            if type(contour) is not list:
+            if type(contours) is not list:
                 raise TypeError
         except TypeError:
             if self.logger is not None:
                 self.logger.debug("Contour must be of type list")
             raise TypeError
-        if type(contour[0]) is list:
-            for c in contour:
-                contourdict = [{"x":x, "y":y} for (x, y, _) in c]
+        if type(contours[0]) is list:
+            for contour in contours:
+                contourdict = [{"x":c[0], "y":c[1]} for c in contour]
                 self.__json["contours"].append(contourdict)
         else:
-            contourdict = [{"x":x, "y":y} for (x, y, _) in contour]
-            self.__json["contours"].append(contourdict)
+            for contour in contours:
+                contourdict = [{"x":c[0], "y":c[1]} for c in contour]
+                self.__json["contours"].append(contourdict)
 
     def getJson(self):
         '''
