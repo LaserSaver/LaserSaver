@@ -34,6 +34,7 @@ class jsonCreator:
             x (float): The scale of the x axis
             y (float): The scale of the y axis
         '''
+        '''
         try:
             if type(x) is not float:
                 print type(x)
@@ -44,7 +45,8 @@ class jsonCreator:
             if self.logger is not None:
                 self.logger.debug("X and Y must be floats")
             raise TypeError
-        self.__json["scale"] = (x,y)
+        '''
+        self.__json["scale"] = (str(x),str(y))
 
     def addContours(self, contours):
         '''
