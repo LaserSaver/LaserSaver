@@ -29,6 +29,7 @@ python setup.py install
 
 ### Install Instructions for OSX
 We recommend you install anaconda as your python distribution
+
 Install opencv 3.0.0
 
 http://www.pyimagesearch.com/2015/06/15/install-opencv-3-0-and-python-2-7-on-osx/
