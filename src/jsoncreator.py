@@ -88,8 +88,10 @@ class jsonCreator:
         '''
         with open(filename, 'w') as fp:
             fp.write(str(self.__json))
+        '''
         with open(filename, 'w') as fp:
             fp.write(json.dumps(self.__json))
+        '''
 
     def resetJson(self):
         '''
