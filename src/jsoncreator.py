@@ -10,8 +10,8 @@ class jsonCreator:
         Args:
             logger (logger object): Logger object to debug this class, will be set to None if no object is specified.
         '''
-        if logger is not None:
-            self.logger = logger
+        
+        self.logger = logger
         self.resetJson()
 
     def addUnits(self, units):
