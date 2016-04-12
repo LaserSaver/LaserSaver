@@ -58,6 +58,7 @@ class jsonCreator:
             if self.logger is not None:
                 self.logger.debug("Contour must be of type list")
             raise TypeError
+        contours = contours[0]
         if type(contours[0]) is list:
             for contour in contours:
                 contourdict = [{"x":c[0], "y":c[1]} for c in contour]
