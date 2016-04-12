@@ -63,7 +63,7 @@ class jsonCreator:
                 contourdict = [{"x":x, "y":y} for (x, y, _) in c]
                 self.__json["contours"].append(contourdict)
         else:
-            contourdict = [{"x":x, "y":y} for (x, y) in contour]
+            contourdict = [{"x":x, "y":y} for (x, y, _) in contour]
             self.__json["contours"].append(contourdict)
 
     def getJson(self):
