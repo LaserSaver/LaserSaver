@@ -6,12 +6,11 @@ class SkewController:
 	def __init__(self, master):
 		''' The skew controller in charge of updating the skew model
 		 
-		    Args:
-		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+			Args:
+				master(Tk object): The toplevel widget of Tk which is the main window of an application
 		'''
 		self.master = master
 
-		self.numberOfPhotosRequired = 3
 		self.photos = []
 		self.model = SkewModel()
 
@@ -21,7 +20,7 @@ class SkewController:
 	
 		self.view.pack(expand=YES,fill=BOTH)
 
-		self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)
+		self.view.updateButtons(len(self.photos))
 
 		self.continiousUpdatePanel()
 
@@ -69,29 +68,30 @@ class SkewController:
 			self.view.photoButton.configure( state=NORMAL)
 			self.continiousUpdatePanel()
 
+	def startSkewCalibration(self):
+		'''When the calibration button is clicked
+		'''
+		self.view.photoButton.pack_forget()
+		self.view.undoButton.pack_forget()
+		self.view.calibrateButton.pack_forget()
+		
+		progressbar = ttk.Progressbar(self.view, orient=HORIZONTAL, length=self.master.winfo_width()-50, mode='determinate')
+		progressbar.bind("<Configure>", lambda e: progressbar.configure(length=self.master.winfo_width()-50) )
+		progressbar.pack(side=BOTTOM)
+		progressbar.start()
+
+		processingLabel = Label(self.view, text="Processing...")
+		processingLabel.pack(side=BOTTOM)
+
+		AppUtils.computeOnSeprateThread(self.master, self.calibrationDone, self.model.calculate ,[self.photos])
 
 	def takePhotoClicked(self):
 		'''When the take photo button is clicked
 		'''
-		if len(self.photos) < self.numberOfPhotosRequired:
-			#Taking a photo
-			self.takingPictureEffect()
-			self.photos.append(AppUtils.getImg(self.cam))
-			self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)
-		else:
-			#Submitting for calibration
-			self.view.photoButton.pack_forget()
-			self.view.undoButton.pack_forget()
-			
-			progressbar = ttk.Progressbar(self.view, orient=HORIZONTAL, length=self.master.winfo_width()-50, mode='determinate')
-			progressbar.bind("<Configure>", lambda e: progressbar.configure(length=self.master.winfo_width()-50) )
-			progressbar.pack(side=BOTTOM)
-			progressbar.start()
-
-			processingLabel = Label(self.view, text="Processing...")
-			processingLabel.pack(side=BOTTOM)
-
-			AppUtils.computeOnSeprateThread(self.master, self.calibrationDone, self.model.calculate ,[self.photos])
+		self.takingPictureEffect()
+		self.photos.append(AppUtils.getImg(self.cam))
+		self.view.updateButtons(len(self.photos))
+	
 
 
 	def calibrationDone(self, img):
