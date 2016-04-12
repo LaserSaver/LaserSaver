@@ -5,7 +5,7 @@ This will include all instructions for building the physical scanner as well as 
 
 # Install Instructions for Dependencies
 These are the instructions for installing the dependencies for the project.
-### Install Instructions
+### Install Instructions for Debian
 Use our script to install all dependencies and link code. By running the following commands from the terminal
 ```
 $ sudo install_opencv.sh
