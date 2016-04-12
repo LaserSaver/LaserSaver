@@ -36,7 +36,7 @@ class jsonCreator:
         '''
         try:
             if type(x) is not float:
-                self.logger.debug(type(x))
+                print type(x)
                 raise TypeError
             if type(y) is not float:
                 raise TypeError
