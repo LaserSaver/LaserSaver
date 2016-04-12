@@ -60,7 +60,7 @@ class jsonCreator:
             raise TypeError
         if type(contour[0]) is list:
             for c in contour:
-                contourdict = [{"x":x, "y":y} for (x, y) in c]
+                contourdict = [{"x":x, "y":y} for (x, y, _) in c]
                 self.__json["contours"].append(contourdict)
         else:
             contourdict = [{"x":x, "y":y} for (x, y) in contour]
