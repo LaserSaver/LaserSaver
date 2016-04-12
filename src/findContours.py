@@ -152,15 +152,17 @@ class FindContours:
             contourList: list of contours found in photo
 
         Returns:
-            drawing: image of the given contours
+            drawnContours: image of the given contours
         '''
+        
+        # print inputImg.shape
 
         drawing = np.zeros(inputImg.shape,np.uint8)
         drawnContours = cv2.drawContours(drawing, contourList, -1, (255,255,255), 1)
 
-        cv2.imshow("Contours", drawnContours)
+        # cv2.imshow("Contours", drawnContours)
+        #
+        # # Any key press closes all display windows (while windows are in focus)
+        # cv2.waitKey(0)
 
-        # Any key press closes all display windows (while windows are in focus)
-        cv2.waitKey(0)
-
-        return drawing
+        return drawnContours

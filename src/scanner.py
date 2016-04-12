@@ -105,7 +105,10 @@ def find_contours(image):
     fd = FindContours()
     contours, hierarchy, edgeImage = fd.find_all_contours(image)
     finalContours = fd.select_contours(contours, hierarchy)
-    return finalContours,edgeImage
+    
+    contourImage = fd.display_drawn_contours(image,finalContours)
+    
+    return finalContours, contourImage
 
 def export_json(contours, xscale, yscale, units):
     """
@@ -193,12 +196,12 @@ class Scanner:
 
         #finalImage = stitch_images(image1, image2)
         finalImage = image1
-        contours, edgeImage = find_contours(finalImage)
+        contours, contourImage = find_contours(finalImage)
         xscale, yscale, units = get_scale(scale_detect)
         export_json(contours, xscale, yscale, units) #do I need to do something with return value?
 
 
-        return finalImage #do we want to show the contours on this as well?
+        return contourImage #do we want to show the contours on this as well?
 
     def doesConfigExist(self):
         """
