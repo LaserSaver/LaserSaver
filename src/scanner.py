@@ -104,7 +104,7 @@ def find_contours(image):
     #findContours = FindContours()
     fd = FindContours()
     contours, hierarchy, edgeImage = fd.find_all_contours(image)
-    finalContours = findContours.select_contours(contours, hierarchy)
+    finalContours = fd.select_contours(contours, hierarchy)
     return finalContours,edgeImage
 
 def export_json(contours, xscale, yscale, units):
