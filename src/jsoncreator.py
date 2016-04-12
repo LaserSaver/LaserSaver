@@ -61,17 +61,20 @@ class jsonCreator:
             if self.logger is not None:
                 self.logger.debug("Contour must be of type list")
             raise TypeError
-        '''
+
         with open("contour.txt", 'w') as fp:
             fp.write(str(contours))
-        '''
+
         if type(contours) is list:
             for contour in contours:
-                contourdict = [{"x":c[0], "y":c[1]} for c in contour]
-                self.__json["contours"].append(contourdict)
+                contour = contour.tolist()
+                contourdict = [[[{"x":a[0], "y":a[1]} for a in b] for b in c] for c in contours]
+            self.__json["contours"].append(contourdict)
         else:
             for contour in contours:
                 #contourdict = [{"x":c[0], "y":c[1]} for c in contour]
+                contour = contour.tolist()
+                contourdict = [[[{"x":a[0], "y":b[1]} for a in b] for b in c] for c in contours]
                 self.__json["contours"].append(contour.tolist())
 
     def getJson(self):
