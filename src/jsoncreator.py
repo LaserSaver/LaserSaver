@@ -87,7 +87,7 @@ class jsonCreator:
             filename (str): The filename that the json should be exported to
         '''
         with open(filename, 'w') as fp:
-            fp.write(self.__json)
+            fp.write(str(self.__json))
         with open(filename, 'w') as fp:
             fp.write(json.dumps(self.__json))
 
