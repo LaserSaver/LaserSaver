@@ -160,9 +160,9 @@ class FindContours:
         drawing = np.zeros(inputImg.shape,np.uint8)
         drawnContours = cv2.drawContours(drawing, contourList, -1, (255,255,255), 1)
 
-        # cv2.imshow("Contours", drawnContours)
-        #
-        # # Any key press closes all display windows (while windows are in focus)
-        # cv2.waitKey(0)
+        # THIS IS A HACK!!!!
+        cv2.imwrite("contours.jpg", drawnContours)
 
-        return drawnContours
+        img = cv2.imread("contours.jpg", 0)
+
+        return img
