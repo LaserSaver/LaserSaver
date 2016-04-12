@@ -6,25 +6,28 @@ This will include all instructions for building the physical scanner as well as 
 # Install Instructions for Dependencies
 These are the instructions for installing the dependencies for the project.
 ### Install Instructions
-Use our script to install all dependencies and link code.
+Use our script to install all dependencies and link code. By running the following commands from the terminal
 ```
 $ sudo install_opencv.sh
 $ python setup.py install
 ```
 
 ### Install Instructions for Windows
-Install opencv 3.0.0
+Install opencv 3.0.0 by following the instructions at this link
 
 http://docs.opencv.org/2.4/doc/tutorials/introduction/windows_install/windows_install.html
+
+Then run the following commands from the command prompt
 ```
 pip install setuptools
 python setup.py install
 ```
 
-## Install Instructions for Windows
+## Install Instructions for OSX
 Install opencv 3.0.0
 
 http://www.pyimagesearch.com/2015/06/15/install-opencv-3-0-and-python-2-7-on-osx/
+Then run the following commands from the terminal
 ```
 pip install setuptools
 python setup.py install
