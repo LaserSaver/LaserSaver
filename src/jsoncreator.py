@@ -62,7 +62,7 @@ class jsonCreator:
                 self.logger.debug("Contour must be of type list")
             raise TypeError
         with open("contours.json", 'w') as fp:
-            fp.write(json.dumps({"contours":contours}))
+            fp.write(str(contours))
         contours = contours[0]
         if type(contours[0]) is list:
             for contour in contours:
