@@ -19,15 +19,15 @@ def scale_calibration(scaleDetect, image, objx, objy, units):
         True on success, False on failure
     """
     configCom = ConfigCommunicator()
-    
+
     success = scaleDetect.calibrate(image, objx, objy, units)
-    
+
     dictionary = {'x_scale': str(scaleDetect.x_scale), 'y_scale': str(scaleDetect.y_scale), 'units': scaleDetect.units}
-    
+
     configCom.setScale(dictionary)
-    
+
     configCom.saveConfig()
-    
+
     return success
 
 def scale_calibration_data():
@@ -61,14 +61,14 @@ def skew_calibration(calibImages, camera_number):
     Returns:
         None
     """
-    
+
     scanner_camera = ScannerCamera(camera_number)
     scanner_camera.setSkewCorrectionValues(calibImages)
-    
+
     # Config file
     configCom = ConfigCommunicator()
     configCom.setSkew(scanner_camera.dst, camera_number)
-    
+
     configCom.saveConfig()
 
 
@@ -157,7 +157,7 @@ class Scanner:
         Returns:
             None
         """
-        
+
         skew_calibration(calibImages, camera_number)
 
 
@@ -174,21 +174,23 @@ class Scanner:
         configCom = ConfigCommunicator()
 
         # Grabs skew info from config, and creates instance of ScannerCamera()
-        dst = configCom.getSkew(1)
-        
+
         skewObject = ScannerCamera(1)
-        skewObject.setDst(dst)
-        
-        
+        try:
+            dst = configCom.getSkew(1)
+            skewObject.setDst(dst)
+        except:
+            print "skipping skew calibration"
+
         # Grabs scale info from config
         dictionary = configCom.getScale()
-        
+
         scale_detect = ScaleDetection()
         scale_detect.setScale(dictionary['x_scale'], dictionary['y_scale'], dictionary['units'])
 
 
         # Process board image
-        
+
         image1 = skew_correction(image1, skewObject)
 
         #finalImage = stitch_images(image1, image2)
@@ -196,8 +198,8 @@ class Scanner:
         contours, edgeImage = find_contours(finalImage)
         xscale, yscale, units = get_scale(scale_detect)
         export_json(contours, xscale, yscale, units) #do I need to do something with return value?
-        
-        
+
+
         return finalImage #do we want to show the contours on this as well?
 
     def doesConfigExist(self):
