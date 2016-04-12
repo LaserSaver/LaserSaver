@@ -9,27 +9,26 @@ from threading import Thread
 
 class AppUtils: 
 
-	#Creating cam1 and cam2 as singleton objects that can be reused across the app
-	cam1 = None
-	cam2 = None
+	#Creating cam
+	cam = None
+
+	#Frame Per Millisecond, update rate of video capture
+	framePerMillis = 50
+	CV_CAP_PROP_FRAME_WIDTH  = 3
+	CV_CAP_PROP_FRAME_HEIGHT = 4
+
 	
 	@staticmethod
-	def getCam1():
+	def getCam():
 		'''Gets a singleton insatnce of camera 1'''
-		if AppUtils.cam1 is None:
-			AppUtils.cam1 = cv2.VideoCapture(0)
-		return AppUtils.cam1
+		if AppUtils.cam is None:
+			AppUtils.cam = cv2.VideoCapture(0)
+			AppUtils.cam.set(AppUtils.CV_CAP_PROP_FRAME_WIDTH,1920)
+			AppUtils.cam.set(AppUtils.CV_CAP_PROP_FRAME_HEIGHT,1080)
+		return AppUtils.cam
 
 	@staticmethod
-	def getCam2():
-		'''Gets a singleton insatnce of camera 2'''
-		if AppUtils.cam2 is None:
-			AppUtils.cam2 = cv2.VideoCapture(0)
-		return AppUtils.cam2
-
-
-	@staticmethod
-	def getImg(cam, width=640, height=400):
+	def getImg(cam, width=1920, height=1080):
 		''' Getting an image object from the video capture
 			Width and Height are optional and their default will
 			be used as the standard resolution we use for the photos

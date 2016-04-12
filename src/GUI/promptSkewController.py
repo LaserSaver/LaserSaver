@@ -2,7 +2,7 @@ from appUtils import *
 from promptSkewView import PromptSkewView 
 from skewController import SkewController
 from scaleController import ScaleController
-
+import tkMessageBox
 
 class PromptSkewController:
 	def __init__(self, master):
@@ -28,3 +28,9 @@ class PromptSkewController:
 		'''
 		self.view.pack_forget()
 		ScaleController(self.master)
+	
+	def deleteClicked(self):
+		'''Called on when delete button is clicked
+		'''
+	 	if tkMessageBox.askyesno("Warning", "Are you sure you want to delete previous skew calibration?"):
+			print("YO")

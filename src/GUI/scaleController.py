@@ -11,8 +11,7 @@ class ScaleController:
 		'''
 		self.master = master
 
-		self.cam1 = AppUtils.getCam1()
-		self.cam2 = AppUtils.getCam2()
+		self.cam = AppUtils.getCam()
 	
 		self.view = ScaleView(master, self, formParams)
 		self.view.pack(expand=YES,fill=BOTH)
@@ -21,27 +20,22 @@ class ScaleController:
 
 
 	def continiousUpdatePanel(self):
-		'''Calls on updatePanels continiously every 50 milliseconds
+		'''Calls on updatePanels continiously 
 		'''
 		if self.view.winfo_manager() == "":
 			#If view is removed stop updating the panel
 			self.master.after_cancel(self.updatePanelID)
 			return
 
-		self.updatePanels()
-		#Update capture every 50 milliseconds
-		self.updatePanelID = self.master.after(50, self.continiousUpdatePanel)
+		self.updatePanel()
+		self.updatePanelID = self.master.after(AppUtils.framePerMillis, self.continiousUpdatePanel)
 
-	def updatePanels(self):
+	def updatePanel(self):
 		''' Updates the images in the video capture 
 		'''
-		imgtk = AppUtils.getTkinterImg(self.cam1,self.view.videoPanel1.winfo_width(),self.view.videoPanel1.winfo_height())
-		self.view.videoPanel1.configure(image = imgtk)
-		self.view.videoPanel1.image = imgtk
-
-		imgtk = AppUtils.getTkinterImg(self.cam2,self.view.videoPanel2.winfo_width(),self.view.videoPanel2.winfo_height())
-		self.view.videoPanel2.configure(image = imgtk)
-		self.view.videoPanel2.image = imgtk
+		imgtk = AppUtils.getTkinterImg(self.cam,self.view.videoPanel.winfo_width(),self.view.videoPanel.winfo_height())
+		self.view.videoPanel.configure(image = imgtk)
+		self.view.videoPanel.image = imgtk
 
 
 
@@ -49,11 +43,10 @@ class ScaleController:
 		'''Move to validation export view
 		'''
 		self.view.pack_forget()
-		img1 = AppUtils.getImg(self.cam1)
-		img2 = AppUtils.getImg(self.cam2)
+		img = AppUtils.getImg(self.cam)
 
 		formParams ={'width':float(self.view.widthInput.get()),'height':float(self.view.heightInput.get()),'units':self.view.unitsBox.get()}
 		from validationScaleController import ValidationScaleController
-		ValidationScaleController(self.master, formParams, img1, img2)
+		ValidationScaleController(self.master, formParams, img)
 
 	

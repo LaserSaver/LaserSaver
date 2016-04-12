@@ -2,17 +2,16 @@ from appUtils import *
 from baseView import BaseView
 
 class SkewView(BaseView):
-	def __init__(self, master, controller, camNumber):
+	def __init__(self, master, controller):
 		''' Sets up the skew view
 		 
 		    Args:
 		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
 		    	controller(SkewController object): The controller which will be in charge of the view
-		    	camNumber(int): The current camera being calibrated
 		'''
 		BaseView.__init__(self, master)
 
-		skewLabel = Label(self, text="Skew calibration for camera #" + str(camNumber+1), font="-weight bold")
+		skewLabel = Label(self, text="Skew calibration", font="-weight bold")
 		skewLabel.pack(side=TOP)
 
 
