@@ -27,6 +27,7 @@ python setup.py install
 Install opencv 3.0.0
 
 http://www.pyimagesearch.com/2015/06/15/install-opencv-3-0-and-python-2-7-on-osx/
+
 Then run the following commands from the terminal
 ```
 pip install setuptools
