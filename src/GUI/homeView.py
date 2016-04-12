@@ -1,7 +1,7 @@
 from appUtils import *
 
 class HomeView(Frame):
-	def __init__(self, master, controller, isReady):
+	def __init__(self, master, controller, isReady, logoImg):
 		''' The HomeView if there is no config file will not allow the user to start export,
 			but only to calibrate the various models
 		    
@@ -9,11 +9,34 @@ class HomeView(Frame):
 		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
 		    	controller(HomeController object): The controller which will be in charge of the view
 		    	isReady(boolean): Lets the view know if the user is ready to start the export json process
+		    	logoImg(Img): The img used as the logo
 		'''
 		Frame.__init__(self, master)
 
 		promptLabel = Label(self, text="Welcome", font="-weight bold")
 		promptLabel.pack(side=TOP)
+
+		def configImgPanel(img, imgPanel):
+			winwidth = master.winfo_width()-120
+
+			if winwidth < 0 :
+				return
+
+			imgheight, imgwidth, channels = img.shape
+
+			width = winwidth
+			height = int(width * imgheight/imgwidth)
+		
+
+
+			resizdeImg = AppUtils.converImgToTkinterImg(img, width, height)
+			imgPanel.configure(width=width, height=height, image = resizdeImg)
+			imgPanel.image = resizdeImg
+
+		self.imgPanel = Label(self)
+		configImgPanel(logoImg, self.imgPanel)
+		self.imgPanel.bind("<Configure>", lambda e: configImgPanel(logoImg, self.imgPanel) )
+		self.imgPanel.place(relx=0.5, rely=0.45,anchor=CENTER)
 
 		self.calibrateButton = Button(self, text="Calibrate", command=controller.calibrateClicked)
 		self.calibrateButton.pack(side=BOTTOM)
