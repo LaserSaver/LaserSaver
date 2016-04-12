@@ -62,9 +62,6 @@ class jsonCreator:
                 self.logger.debug("Contour must be of type list")
             raise TypeError
 
-        with open("contour.txt", 'w') as fp:
-            fp.write(str(contours))
-
         if type(contours) is list:
             for contour in contours:
                 contour = contour.tolist()
