@@ -179,6 +179,7 @@ class Scanner:
         try:
             dst = configCom.getSkew(1)
             skewObject.setDst(dst)
+            # Process board image
             image1 = skew_correction(image1, skewObject)
         except:
             print "skipping skew calibration"
@@ -188,9 +189,6 @@ class Scanner:
 
         scale_detect = ScaleDetection()
         scale_detect.setScale(dictionary['x_scale'], dictionary['y_scale'], dictionary['units'])
-
-
-        # Process board image
 
 
         #finalImage = stitch_images(image1, image2)
