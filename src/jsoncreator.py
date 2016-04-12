@@ -61,8 +61,9 @@ class jsonCreator:
             if self.logger is not None:
                 self.logger.debug("Contour must be of type list")
             raise TypeError
-        with open("contours.json", 'w') as fp:
+        with open("/~/Documents/Lasercutter/src/contours.json", 'w') as fp:
             fp.write(str(contours))
+            print str(contours)
         contours = contours[0]
         if type(contours[0]) is list:
             for contour in contours:
