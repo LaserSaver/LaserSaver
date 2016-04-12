@@ -10,7 +10,7 @@ class jsonCreator:
         Args:
             logger (logger object): Logger object to debug this class, will be set to None if no object is specified.
         '''
-        
+
         self.logger = logger
         self.resetJson()
 
@@ -36,6 +36,7 @@ class jsonCreator:
         '''
         try:
             if type(x) is not float:
+                self.logger.debug(type(x))
                 raise TypeError
             if type(y) is not float:
                 raise TypeError
