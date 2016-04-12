@@ -15,7 +15,7 @@ $ python setup.py install
 ```
 
 ### Install Instructions for Windows
-We reccommend you install anaconda as your python distribution
+We recommend you install anaconda as your python distribution
 
 Install opencv 3.0.0 by following the instructions at this link
 
