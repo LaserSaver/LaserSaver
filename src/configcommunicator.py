@@ -1,5 +1,7 @@
 import configparser
 import json
+import numpy as np
+
 
 
 class ConfigCommunicator():

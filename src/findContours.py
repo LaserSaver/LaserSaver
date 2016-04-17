@@ -50,7 +50,7 @@ class FindContours:
         #img = cv2.imread(img,0)
 
         # Edge detection
-        edgeImage = cv2.Canny(img,200,400)
+        edgeImage = cv2.Canny(imgcpy,200,400)
 
         # Use copy of edges1 if we want to preserve orignal edges, as cv2.threshold() is destructive
         edgeCopy = edgeImage.copy()
@@ -154,14 +154,14 @@ class FindContours:
         Returns:
             drawnContours: image of the given contours
         '''
-        
+
         # print inputImg.shape
 
         drawing = np.zeros(inputImg.shape,np.uint8)
         drawnContours = cv2.drawContours(drawing, contourList, -1, (255,255,255), 1)
 
         # THIS IS A HACK!!!!
-        # For some reason we are unable to display the drawCountours in the 
+        # For some reason we are unable to display the drawCountours in the
         #  GUI so the two lines below are a hack!
         cv2.imwrite("contours.jpg", drawnContours)
 

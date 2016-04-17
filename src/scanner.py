@@ -55,7 +55,7 @@ def skew_calibration(calibImages, camera_number, scanner_camera):
 
     # Config file
     configCom = ConfigCommunicator()
-    
+
     configCom.setSkew(scanner_camera.skew_dst, camera_number)
 
     configCom.saveConfig()
@@ -96,9 +96,9 @@ def find_contours(image):
     fd = FindContours()
     contours, hierarchy, edgeImage = fd.find_all_contours(image)
     finalContours = fd.select_contours(contours, hierarchy)
-    
+
     contourImage = fd.display_drawn_contours(image,finalContours)
-    
+
     return finalContours, contourImage
 
 def export_json(contours, xscale, yscale, units):
@@ -165,13 +165,10 @@ class Scanner:
         # Grabs skew info from config, and creates instance of ScannerCamera()
 
         skewObject = ScannerCamera(1)
-        try:
-            dst = configCom.getSkew(1)
-            skewObject.setDst(dst)
-            # Process board image
-            image1 = skew_correction(image1, skewObject)
-        except:
-            print "skipping skew calibration"
+        dst = configCom.getSkew(1)
+        skewObject.setDst(dst)
+        # Process board image
+        image1 = skew_correction(image1, skewObject)
 
         # Grabs scale info from config
         dictionary = configCom.getScale()
