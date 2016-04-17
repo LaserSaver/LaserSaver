@@ -75,7 +75,7 @@ class ConfigCommunicator():
         '''
         Set the skew calibration
         Args:
-            value (list): Skew calibration settings
+            value (list): Skew calibration dst
             camera_num (int): Camera which skew calibration corresponds too
         '''
         self.config.set("Skew Calibration", "camera" + str(camera_num), json.dumps({'skew':value}))

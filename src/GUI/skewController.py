@@ -3,27 +3,22 @@ from skewView import SkewView
 from skewModel import SkewModel 
 
 class SkewController:
-	def __init__(self, master, camNumber=0):
+	def __init__(self, master):
 		''' The skew controller in charge of updating the skew model
 		 
 		    Args:
 		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
-		    	camNumber(int): The current camera being calibrated
 		'''
 		self.master = master
-		self.camNumber = camNumber;
 
 		self.numberOfPhotosRequired = 3
 		self.photos = []
 		self.model = SkewModel()
 
-		self.view = SkewView(master, self, camNumber)
+		self.view = SkewView(master, self)
 
-		#Change 0 to cam number currently only have one camera
-		if camNumber == 0:
-			self.cam = AppUtils.getCam1()
-		else :
-			self.cam = AppUtils.getCam2()
+		self.cam = AppUtils.getCam()
+	
 		self.view.pack(expand=YES,fill=BOTH)
 
 		self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)
@@ -31,7 +26,7 @@ class SkewController:
 		self.continiousUpdatePanel()
 
 	def continiousUpdatePanel(self):
-		'''Calls on updatePanel continiously every 50 milliseconds
+		'''Calls on updatePanel continiously
 		'''
 		if self.view.winfo_manager() == "":
 			#If view is removed stop updating the panel
@@ -39,7 +34,7 @@ class SkewController:
 			return
 		
 		self.updatePanel()
-		self.updatePanelID = self.master.after(50,self.continiousUpdatePanel )
+		self.updatePanelID = self.master.after(AppUtils.framePerMillis,self.continiousUpdatePanel )
 
 	def updatePanel(self):
 		''' Updates the image in the video capture 
@@ -108,4 +103,4 @@ class SkewController:
 		self.view.pack_forget()
 		#Had to import here to prevent cyclical refrencing
 		from validationSkewController import ValidationSkewController
-		ValidationSkewController(self.master, img, self.camNumber)
+		ValidationSkewController(self.master, img)

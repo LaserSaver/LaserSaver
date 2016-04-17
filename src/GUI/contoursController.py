@@ -11,8 +11,7 @@ class ContoursController:
 		'''
 		self.master = master
 		
-		self.cam1 = AppUtils.getCam1()
-		self.cam2 = AppUtils.getCam2()
+		self.cam = AppUtils.getCam()
 
 		self.model = ContoursModel()
 	
@@ -34,11 +33,8 @@ class ContoursController:
 			self.master.after(50, self.takingPicturesEffect, 1)
 		elif case == 1:
 			#Setting image to none
-			self.view.videoPanel1.configure(image = None)
-			self.view.videoPanel1.image = None
-
-			self.view.videoPanel2.configure(image = None)
-			self.view.videoPanel2.image = None
+			self.view.videoPanel.configure(image = None)
+			self.view.videoPanel.image = None
 			
 			self.master.after(50, self.takingPicturesEffect, 2)
 		else :
@@ -46,34 +42,30 @@ class ContoursController:
 
 
 	def continiousUpdatePanel(self):
-		'''Calls on updatePanels continiously every 50 milliseconds
+		'''Calls on updatePanels continiously 
 		'''
 		if self.view.winfo_manager() == "":
 			#If view is removed stop updating the panel
 			self.master.after_cancel(self.updatePanelID)
 			return
-		self.updatePanels()
-		#Update capture every 50 milliseconds
-		self.updatePanelID = self.master.after(50, self.continiousUpdatePanel)
+		self.updatePanel()
+		#Update capture every 
+		self.updatePanelID = self.master.after(AppUtils.framePerMillis, self.continiousUpdatePanel)
 
-	def updatePanels(self):
+	def updatePanel(self):
 		''' Updates the images in the video capture 
 		'''
-		imgtk = AppUtils.getTkinterImg(self.cam1,self.view.videoPanel1.winfo_width(),self.view.videoPanel1.winfo_height())
-		self.view.videoPanel1.configure(image = imgtk)
-		self.view.videoPanel1.image = imgtk
+		imgtk = AppUtils.getTkinterImg(self.cam,self.view.videoPanel.winfo_width(),self.view.videoPanel.winfo_height())
+		self.view.videoPanel.configure(image = imgtk)
+		self.view.videoPanel.image = imgtk
 
-		imgtk = AppUtils.getTkinterImg(self.cam2,self.view.videoPanel2.winfo_width(),self.view.videoPanel2.winfo_height())
-		self.view.videoPanel2.configure(image = imgtk)
-		self.view.videoPanel2.image = imgtk
 
 
 
 	def takePhotosClicked(self):
 		'''Takes two pictures and performs contours processing on them on seperate thread
 		'''
-		img1 = AppUtils.getImg(self.cam1)
-		img2 = AppUtils.getImg(self.cam2)
+		img = AppUtils.getImg(self.cam)
 		self.takingPicturesEffect()
 
 		#Submitting for calibration
@@ -87,7 +79,7 @@ class ContoursController:
 		processingLabel = Label(self.view, text="Processing...")
 		processingLabel.pack(side=BOTTOM)
 
-		AppUtils.computeOnSeprateThread(self.master, self.processingDone, self.model.calculate ,[img1, img2])
+		AppUtils.computeOnSeprateThread(self.master, self.processingDone, self.model.calculate ,[img])
 
 	def processingDone(self, img):
 		'''Moves to validation contoursView

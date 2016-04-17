@@ -28,10 +28,10 @@ class ScannerCamera:
         self.use_skew_correction = None
         
      
-    ''' Pull values from config file '''
-    def setFromConfig(self):
+    ''' Pull dst values from config file '''
+    def setDst(self, dst):
         
-        return 0   
+        self.skew_dst = dst   
     
    
     ''' Calibrate Skew Correction '''

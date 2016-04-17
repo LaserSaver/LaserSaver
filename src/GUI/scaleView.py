@@ -17,29 +17,22 @@ class ScaleView(BaseView):
 
 
 		#Video Capture frame for both cameras
-		self.frame = Label(self )
-		self.frame.pack(side=TOP)
+		self.videoPanel = Label(self )
+		self.videoPanel.pack(side=TOP)
 
 
-		panelWidth = (master.winfo_width()-10)/2
+		panelWidth = (master.winfo_width()-10)
 		panelHeight = (master.winfo_height() -175)
 
-		self.videoPanel1 = Label(self.frame, width=panelWidth, height=panelHeight)
-		self.videoPanel1.pack(side=LEFT)
-
-		self.videoPanel2 = Label(self.frame, width=panelWidth, height=panelHeight)
-		self.videoPanel2.pack(side=RIGHT)
-
-		def resizeVideoCapturePanels(videoPanel1, videoPanel2,controller):
-			controller.updatePanels()
-			panelWidth = (master.winfo_width()-10)/2
+		def resizeVideoCapturePanel(videoPanel, controller):
+			controller.updatePanel()
+			panelWidth = (master.winfo_width()-10)
 			panelHeight = (master.winfo_height() -175)
 
-			videoPanel1.configure(width=panelWidth, height=panelHeight)
-			videoPanel2.configure(width=panelWidth, height=panelHeight)
-			controller.updatePanels()
+			videoPanel.configure(width=panelWidth, height=panelHeight)
+			controller.updatePanel()
 
-		self.frame.bind("<Configure>", lambda e: resizeVideoCapturePanels(self.videoPanel1, self.videoPanel2, controller) )
+		self.videoPanel.bind("<Configure>", lambda e: resizeVideoCapturePanel(self.videoPanel, controller) )
 
 		#Width
 		onEditVar= StringVar()
@@ -80,7 +73,7 @@ class ScaleView(BaseView):
 		unitsPanel.pack(side=TOP)
 
 		#Export button
-		self.photosButton = Button(self, text="Take photos", wraplength=80,  command=controller.photosClicked)
+		self.photosButton = Button(self, text="Take photo", wraplength=80,  command=controller.photosClicked)
 		self.photosButton.pack(side=BOTTOM)
 
 	def validate(self,value,inputtext):

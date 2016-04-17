@@ -4,7 +4,7 @@ from scaleController import ScaleController
 from scaleModel import ScaleModel
 
 class ValidationScaleController:
-	def __init__(self, master, formParams, img1, img2):
+	def __init__(self, master, formParams, img):
 		''' The validation scale controller in charge of asking the user whether the images he took are fit to
 			be processed by the scale model
 		 
@@ -12,20 +12,18 @@ class ValidationScaleController:
 		    Args:
 		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
 		    	formParams(Dictonary): The params that fill the form
-		    	img1(Image): Confirm taken image from camera 1
-		    	img2(Image): Confirm taken image from camera 2
+		    	img(Image): Confirm taken image from camera
 		'''
 		self.master = master
 
-		self.view = ValidationScaleView(master, self, img1, img2)
+		self.view = ValidationScaleView(master, self, img)
 		self.view.pack(expand=YES,fill=BOTH)
 
 		self.model = ScaleModel()
 
 		self.formParams = formParams
 		
-		self.img1 = img1
-		self.img2 = img2
+		self.img = img
 
 	def yesClicked(self):
 		'''Yes button clicked start processing by the scale model'''
@@ -37,7 +35,7 @@ class ValidationScaleController:
 		self.view.progressbar.pack(side=BOTTOM)
 		self.view.progressbar.start()
 
-		AppUtils.computeOnSeprateThread(self.master, self.finishCalibrating, self.model.calculate ,[self.img1, self.img2, self.formParams['width'], self.formParams['height'], self.formParams['units']])
+		AppUtils.computeOnSeprateThread(self.master, self.finishCalibrating, self.model.calculate ,[self.img, self.formParams['width'], self.formParams['height'], self.formParams['units']])
 
 		self.view.processingLabel = Label(self.view, text="Processing...")
 		self.view.processingLabel.pack(side=BOTTOM)
