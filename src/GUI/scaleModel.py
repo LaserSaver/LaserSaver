@@ -9,7 +9,7 @@ class ScaleModel:
         self.scanner = Scanner()
         
     def calculate(self, img, width, height, units):
-        scaleDetectObj = self.scanner.scaleCalibration(img, width, height, units)
+        #scaleDetectObj = self.scanner.scaleCalibration(img, width, height, units)
         
         #should return scaleDetectObj
         

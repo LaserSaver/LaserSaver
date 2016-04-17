@@ -17,5 +17,5 @@ class BaseView(Frame):
 
 	def homeClicked(self):
 		'''Home butaton is clicked unpacks the current view and pushes on the home view'''
-		self.pack_forget()
+		self.destroy()
 		HomeController(self.master)

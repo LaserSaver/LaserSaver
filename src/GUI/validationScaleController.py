@@ -42,7 +42,7 @@ class ValidationScaleController:
 
 	def noClicked(self):
 		'''No Button clicked go back to the previous step'''
-		self.view.pack_forget()
+		self.view.destroy()
 		ScaleController(self.master, self.formParams)
 
 	def finishCalibrating(self, wentWell):

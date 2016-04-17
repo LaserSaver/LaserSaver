@@ -10,7 +10,7 @@ class ContoursModel:
     
     def calculate(self, img):
 
-        finalImage = self.scanner.processImages(img)
+        #finalImage = self.scanner.processImages(img)
         
         #Return stitched image, but doesn't have any contours on it currently
-        return finalImage
+        return img

@@ -11,6 +11,7 @@ class HomeController:
 		'''
 		self.master = master
 
+
 		#Assume there is a config file for now
 		isReady = True
 		img =  cv2.imread("LogoImg.png")
@@ -21,7 +22,7 @@ class HomeController:
 	def startClicked(self):
 		'''Called on when the start button is clicked start the json export process
 		'''
-		self.view.pack_forget()
+		self.view.destroy()
 
 		#To avoid cyclical imports
 		from contoursController import ContoursController
@@ -30,7 +31,7 @@ class HomeController:
 	def calibrateClicked(self):
 		'''Called when the calibrate button is clicked starts the calibration process
 		'''
-		self.view.pack_forget()
+		self.view.destroy()
 
 		#To avoid cyclical imports
 		from promptSkewController import PromptSkewController

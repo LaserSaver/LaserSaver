@@ -27,7 +27,7 @@ class SkewController:
 	def continiousUpdatePanel(self):
 		'''Calls on updatePanel continiously
 		'''
-		if self.view.winfo_manager() == "":
+		if not self.view.winfo_exists():
 			#If view is removed stop updating the panel
 			self.master.after_cancel(self.updatePanelID)
 			return
@@ -54,6 +54,8 @@ class SkewController:
 			Args:
 				case(int): The current step in the animation 
 		'''
+		if not self.view.winfo_exists():
+			return 
 		if case == 0:
 			#Stopping video capture disable take photo button
 			self.master.after_cancel(self.updatePanelID)
@@ -100,7 +102,7 @@ class SkewController:
 			Args:
 				img(Image): The image returned from the model's processing
 		'''
-		self.view.pack_forget()
+		self.view.destroy()
 		#Had to import here to prevent cyclical refrencing
 		from validationSkewController import ValidationSkewController
 		ValidationSkewController(self.master, img)

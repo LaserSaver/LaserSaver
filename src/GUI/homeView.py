@@ -17,20 +17,9 @@ class HomeView(Frame):
 		promptLabel.pack(side=TOP)
 
 		def configImgPanel(img, imgPanel):
-			winwidth = master.winfo_width()-120
-
-			if winwidth < 0 :
-				return
-
 			imgheight, imgwidth, channels = img.shape
-
-			width = winwidth
-			height = int(width * imgheight/imgwidth)
-		
-
-
-			resizdeImg = AppUtils.converImgToTkinterImg(img, width, height)
-			imgPanel.configure(width=width, height=height, image = resizdeImg)
+			resizdeImg = AppUtils.converImgToTkinterImg(img, imgwidth, imgheight)
+			imgPanel.configure(width=imgwidth, height=imgheight, image = resizdeImg)
 			imgPanel.image = resizdeImg
 
 		self.imgPanel = Label(self)

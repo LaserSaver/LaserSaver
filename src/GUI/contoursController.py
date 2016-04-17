@@ -27,6 +27,8 @@ class ContoursController:
 			Args:
 				case(int): The current step in the animation 
 		'''
+		if not self.view.winfo_exists():
+			return 
 		if case == 0:
 			#Stopping video capture disable take photo button
 			self.master.after_cancel(self.updatePanelID)
@@ -44,7 +46,7 @@ class ContoursController:
 	def continiousUpdatePanel(self):
 		'''Calls on updatePanels continiously 
 		'''
-		if self.view.winfo_manager() == "":
+		if not self.view.winfo_exists():
 			#If view is removed stop updating the panel
 			self.master.after_cancel(self.updatePanelID)
 			return
@@ -87,7 +89,7 @@ class ContoursController:
 			Args:
 				img(Image): The image computed from the model function
 		'''
-		self.view.pack_forget()
+		self.view.destroy()
 
 		from validationContoursController import ValidationContoursController 
 		ValidationContoursController(self.master,img)

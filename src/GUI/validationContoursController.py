@@ -19,10 +19,10 @@ class ValidationContoursController:
 
 	def yesClicked(self):
 		'''When the yes button is clicked goes on to the next step'''
-		self.view.pack_forget()
+		self.view.destroy()
 		ExportController(self.master)
 
 	def noClicked(self):
 		'''When the no button is clicked goes back to a previous step'''
-		self.view.pack_forget()
+		self.view.destroy()
 		ContoursController(self.master)

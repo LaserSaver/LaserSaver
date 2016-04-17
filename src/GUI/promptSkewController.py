@@ -20,13 +20,13 @@ class PromptSkewController:
 	def calibrateClicked(self):
 		'''Called on when calibration is clicked goes to the next step
 		'''
-		self.view.pack_forget()
+		self.view.destroy()
 		SkewController(self.master)
 
 	def skipClicked(self):
 		'''Called on when skip is clicked skips to scale detection
 		'''
-		self.view.pack_forget()
+		self.view.destroy()
 		ScaleController(self.master)
 	
 	def deleteClicked(self):
