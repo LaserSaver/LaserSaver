@@ -60,7 +60,7 @@ class FindContours:
 
         # cv2.findContours returns an image (which we don't need), the list of identified contours,
         # and the contour hierarchy(how the contours relate to each other)
-        _, initial_contours, hierarchy = cv2.findContours(thresh,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_NONE)
+        _, initial_contours, hierarchy = cv2.findContours(thresh,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
 
         return initial_contours, hierarchy, edgeImage
 

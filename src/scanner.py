@@ -67,7 +67,8 @@ def skew_calibration(calibImages, camera_number):
 
     # Config file
     configCom = ConfigCommunicator()
-    configCom.setSkew(scanner_camera.dst, camera_number)
+    
+    configCom.setSkew(scanner_camera.skew_dst, camera_number)
 
     configCom.saveConfig()
 
