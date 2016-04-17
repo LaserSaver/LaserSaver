@@ -5,6 +5,8 @@ from determineSkew import DetermineSkew
 from scannerCamera import ScannerCamera
 from jsoncreator import jsonCreator
 from configcommunicator import ConfigCommunicator
+import numpy as np
+import cv2
 
 def scale_calibration(scaleDetect, image, objx, objy, units):
     """
@@ -179,7 +181,8 @@ class Scanner:
 
         #finalImage = stitch_images(image1, image2)
         finalImage = image1
-        contours, contourImage = find_contours(finalImage)
+        cv2.imwrite('FinalImage.jpg', finalImage)
+        contours, contourImage = find_contours(np.array(finalImage, dtype=np.uint8))
         xscale, yscale, units = get_scale(scale_detect)
         export_json(contours, xscale, yscale, units) #do I need to do something with return value?
 
