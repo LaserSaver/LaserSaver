@@ -10,15 +10,11 @@ class SkewModel:
     
     def calculate(self, imgList):
         """
-        calibrates the scale and saves to config file
+        Calls the scanner function to calculate skew correction values
         Args:
-            scaleDetect (ScaleDetection):
-            image: the calibration image
-            objx: width of calibration object
-            objy: height of calibration object
-            units (string): units to use
+            imgList: Array of images used for calibration
         Returns:
-            True on success, False on failure
+            imgList[0]: First image taken
         """
         try:
             self.scanner.skewCalibration(imgList,1)

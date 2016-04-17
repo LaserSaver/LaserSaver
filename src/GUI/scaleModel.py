@@ -10,12 +10,11 @@ class ScaleModel:
         
     def calculate(self, img, width, height, units):
         """
-        calibrates the scale and saves to config file
+        Calls the scanner function to calculate scale
         Args:
-            scaleDetect (ScaleDetection):
-            image: the calibration image
-            objx: width of calibration object
-            objy: height of calibration object
+            img: the calibration image
+            width: width of calibration object
+            height: height of calibration object
             units (string): units to use
         Returns:
             True on success, False on failure

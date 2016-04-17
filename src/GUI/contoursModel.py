@@ -12,13 +12,9 @@ class ContoursModel:
         """
         Calls the scanner function to calculate contours and generate JSON
         Args:
-            scaleDetect (ScaleDetection):
-            image: the calibration image
-            objx: width of calibration object
-            objy: height of calibration object
-            units (string): units to use
+            img: image to calculate contours on
         Returns:
-            True on success, False on failure
+            finalImage: image of the contours
         """
         finalImage = self.scanner.processImages(img)
         

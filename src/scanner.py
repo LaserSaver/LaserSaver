@@ -30,17 +30,6 @@ def scale_calibration(scaleDetect, image, objx, objy, units):
 
     return success
 
-def scale_calibration_data():
-    """
-    See if scale calibration data exists
-    Args:
-        None
-    Returns:
-        True on success, False on failure
-    """
-    success = scaleDetect.loadConfigFile()
-    #load other calibration data as well
-    return success
 
 def get_scale(scaleDetect):
     """
@@ -54,7 +43,7 @@ def get_scale(scaleDetect):
 
 def skew_calibration(calibImages, camera_number):
     """
-    desc
+    Calculate skew correction values
     Args:
         calibImages
         camera_number
@@ -75,7 +64,7 @@ def skew_calibration(calibImages, camera_number):
 
 def skew_correction(image, camSettings):
     """
-    desc
+    Apply skew correction to image
     Args:
         None
     Returns:
@@ -85,22 +74,24 @@ def skew_correction(image, camSettings):
 
 def stitch_images(image1, image2):
     """
-    desc
+    Stitch 2 images
     Args:
-        None
+        image1:
+        image2:
     Returns:
-        True on success, False on failure
+        stitched image
     """
     stitcher = Stitcher()
     return stitcher.stitch((image1,image2)) #correct order for images?
 
 def find_contours(image):
     """
-    desc
+    Find contours on image
     Args:
-        None
+        image: Image to find contours on
     Returns:
-        True on success, False on failure
+        finalContours:
+        contourImage:
     """
     #findContours = FindContours()
     fd = FindContours()
@@ -113,9 +104,12 @@ def find_contours(image):
 
 def export_json(contours, xscale, yscale, units):
     """
-    desc
+    Export the contours to JSON
     Args:
-        None
+        contours:
+        xscale:
+        yscale:
+        units:
     Returns:
         True on success, False on failure
     """
@@ -126,15 +120,6 @@ def export_json(contours, xscale, yscale, units):
     return jsonData.exportJson()
 
 class Scanner:
-    #in case we want to pass around 1 scanner object instead of the individual objects
-    def __init__(self):
-        '''
-        Initialize a new Scanner object
-        '''
-        cam1Settings = None
-        cam2Settings = None
-        scaleDetectObj = None
-
     #Functions GUI should call:
     def scaleCalibration(self, image1, objx, objy, units):
         """
@@ -158,6 +143,7 @@ class Scanner:
         Skew calibration. Should be run on each camera
         Args:
             calibImages: calibration images for camera 1 (any number)
+            camera_number:
         Returns:
             None
         """
@@ -171,7 +157,6 @@ class Scanner:
         The rest of the logic to stitch the image
         Args:
             image1: image from camera 1
-
         Returns:
             finalImage: image to be displayed to user to confirm it is correct
         """
