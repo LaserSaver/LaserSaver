@@ -11,8 +11,7 @@ class PromptSkewView(BaseView):
 		'''
 		BaseView.__init__(self, master)
 
-		promptLabel = Label(self, text="Would you like to calibrate for skew?", font="-weight bold")
-		promptLabel.pack(side=TOP)
+		self.addTitle("Skew Calibration")
 
 		instructions = Message(self, text="Calibration of skew bleh bleh aksjdhfjdksahfjdsnfjkadbncjkdsabcjkdsbckdsacdlsakcjdslakbcvdsklavjbdskjalvcbdsjakvbsdkjavbsdkavjbdsakjv", relief=RIDGE, borderwidth=2)
 		instructions.pack(side=TOP)

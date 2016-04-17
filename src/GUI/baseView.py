@@ -19,3 +19,14 @@ class BaseView(Frame):
 		'''Home butaton is clicked unpacks the current view and pushes on the home view'''
 		self.destroy()
 		HomeController(self.master)
+
+	def addTitle(self, title):
+		'''Gives a way to set the title for all other inheriting views
+
+			Args:
+				title(string): the string of the title
+		'''
+		helv24 = tkFont.Font(family='Helvetica',size=24, weight='bold') 
+		promptLabel = Label(self, text=title, font="-weight bold", pady=5 )
+		promptLabel['font'] = helv24
+		promptLabel.pack(side=TOP)

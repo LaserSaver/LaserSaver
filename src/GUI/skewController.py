@@ -46,7 +46,7 @@ class SkewController:
 		'''When the undobutton is clicked removes one of the images from the list
 		'''
 		self.photos.pop()
-		self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)
+		self.view.updateButtons(len(self.photos))
 
 	def takingPictureEffect(self, case=0):
 		'''This is used to create the flash effect when taking picture

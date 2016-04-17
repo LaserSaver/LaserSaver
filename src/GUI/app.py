@@ -14,8 +14,9 @@ class App:
 
 #Initializing GUI window
 root = Tk()
-root.wm_title("LazerCutter GUI")
-root.geometry('{}x{}'.format(640, 480))
-root.minsize(200, 200)
+root.wm_title("LaserSaver")
+root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
+#root.geometry('{}x{}'.format(640, 480))
+root.minsize(530, 430)
 app = App(root)
 root.mainloop()

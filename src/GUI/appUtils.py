@@ -6,6 +6,7 @@ import cv2
 import time
 import os
 from threading import Thread
+import tkFont
 
 class AppUtils: 
 
