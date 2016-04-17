@@ -41,7 +41,7 @@ def get_scale(scaleDetect):
     """
     return scaleDetect.getScale()
 
-def skew_calibration(calibImages, camera_number):
+def skew_calibration(calibImages, camera_number, scanner_camera):
     """
     Calculate skew correction values
     Args:
@@ -51,7 +51,6 @@ def skew_calibration(calibImages, camera_number):
         None
     """
 
-    scanner_camera = ScannerCamera(camera_number)
     scanner_camera.setSkewCorrectionValues(calibImages)
 
     # Config file
@@ -147,8 +146,9 @@ class Scanner:
         Returns:
             None
         """
-
-        skew_calibration(calibImages, camera_number)
+        scanner_camera = ScannerCamera(camera_number)
+        skew_calibration(calibImages, camera_number, scanner_camera)
+        return skew_correction(calibImages[0], scanner_camera)
 
 
     def processImages(self, image1):

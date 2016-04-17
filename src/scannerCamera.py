@@ -96,16 +96,18 @@ class ScannerCamera:
             Else:
                 original_img (string): the unaltered original image
         '''
-        
+
+
+
         if self.use_skew_correction is None:
-            
+            cv2.imwrite("skew.jpg", original_img)
             # This means that the image we are using for calibration is permanently rewritten with the skew matrix
-            corrected_img = cv2.imwrite(original_img, self.skew_dst)
+            corrected_img = cv2.imwrite("skew.jpg", self.skew_dst)
             return corrected_img
             
         elif self.use_skew_correction is True:
-            
-            corrected_img = cv2.imwrite(original_img, self.skew_dst)
+            cv2.imwrite("skew.jpg", original_img)
+            corrected_img = cv2.imwrite("skew.jpg", self.skew_dst)
             return corrected_img
 
         else:

@@ -1,6 +1,7 @@
 import time
 import sys
 import os
+import cv2
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scanner import Scanner
 
@@ -17,8 +18,9 @@ class SkewModel:
             imgList[0]: First image taken
         """
         try:
-            self.scanner.skewCalibration(imgList,1)
+            returnImage = self.scanner.skewCalibration(imgList,1)
         except AttributeError:
             print "No going"
-            
-        return imgList[0]
+
+        returnImage = cv2.imread("skew.jpg")
+        return returnImage
