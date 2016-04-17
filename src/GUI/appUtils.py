@@ -7,7 +7,7 @@ import time
 import os
 from threading import Thread
 
-class AppUtils: 
+class AppUtils:
 
 	#Creating cam
 	cam = None
@@ -17,7 +17,7 @@ class AppUtils:
 	CV_CAP_PROP_FRAME_WIDTH  = 3
 	CV_CAP_PROP_FRAME_HEIGHT = 4
 
-	
+
 	@staticmethod
 	def getCam():
 		'''Gets a singleton insatnce of camera 1'''
@@ -39,8 +39,7 @@ class AppUtils:
 		    	height(int): The height resolution of the image in pixels width
 		'''
 		ret, frame = cam.read()
-		#Flipping horizontally 
-		frame = cv2.flip(frame, 1)
+
 		#Resizing to panel size
 		frame = cv2.resize(frame, (width,height))
 		cv2img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
@@ -49,7 +48,7 @@ class AppUtils:
 	@staticmethod
 	def getTkinterImg(cam, width, height):
 		''' Gets tkinter image from the camera these images can be displayed inside the GUI
-			
+
 			Args:
 				cam(videoCapture): The camera which the picture will be taken from
 		    	width(int): The width resolution of the image in pixels width
@@ -60,7 +59,7 @@ class AppUtils:
 	@staticmethod
 	def converImgToTkinterImg(img, width, height):
 		''' Converts a standard image to tkinter image and resized it
-			
+
 			Args:
 				img(Image): The standrd image object
 		    	width(int): The resize width resolution of the image in pixels width
@@ -72,7 +71,7 @@ class AppUtils:
 	def computeOnSeprateThread(master, callback, function, args):
 		''' Computes a function on a sperate thread as to not distub the main thread
 			and later on callsback on the main thread after the function finished
-			
+
 			Args:
 				master(Tk object): The toplevel widget of Tk which is the main window of an application
 		    	callback(function): The function to callback on once the processing function is done
@@ -92,7 +91,7 @@ class AppUtils:
 		    	callback(function): The function to callback on once the processing function is done
 		    	function(function): The processing function which will be ran on a seperate thread
 		    	args(list): the arguments that are passed to the computing function
-	
+
 		'''
 		retVal = function(*args)
 
