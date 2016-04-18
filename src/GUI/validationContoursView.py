@@ -12,13 +12,12 @@ class ValidationContoursView(BaseView):
 		'''
 		BaseView.__init__(self, master)
 
-		promptLabel = Label(self, text="Does this look okay?", font="-weight bold")
-		promptLabel.pack(side=TOP)
+		self.addTitle("Does this look okay?")
 
 
 		def configImgPanel(img, imgPanel):
-			resizdeImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-115)
-			imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-115, relief=RIDGE, borderwidth=2, image = resizdeImg)
+			resizdeImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-130)
+			imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-130, relief=RIDGE, borderwidth=2, image = resizdeImg)
 			imgPanel.image = resizdeImg
 
 		self.imgPanel = Label(self)

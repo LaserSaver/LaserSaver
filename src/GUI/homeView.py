@@ -12,7 +12,7 @@ class HomeView(Frame):
 		    	logoImg(Img): The img used as the logo
 		'''
 		Frame.__init__(self, master)
-		helv54 = tkFont.Font(family='Helvetica',size=54, weight='bold') 
+		helv54 = tkFont.Font(family='Helvetica',size=54) 
 		promptLabel = Label(self, text="LaserSaver", font="-weight bold", pady=20 )
 		promptLabel['font'] = helv54
 		promptLabel.pack(side=TOP)
@@ -22,15 +22,15 @@ class HomeView(Frame):
 		self.imgPanel.image = logoImg
 		self.imgPanel.place(relx=0.5, rely=0.45,anchor=CENTER)
 
-		helv20 = tkFont.Font(family='Helvetica',size=20, weight='bold') 
+		helv18 = tkFont.Font(family='Helvetica',size=18) 
 
-		self.calibrateButton = Button(self, text="Calibrate", command=controller.calibrateClicked,width=20, height =2)
-		self.calibrateButton['font'] = helv20
+		self.calibrateButton = Button(self, text="Calibrate", command=controller.calibrateClicked,pady=5)
+		self.calibrateButton['font'] = helv18
 		self.calibrateButton.pack(side=BOTTOM)
 
-		self.startButton = Button(self, text="Scan Board", command=controller.startClicked,width=20)
+		self.startButton = Button(self, text="Scan Board", command=controller.startClicked, pady=5)
 
-		self.startButton ['font'] = helv20
+		self.startButton ['font'] = helv18
 
 		if not isReady:
 			self.startButton.configure( state=DISABLED)

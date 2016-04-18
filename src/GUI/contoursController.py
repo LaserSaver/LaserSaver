@@ -89,6 +89,9 @@ class ContoursController:
 			Args:
 				img(Image): The image computed from the model function
 		'''
+		if not self.view.winfo_exists():
+			#If view is removed do not attempt anything
+			return
 		self.view.destroy()
 
 		from validationContoursController import ValidationContoursController 

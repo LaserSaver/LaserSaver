@@ -102,6 +102,9 @@ class SkewController:
 			Args:
 				img(Image): The image returned from the model's processing
 		'''
+		if not self.view.winfo_exists():
+			#If view is removed do not attempt anything
+			return
 		self.view.destroy()
 		#Had to import here to prevent cyclical refrencing
 		from validationSkewController import ValidationSkewController

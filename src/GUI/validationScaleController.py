@@ -51,6 +51,9 @@ class ValidationScaleController:
 			Args:
 				wentlWell(Bool): Tells the controller whether or not the scale model was sucessfully calibrated
 		''' 
+		if not self.view.winfo_exists():
+			#If view is removed do not attempt anything
+			return
 		self.view.processingLabel.pack_forget()
 		self.view.progressbar.pack_forget()
 		

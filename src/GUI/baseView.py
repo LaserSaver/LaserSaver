@@ -27,6 +27,8 @@ class BaseView(Frame):
 				title(string): the string of the title
 		'''
 		helv24 = tkFont.Font(family='Helvetica',size=24, weight='bold') 
-		promptLabel = Label(self, text=title, font="-weight bold", pady=5 )
-		promptLabel['font'] = helv24
-		promptLabel.pack(side=TOP)
+		self.titleLabel = Label(self, text=title, font="-weight bold", pady=5 )
+		self.titleLabel['font'] = helv24
+		self.titleLabel.pack(side=TOP)
+
+

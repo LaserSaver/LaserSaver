@@ -28,3 +28,4 @@ class PromptSkewView(BaseView):
 
 		self.deleteButton = Button(self, text="Delete skew", command=controller.deleteClicked)
 		self.deleteButton.pack(side=BOTTOM)
+

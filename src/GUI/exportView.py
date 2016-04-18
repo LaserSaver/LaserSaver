@@ -12,8 +12,7 @@ class ExportView(BaseView):
 		'''
 		BaseView.__init__(self, master)
 
-		label = Label(self, text="Congrutlations, successfully exported JSON", font="-weight bold")
-		label.pack(side=TOP)
+		self.addTitle("JSON Exported")
 
 		jsonMes = Message(self, text=jsonText, relief=RIDGE, borderwidth=2)
 		jsonMes.pack(side=TOP)
