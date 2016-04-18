@@ -17,15 +17,9 @@ class HomeView(Frame):
 		promptLabel['font'] = helv54
 		promptLabel.pack(side=TOP)
 
-		def configImgPanel(img, imgPanel):
-			imgheight, imgwidth, channels = img.shape
-			resizdeImg = AppUtils.converImgToTkinterImg(img, imgwidth, imgheight)
-			imgPanel.configure(width=imgwidth, height=imgheight, image = resizdeImg)
-			imgPanel.image = resizdeImg
-
 		self.imgPanel = Label(self)
-		configImgPanel(logoImg, self.imgPanel)
-		self.imgPanel.bind("<Configure>", lambda e: configImgPanel(logoImg, self.imgPanel) )
+		self.imgPanel.configure( image = logoImg,background=self["bg"])
+		self.imgPanel.image = logoImg
 		self.imgPanel.place(relx=0.5, rely=0.45,anchor=CENTER)
 
 		helv20 = tkFont.Font(family='Helvetica',size=20, weight='bold') 

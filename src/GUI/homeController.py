@@ -14,9 +14,7 @@ class HomeController:
 
 		#Assume there is a config file for now
 		isReady = True
-		img =  cv2.imread("LogoImg.png")
-		cv2img = cv2.cvtColor(img, cv2.COLOR_BGR2RGBA)
-		self.view = HomeView(master, self, isReady, cv2img)
+		self.view = HomeView(master, self, isReady, ImageTk.PhotoImage(file="LogoImg.png"))
 		self.view.pack(expand=YES,fill=BOTH)
 
 	def startClicked(self):

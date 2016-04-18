@@ -59,7 +59,7 @@ class AppUtils:
 		return ImageTk.PhotoImage(Image.fromarray(AppUtils.getImg(cam,width,height)))
 
 	@staticmethod
-	def converImgToTkinterImg(img, width, height):
+	def converImgToTkinterImg(img, width=None, height=None):
 		''' Converts a standard image to tkinter image and resized it
 			
 			Args:
@@ -67,6 +67,8 @@ class AppUtils:
 		    	width(int): The resize width resolution of the image in pixels width
 		    	height(int): The resize height resolution of the image in pixels width
 		'''
+		if width == None or height == None:
+			return ImageTk.PhotoImage(Image.fromarray(img))
 		return ImageTk.PhotoImage(Image.fromarray(cv2.resize(img, (width, height))))
 
 	@staticmethod
