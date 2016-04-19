@@ -2,7 +2,7 @@ from appUtils import *
 from baseView import BaseView
 
 class ExportView(BaseView):
-	def __init__(self, master, controller, jsonText):
+	def __init__(self, master, controller, json):
 		''' Sets up the export view 
 		 
 		    Args:
@@ -14,11 +14,25 @@ class ExportView(BaseView):
 
 		self.addTitle("JSON Exported")
 
-		jsonMes = Message(self, text=jsonText, relief=RIDGE, borderwidth=2)
-		jsonMes.pack(side=TOP)
+		panel = Frame(self)
+		panel.pack(side=TOP)
+
+		scrollbar = Scrollbar(panel)
+		scrollbar.pack(side=RIGHT, fill=Y)
+
+		jsonText = Text(panel,  wrap=WORD, yscrollcommand=scrollbar.set, relief=RIDGE, borderwidth=2,state=NORMAL)
+		jsonText.delete(1.0, END)
+		jsonText.insert(END, json)
+		jsonText.config(state=DISABLED)
+		jsonText.pack(side=TOP)
+
+
+
+
+		scrollbar.config(command=jsonText.yview)
 
 		#Configure is for when window is resized 
-		jsonMes.bind("<Configure>", lambda e: jsonMes.configure(width=master.winfo_width()-50))
+		#jsonMes.bind("<Configure>", lambda e: jsonMes.configure(width=master.winfo_width()-50))
 
 
 		self.skipButton = Button(self, text="Exit", command=master.destroy)
