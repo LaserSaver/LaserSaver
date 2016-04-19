@@ -15,7 +15,6 @@ class App:
 #Initializing GUI window
 root = Tk()
 root.wm_title("LaserSaver")
-root.state('zoomed')
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()));
 root.minsize(530, 430)
 
