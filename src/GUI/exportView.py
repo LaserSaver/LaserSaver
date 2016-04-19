@@ -14,13 +14,13 @@ class ExportView(BaseView):
 
 		self.addTitle("JSON Exported")
 
-		panel = Frame(self)
+		panel = Frame(self,relief=RIDGE, borderwidth=2)
 		panel.pack(side=TOP)
 
 		scrollbar = Scrollbar(panel)
 		scrollbar.pack(side=RIGHT, fill=Y)
 
-		jsonText = Text(panel,  wrap=WORD, yscrollcommand=scrollbar.set, relief=RIDGE, borderwidth=2,state=NORMAL)
+		jsonText = Text(panel,  wrap=WORD, yscrollcommand=scrollbar.set, state=NORMAL)
 		jsonText.delete(1.0, END)
 		jsonText.insert(END, json)
 		jsonText.config(state=DISABLED)
@@ -31,8 +31,6 @@ class ExportView(BaseView):
 
 		scrollbar.config(command=jsonText.yview)
 
-		#Configure is for when window is resized 
-		#jsonMes.bind("<Configure>", lambda e: jsonMes.configure(width=master.winfo_width()-50))
 
 
 		self.skipButton = Button(self, text="Exit", command=master.destroy)
