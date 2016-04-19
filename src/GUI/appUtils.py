@@ -7,6 +7,7 @@ import time
 import os
 from threading import Thread
 import tkFont
+import platform
 
 class AppUtils: 
 

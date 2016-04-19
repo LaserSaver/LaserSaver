@@ -15,7 +15,11 @@ class App:
 #Initializing GUI window
 root = Tk()
 root.wm_title("LaserSaver")
-root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()));
+if platform.system() == 'Windows':
+	root.state('zoomed')
+	root.geometry('{}x{}'.format(640, 480))
+else :
+	root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()));
 root.minsize(530, 430)
 
 #Setting default font size
