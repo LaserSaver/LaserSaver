@@ -21,7 +21,7 @@ class ContoursView(BaseView):
 		def resizeVideoCapturePanels(videoPanel,controller):
 			controller.updatePanel()
 			panelWidth = (master.winfo_width()-10)
-			panelHeight = (master.winfo_height() -120)
+			panelHeight = (master.winfo_height() -140)
 
 			videoPanel.configure(width=panelWidth, height=panelHeight)
 			controller.updatePanel()
