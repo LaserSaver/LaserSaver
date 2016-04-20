@@ -26,7 +26,7 @@ elif platform.system() == 'Linux':
 else :
 	root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 	defaultFont.configure(size=18)
-root.minsize(530, 430)
+root.minsize(640, 480)
 
 #Setting default font size
 defaultFont = tkFont.nametofont("TkDefaultFont")
