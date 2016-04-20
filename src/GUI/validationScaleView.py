@@ -12,8 +12,7 @@ class ValidationScaleView(BaseView):
 		'''
 		BaseView.__init__(self, master)
 
-		promptLabel = Label(self, text="Does this look okay?", font="-weight bold")
-		promptLabel.pack(side=TOP)
+		self.addTitle("Does this look okay?")
 
 
 		self.imgPanel = Label(self )
@@ -21,7 +20,7 @@ class ValidationScaleView(BaseView):
 
 		def resizeImgPanel(imgPanel,img):
 			panelWidth = (master.winfo_width()-10)
-			panelHeight = (master.winfo_height() -115)
+			panelHeight = (master.winfo_height() -165)
 
 			resizdeImg = AppUtils.converImgToTkinterImg(img, panelWidth, panelHeight)
 			imgPanel.configure(width=panelWidth, height=panelHeight, image = resizdeImg)

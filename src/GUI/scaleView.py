@@ -12,8 +12,7 @@ class ScaleView(BaseView):
 		'''
 		BaseView.__init__(self, master)
 
-		scaleLabel = Label(self, text="Scale calibration", font="-weight bold")
-		scaleLabel.pack(side=TOP)
+		self.addTitle("Scale Calibration")
 
 
 		#Video Capture frame for both cameras
@@ -22,18 +21,19 @@ class ScaleView(BaseView):
 
 
 		panelWidth = (master.winfo_width()-10)
-		panelHeight = (master.winfo_height() -175)
+		panelHeight = (master.winfo_height() -230)
 
 		def resizeVideoCapturePanel(videoPanel, controller):
 			controller.updatePanel()
 			panelWidth = (master.winfo_width()-10)
-			panelHeight = (master.winfo_height() -175)
+			panelHeight = (master.winfo_height() -230)
 
 			videoPanel.configure(width=panelWidth, height=panelHeight)
 			controller.updatePanel()
 
 		self.videoPanel.bind("<Configure>", lambda e: resizeVideoCapturePanel(self.videoPanel, controller) )
 
+		defaultFont = tkFont.nametofont("TkDefaultFont")
 		#Width
 		onEditVar= StringVar()
 		onEditVar.set(str(formParams['width']))
@@ -43,7 +43,7 @@ class ScaleView(BaseView):
 		widthLabel = Label(widthPanel, text="Width:")
 		widthLabel.pack(side=LEFT)
 
-		self.widthInput = Entry(widthPanel, width=11, validate = 'key', validatecommand = vcmd, textvariable=onEditVar)
+		self.widthInput = Entry(widthPanel, width=11, validate = 'key', validatecommand = vcmd, textvariable=onEditVar, font=defaultFont)
 		self.widthInput.pack(side=RIGHT)
 		widthPanel.pack(side=TOP)
 
@@ -56,7 +56,7 @@ class ScaleView(BaseView):
 		heightLabel = Label(heightPanel, text="Height:")
 		heightLabel.pack(side=LEFT)
 
-		self.heightInput = Entry(heightPanel, width=11, validate = 'key', validatecommand = vcmd, textvariable=onEditVar)
+		self.heightInput = Entry(heightPanel, width=11, validate = 'key', validatecommand = vcmd, textvariable=onEditVar, font=defaultFont)
 		self.heightInput.pack(side=RIGHT)
 		heightPanel.pack(side=TOP)
 
@@ -65,7 +65,7 @@ class ScaleView(BaseView):
 		calibrationLabel = Label(unitsPanel, text="Units:")
 		calibrationLabel.pack(side=LEFT)
 
-		self.unitsBox = ttk.Combobox(unitsPanel, width=10, state="readonly")
+		self.unitsBox = ttk.Combobox(unitsPanel, width=10, state="readonly",  font=defaultFont)
 		self.unitsBox['values'] = ('cm', 'in', 'mm')
 		self.unitsBox['state'] = 'readonly'
 		self.unitsBox.set(formParams['units'])
@@ -73,8 +73,8 @@ class ScaleView(BaseView):
 		unitsPanel.pack(side=TOP)
 
 		#Export button
-		self.photosButton = Button(self, text="Take photo", wraplength=80,  command=controller.photosClicked)
-		self.photosButton.pack(side=BOTTOM)
+		self.photosButton = Button(self, text="Take photo", command=controller.photosClicked)
+		self.photosButton.pack(side=TOP)
 
 	def validate(self,value,inputtext):
 		'''Will only allow number to be inputed for entry widget used for width and height calibration

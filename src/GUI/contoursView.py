@@ -11,8 +11,8 @@ class ContoursView(BaseView):
 		'''
 		BaseView.__init__(self, master)
 
-		label = Label(self, text="Take photo" , font="-weight bold")
-		label.pack(side=TOP)
+		self.addTitle("Scan Board")
+
 
 		#Video Capture frame for both cameras
 		self.videoPanel = Label(self )
@@ -21,7 +21,7 @@ class ContoursView(BaseView):
 		def resizeVideoCapturePanels(videoPanel,controller):
 			controller.updatePanel()
 			panelWidth = (master.winfo_width()-10)
-			panelHeight = (master.winfo_height() -100)
+			panelHeight = (master.winfo_height() -140)
 
 			videoPanel.configure(width=panelWidth, height=panelHeight)
 			controller.updatePanel()

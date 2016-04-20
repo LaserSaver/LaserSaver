@@ -8,7 +8,7 @@ from scanner import Scanner
 class SkewModel:
     def __init__(self):
 	    self.scanner = Scanner()
-    
+
     def calculate(self, imgList):
         """
         Calls the scanner function to calculate skew correction values

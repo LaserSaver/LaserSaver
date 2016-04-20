@@ -12,10 +12,25 @@ class BaseView(Frame):
 		Frame.__init__(self, master)
 
 		self.master = master
-		self.homeButton = Button(self, text="Home", command=self.homeClicked)
-		self.homeButton.pack(side=BOTTOM, anchor=W)
+		self.topFrame = Frame(self)
+		self.homeButton = Button(self.topFrame, text="Home", command=self.homeClicked)
+		self.homeButton.pack(side=LEFT)
+		self.topFrame.pack(side=TOP,fill=X)
 
 	def homeClicked(self):
 		'''Home butaton is clicked unpacks the current view and pushes on the home view'''
-		self.pack_forget()
+		self.destroy()
 		HomeController(self.master)
+
+	def addTitle(self, title):
+		'''Gives a way to set the title for all other inheriting views
+
+			Args:
+				title(string): the string of the title
+		'''
+		helv24 = tkFont.Font(family='Helvetica',size=24, weight='bold') 
+		self.titleLabel = Label(self.topFrame, text=title, font="-weight bold", pady=5 )
+		self.titleLabel['font'] = helv24
+		self.titleLabel.pack()
+
+
