@@ -20,7 +20,7 @@ if platform.system() == 'Windows':
 	root.state('zoomed')
 	root.geometry('{}x{}'.format(640, 480))
 	defaultFont.configure(size=14)
-elif: platform.system() == 'Linux':
+elif platform.system() == 'Linux':
 	root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 	defaultFont.configure(size=14)
 else :
