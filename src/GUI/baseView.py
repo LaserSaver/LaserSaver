@@ -31,6 +31,6 @@ class BaseView(Frame):
 		helv24 = tkFont.Font(family='Helvetica',size=24, weight='bold') 
 		self.titleLabel = Label(self.topFrame, text=title, font="-weight bold", pady=5 )
 		self.titleLabel['font'] = helv24
-		self.titleLabel.pack()
+		self.titleLabel.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 
