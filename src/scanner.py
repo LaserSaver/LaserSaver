@@ -5,6 +5,8 @@ from determineSkew import DetermineSkew
 from scannerCamera import ScannerCamera
 from jsoncreator import jsonCreator
 from configcommunicator import ConfigCommunicator
+import numpy as np
+import cv2
 
 def scale_calibration(scaleDetect, image, objx, objy, units):
     """
@@ -19,28 +21,17 @@ def scale_calibration(scaleDetect, image, objx, objy, units):
         True on success, False on failure
     """
     configCom = ConfigCommunicator()
-    
+
     success = scaleDetect.calibrate(image, objx, objy, units)
-    
+
     dictionary = {'x_scale': str(scaleDetect.x_scale), 'y_scale': str(scaleDetect.y_scale), 'units': scaleDetect.units}
-    
+
     configCom.setScale(dictionary)
-    
+
     configCom.saveConfig()
-    
+
     return success
 
-def scale_calibration_data():
-    """
-    See if scale calibration data exists
-    Args:
-        None
-    Returns:
-        True on success, False on failure
-    """
-    success = scaleDetect.loadConfigFile()
-    #load other calibration data as well
-    return success
 
 def get_scale(scaleDetect):
     """
@@ -52,29 +43,29 @@ def get_scale(scaleDetect):
     """
     return scaleDetect.getScale()
 
-def skew_calibration(calibImages, camera_number):
+def skew_calibration(calibImages, camera_number, scanner_camera):
     """
-    desc
+    Calculate skew correction values
     Args:
         calibImages
         camera_number
     Returns:
         None
     """
-    
-    scanner_camera = ScannerCamera(camera_number)
+
     scanner_camera.setSkewCorrectionValues(calibImages)
-    
+
     # Config file
     configCom = ConfigCommunicator()
-    configCom.setSkew(scanner_camera.dst, camera_number)
-    
+
+    configCom.setSkew(scanner_camera.skew_dst, camera_number)
+
     configCom.saveConfig()
 
 
 def skew_correction(image, camSettings):
     """
-    desc
+    Apply skew correction to image
     Args:
         None
     Returns:
@@ -84,34 +75,42 @@ def skew_correction(image, camSettings):
 
 def stitch_images(image1, image2):
     """
-    desc
+    Stitch 2 images
     Args:
-        None
+        image1:
+        image2:
     Returns:
-        True on success, False on failure
+        stitched image
     """
     stitcher = Stitcher()
     return stitcher.stitch((image1,image2)) #correct order for images?
 
 def find_contours(image):
     """
-    desc
+    Find contours on image
     Args:
-        None
+        image: Image to find contours on
     Returns:
-        True on success, False on failure
+        finalContours:
+        contourImage:
     """
     #findContours = FindContours()
     fd = FindContours()
     contours, hierarchy, edgeImage = fd.find_all_contours(image)
-    finalContours = findContours.select_contours(contours, hierarchy)
-    return finalContours,edgeImage
+    finalContours = fd.select_contours(contours, hierarchy)
+
+    contourImage = fd.display_drawn_contours(image,finalContours)
+
+    return finalContours, contourImage
 
 def export_json(contours, xscale, yscale, units):
     """
-    desc
+    Export the contours to JSON
     Args:
-        None
+        contours:
+        xscale:
+        yscale:
+        units:
     Returns:
         True on success, False on failure
     """
@@ -122,15 +121,6 @@ def export_json(contours, xscale, yscale, units):
     return jsonData.exportJson()
 
 class Scanner:
-    #in case we want to pass around 1 scanner object instead of the individual objects
-    def __init__(self):
-        '''
-        Initialize a new Scanner object
-        '''
-        cam1Settings = None
-        cam2Settings = None
-        scaleDetectObj = None
-
     #Functions GUI should call:
     def scaleCalibration(self, image1, objx, objy, units):
         """
@@ -154,11 +144,13 @@ class Scanner:
         Skew calibration. Should be run on each camera
         Args:
             calibImages: calibration images for camera 1 (any number)
+            camera_number:
         Returns:
             None
         """
-        
-        skew_calibration(calibImages, camera_number)
+        scanner_camera = ScannerCamera(camera_number)
+        skew_calibration(calibImages, camera_number, scanner_camera)
+        return skew_correction(calibImages[0], scanner_camera)
 
 
     def processImages(self, image1):
@@ -167,38 +159,35 @@ class Scanner:
         The rest of the logic to stitch the image
         Args:
             image1: image from camera 1
-
         Returns:
             finalImage: image to be displayed to user to confirm it is correct
         """
         configCom = ConfigCommunicator()
 
         # Grabs skew info from config, and creates instance of ScannerCamera()
-        dst = configCom.getSkew(1)
-        
+
         skewObject = ScannerCamera(1)
+        dst = configCom.getSkew(1)
         skewObject.setDst(dst)
-        
-        
+        # Process board image
+        image1 = skew_correction(image1, skewObject)
+
         # Grabs scale info from config
         dictionary = configCom.getScale()
-        
+
         scale_detect = ScaleDetection()
         scale_detect.setScale(dictionary['x_scale'], dictionary['y_scale'], dictionary['units'])
 
 
-        # Process board image
-        
-        image1 = skew_correction(image1, skewObject)
-
         #finalImage = stitch_images(image1, image2)
         finalImage = image1
-        contours, edgeImage = find_contours(finalImage)
+        cv2.imwrite('FinalImage.jpg', finalImage)
+        contours, contourImage = find_contours(np.array(finalImage, dtype=np.uint8))
         xscale, yscale, units = get_scale(scale_detect)
         export_json(contours, xscale, yscale, units) #do I need to do something with return value?
-        
-        
-        return finalImage #do we want to show the contours on this as well?
+
+
+        return contourImage #do we want to show the contours on this as well?
 
     def doesConfigExist(self):
         """

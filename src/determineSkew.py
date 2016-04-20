@@ -30,11 +30,13 @@ class DetermineSkew:
         logging.basicConfig(level=logging.DEBUG, format='%(message)s')
         
         if calibImages == []:
+            logging.debug("No images to calibrate from")
             raise AttributeError
         
         objpoints, imgpoints = DetermineSkew.findSkewPoints(calibImages)
         
         if imgpoints == [] or objpoints == []:
+            logging.debug("Could not find pattern centers, cannot continue with calibration")
             raise AttributeError
         
         _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (DetermineSkew.w,DetermineSkew.h), None, None)

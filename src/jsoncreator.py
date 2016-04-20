@@ -1,4 +1,5 @@
 import json
+import numpy as np
 
 class jsonCreator:
     '''
@@ -10,8 +11,8 @@ class jsonCreator:
         Args:
             logger (logger object): Logger object to debug this class, will be set to None if no object is specified.
         '''
-        if logger is not None:
-            self.logger = logger
+
+        self.logger = logger
         self.resetJson()
 
     def addUnits(self, units):
@@ -34,8 +35,10 @@ class jsonCreator:
             x (float): The scale of the x axis
             y (float): The scale of the y axis
         '''
+        '''
         try:
             if type(x) is not float:
+                print type(x)
                 raise TypeError
             if type(y) is not float:
                 raise TypeError
@@ -43,28 +46,34 @@ class jsonCreator:
             if self.logger is not None:
                 self.logger.debug("X and Y must be floats")
             raise TypeError
-        self.__json["scale"] = (x,y)
+        '''
+        self.__json["scale"] = (str(x),str(y))
 
-    def addContours(self, contour):
+    def addContours(self, contours):
         '''
         This function will add the scale to the json object
         Args:
             contour (list): the contour(s) to be added this can be a list of vertices or a list of contours (list of lists)
         '''
         try:
-            if type(contour) is not list:
+            if type(contours) is not list:
                 raise TypeError
         except TypeError:
             if self.logger is not None:
                 self.logger.debug("Contour must be of type list")
             raise TypeError
-        if type(contour[0]) is list:
-            for c in contour:
-                contourdict = [{"x":x, "y":y} for (x, y) in c]
-                self.__json["contours"].append(contourdict)
-        else:
-            contourdict = [{"x":x, "y":y} for (x, y) in contour]
+
+        if type(contours) is list:
+            for contour in contours:
+                contour = contour.tolist()
+            contourdict = [[[{"x":a[0], "y":a[1]} for a in b] for b in c] for c in contours]
             self.__json["contours"].append(contourdict)
+        else:
+            for contour in contours:
+                #contourdict = [{"x":c[0], "y":c[1]} for c in contour]
+                contour = contour.tolist()
+            contourdict = [[[{"x":a[0], "y":b[1]} for a in b] for b in c] for c in contours]
+            self.__json["contours"].append(contour.tolist())
 
     def getJson(self):
         '''
@@ -72,12 +81,14 @@ class jsonCreator:
         '''
         return self.__json
 
-    def exportJson(self):
+    def exportJson(self, filename = "final.json"):
         '''
-        This function is a placeholder for when it will eventually be exported over the internet.
-        Returns: A json object that has been dumped into a string for exporting
+        This function exports the json object to the specified filename
+        Args:
+            filename (str): The filename that the json should be exported to
         '''
-        return json.dumps(self.__json)
+        with open(filename, 'w') as fp:
+            fp.write(json.dumps(self.__json))
 
     def resetJson(self):
         '''
