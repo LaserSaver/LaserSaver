@@ -12,7 +12,7 @@ class BaseView(Frame):
 		Frame.__init__(self, master)
 
 		self.master = master
-		self.topFrame = Frame(self)
+		self.topFrame = Frame(self, pady=5)
 		self.homeButton = Button(self.topFrame, text="Home", command=self.homeClicked)
 		self.homeButton.pack(side=LEFT)
 		self.topFrame.pack(side=TOP,fill=X)
@@ -29,7 +29,7 @@ class BaseView(Frame):
 				title(string): the string of the title
 		'''
 		helv24 = tkFont.Font(family='Helvetica',size=24, weight='bold') 
-		self.titleLabel = Label(self.topFrame, text=title, font="-weight bold", pady=5 )
+		self.titleLabel = Label(self.topFrame, text=title, font="-weight bold" )
 		self.titleLabel['font'] = helv24
 		self.titleLabel.place(relx=0.5, rely=0.5, anchor=CENTER)
 
