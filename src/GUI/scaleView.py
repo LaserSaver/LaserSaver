@@ -21,12 +21,12 @@ class ScaleView(BaseView):
 
 
 		panelWidth = (master.winfo_width()-10)
-		panelHeight = (master.winfo_height() -210)
+		panelHeight = (master.winfo_height() -230)
 
 		def resizeVideoCapturePanel(videoPanel, controller):
 			controller.updatePanel()
 			panelWidth = (master.winfo_width()-10)
-			panelHeight = (master.winfo_height() -210)
+			panelHeight = (master.winfo_height() -230)
 
 			videoPanel.configure(width=panelWidth, height=panelHeight)
 			controller.updatePanel()

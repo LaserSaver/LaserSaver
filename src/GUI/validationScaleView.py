@@ -20,7 +20,7 @@ class ValidationScaleView(BaseView):
 
 		def resizeImgPanel(imgPanel,img):
 			panelWidth = (master.winfo_width()-10)
-			panelHeight = (master.winfo_height() -145)
+			panelHeight = (master.winfo_height() -165)
 
 			resizdeImg = AppUtils.converImgToTkinterImg(img, panelWidth, panelHeight)
 			imgPanel.configure(width=panelWidth, height=panelHeight, image = resizdeImg)

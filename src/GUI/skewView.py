@@ -15,10 +15,10 @@ class SkewView(BaseView):
 
 		def resizeVideoCapturePanel(videoCapturePanel, controller):
 			controller.updatePanel()
-			videoCapturePanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-175)
+			videoCapturePanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-195)
 			controller.updatePanel()
 
-		self.videoCapturePanel = Label( self, width=master.winfo_width()-50, height=master.winfo_height()-175 , relief=RIDGE, borderwidth=2)
+		self.videoCapturePanel = Label( self, width=master.winfo_width()-50, height=master.winfo_height()-195 , relief=RIDGE, borderwidth=2)
 		self.videoCapturePanel.bind("<Configure>", lambda e: resizeVideoCapturePanel(self.videoCapturePanel, controller) )
 		self.videoCapturePanel.pack(side=TOP)
 

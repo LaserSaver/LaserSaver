@@ -16,8 +16,8 @@ class ValidationContoursView(BaseView):
 
 
 		def configImgPanel(img, imgPanel):
-			resizdeImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-130)
-			imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-130, relief=RIDGE, borderwidth=2, image = resizdeImg)
+			resizdeImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-150)
+			imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-150, relief=RIDGE, borderwidth=2, image = resizdeImg)
 			imgPanel.image = resizdeImg
 
 		self.imgPanel = Label(self)
