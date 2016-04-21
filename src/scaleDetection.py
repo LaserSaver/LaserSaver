@@ -66,7 +66,7 @@ class ScaleDetection:
             return False
         if float(w) is 0 or float(h) is 0:
             print "width or height is 0"
-            return false
+            return False
 
         # size in pixels is proportional to real scale
         # this scale times pixels can now determin scale
@@ -119,6 +119,8 @@ class ScaleDetection:
                 config = json.load(conf)
         except IOError as e:
             print(e)
+            return False
+        except ValueError:
             return False
         self.x_scale = config["x_scale"]
         self.y_scale = config["y_scale"]

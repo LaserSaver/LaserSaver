@@ -43,6 +43,16 @@ def get_scale(scaleDetect):
     """
     return scaleDetect.getScale()
 
+def get_scale_exists(configcommunicator):
+    """
+    Get the scale from the scale detection object
+    Args:
+        scaleDetect: scale calibration object
+    Returns:
+        scale
+    """
+    return configcommunicator.getScale()
+
 def skew_calibration(calibImages, camera_number, scanner_camera):
     """
     Calculate skew correction values
@@ -197,7 +207,11 @@ class Scanner:
         Returns:
             True if we have config file, False if we don't
         """
-        if (scale_calibration_data()):
+        configCom = ConfigCommunicator()
+
+        print(get_scale_exists(configCom))
+
+        if (get_scale_exists(configCom)):
             return True
         else:
             return False
