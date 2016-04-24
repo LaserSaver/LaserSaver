@@ -16,9 +16,9 @@ class ValidationSkewView(BaseView):
 
 
 		def configImgPanel(img, imgPanel):
-			resizdeImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-165)
-			imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-165, relief=RIDGE, borderwidth=2, image = resizdeImg)
-			imgPanel.image = resizdeImg
+			resizedImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-165)
+			imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-165, relief=RIDGE, borderwidth=2, image = resizedImg)
+			imgPanel.image = resizedImg
 
 		self.imgPanel = Label(self)
 		configImgPanel(img, self.imgPanel)

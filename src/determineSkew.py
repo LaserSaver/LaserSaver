@@ -49,29 +49,31 @@ class DetermineSkew:
 
         logging.debug("ROI is: ")
         logging.debug(roi)
+        
+        return mtx, dist, newcameramtx
 
 
-        logging.debug("Undistorting...")
-
-        # UNDISTORT ------
-        dst = cv2.undistort(img, mtx, dist, None, newcameramtx)
-
-
-        logging.debug("Done undistorting...")
-
-        logging.debug("DST is: ")
-        logging.debug(dst)
-
-
-        logging.debug("Writing new image")
-    
-
-        cv2.imwrite('calibresult.png',dst)
-    
-        error = DetermineSkew.correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist)
-        print error
-    
-        return dst, roi, error
+        # logging.debug("Undistorting...")
+        #
+        # # UNDISTORT ------
+        # dst = cv2.undistort(img, mtx, dist, None, newcameramtx)
+        #
+        #
+        # logging.debug("Done undistorting...")
+        #
+        # logging.debug("DST is: ")
+        # logging.debug(dst)
+        #
+        #
+        # logging.debug("Writing new image")
+        #
+        #
+        # cv2.imwrite('calibresult.png',dst)
+        #
+        # error = DetermineSkew.correctionAccuracy(objpoints, imgpoints, rvecs, tvecs, mtx, dist)
+        # print error
+        #
+        # return dst, roi, error
 
     @staticmethod   
     def findSkewPoints(calibImages):
@@ -178,4 +180,3 @@ class DetermineSkew:
             tot_error += error
     
         return tot_error/len(objpoints)    
-
