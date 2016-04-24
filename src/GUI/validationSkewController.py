@@ -20,11 +20,11 @@ class ValidationSkewController:
 
 	def continueClicked(self):
 		'''Continue button clicked goes on to scale calibration'''
-		self.view.pack_forget()
+		self.view.destroy()
 		ScaleController(self.master)
 
 
 	def redoClicked(self):
 		'''The redo button clicked goes back to the previous step'''
-		self.view.pack_forget()
+		self.view.destroy()
 		SkewController(self.master)

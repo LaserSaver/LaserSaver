@@ -42,7 +42,7 @@ class ValidationScaleController:
 
 	def noClicked(self):
 		'''No Button clicked go back to the previous step'''
-		self.view.pack_forget()
+		self.view.destroy()
 		ScaleController(self.master, self.formParams)
 
 	def finishCalibrating(self, wentWell):
@@ -51,6 +51,9 @@ class ValidationScaleController:
 			Args:
 				wentlWell(Bool): Tells the controller whether or not the scale model was sucessfully calibrated
 		''' 
+		if not self.view.winfo_exists():
+			#If view is removed do not attempt anything
+			return
 		self.view.processingLabel.pack_forget()
 		self.view.progressbar.pack_forget()
 		

@@ -14,15 +14,16 @@ class HomeController:
 		self.model = HomeModel()
 
 
+
 		#Assume there is a config file for now
 		isReady = self.model.doesScaleExist()
-		self.view = HomeView(master, self, isReady)
+		self.view = HomeView(master, self, isReady, ImageTk.PhotoImage(file="LogoImg.png"))
 		self.view.pack(expand=YES,fill=BOTH)
 
 	def startClicked(self):
 		'''Called on when the start button is clicked start the json export process
 		'''
-		self.view.pack_forget()
+		self.view.destroy()
 
 		#To avoid cyclical imports
 		from contoursController import ContoursController
@@ -31,7 +32,7 @@ class HomeController:
 	def calibrateClicked(self):
 		'''Called when the calibrate button is clicked starts the calibration process
 		'''
-		self.view.pack_forget()
+		self.view.destroy()
 
 		#To avoid cyclical imports
 		from promptSkewController import PromptSkewController

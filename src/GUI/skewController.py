@@ -6,12 +6,11 @@ class SkewController:
 	def __init__(self, master):
 		''' The skew controller in charge of updating the skew model
 		 
-		    Args:
-		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
+			Args:
+				master(Tk object): The toplevel widget of Tk which is the main window of an application
 		'''
 		self.master = master
 
-		self.numberOfPhotosRequired = 3
 		self.photos = []
 		self.model = SkewModel()
 
@@ -21,14 +20,14 @@ class SkewController:
 	
 		self.view.pack(expand=YES,fill=BOTH)
 
-		self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)
+		self.view.updateButtons(len(self.photos))
 
 		self.continiousUpdatePanel()
 
 	def continiousUpdatePanel(self):
 		'''Calls on updatePanel continiously
 		'''
-		if self.view.winfo_manager() == "":
+		if not self.view.winfo_exists():
 			#If view is removed stop updating the panel
 			self.master.after_cancel(self.updatePanelID)
 			return
@@ -47,7 +46,7 @@ class SkewController:
 		'''When the undobutton is clicked removes one of the images from the list
 		'''
 		self.photos.pop()
-		self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)
+		self.view.updateButtons(len(self.photos))
 
 	def takingPictureEffect(self, case=0):
 		'''This is used to create the flash effect when taking picture
@@ -55,6 +54,8 @@ class SkewController:
 			Args:
 				case(int): The current step in the animation 
 		'''
+		if not self.view.winfo_exists():
+			return 
 		if case == 0:
 			#Stopping video capture disable take photo button
 			self.master.after_cancel(self.updatePanelID)
@@ -69,29 +70,30 @@ class SkewController:
 			self.view.photoButton.configure( state=NORMAL)
 			self.continiousUpdatePanel()
 
+	def startSkewCalibration(self):
+		'''When the calibration button is clicked
+		'''
+		self.view.photoButton.pack_forget()
+		self.view.undoButton.pack_forget()
+		self.view.calibrateButton.pack_forget()
+		
+		progressbar = ttk.Progressbar(self.view, orient=HORIZONTAL, length=self.master.winfo_width()-50, mode='determinate')
+		progressbar.bind("<Configure>", lambda e: progressbar.configure(length=self.master.winfo_width()-50) )
+		progressbar.pack(side=BOTTOM)
+		progressbar.start()
+
+		processingLabel = Label(self.view, text="Processing...")
+		processingLabel.pack(side=BOTTOM)
+
+		AppUtils.computeOnSeprateThread(self.master, self.calibrationDone, self.model.calculate ,[self.photos])
 
 	def takePhotoClicked(self):
 		'''When the take photo button is clicked
 		'''
-		if len(self.photos) < self.numberOfPhotosRequired:
-			#Taking a photo
-			self.takingPictureEffect()
-			self.photos.append(AppUtils.getImg(self.cam))
-			self.view.updateButtons(len(self.photos), self.numberOfPhotosRequired)
-		else:
-			#Submitting for calibration
-			self.view.photoButton.pack_forget()
-			self.view.undoButton.pack_forget()
-			
-			progressbar = ttk.Progressbar(self.view, orient=HORIZONTAL, length=self.master.winfo_width()-50, mode='determinate')
-			progressbar.bind("<Configure>", lambda e: progressbar.configure(length=self.master.winfo_width()-50) )
-			progressbar.pack(side=BOTTOM)
-			progressbar.start()
-
-			processingLabel = Label(self.view, text="Processing...")
-			processingLabel.pack(side=BOTTOM)
-
-			AppUtils.computeOnSeprateThread(self.master, self.calibrationDone, self.model.calculate ,[self.photos])
+		self.takingPictureEffect()
+		self.photos.append(AppUtils.getImg(self.cam))
+		self.view.updateButtons(len(self.photos))
+	
 
 
 	def calibrationDone(self, img):
@@ -100,7 +102,10 @@ class SkewController:
 			Args:
 				img(Image): The image returned from the model's processing
 		'''
-		self.view.pack_forget()
+		if not self.view.winfo_exists():
+			#If view is removed do not attempt anything
+			return
+		self.view.destroy()
 		#Had to import here to prevent cyclical refrencing
 		from validationSkewController import ValidationSkewController
 		ValidationSkewController(self.master, img)

@@ -22,7 +22,7 @@ class ScaleController:
 	def continiousUpdatePanel(self):
 		'''Calls on updatePanels continiously 
 		'''
-		if self.view.winfo_manager() == "":
+		if not self.view.winfo_exists():
 			#If view is removed stop updating the panel
 			self.master.after_cancel(self.updatePanelID)
 			return
@@ -42,10 +42,10 @@ class ScaleController:
 	def photosClicked(self):
 		'''Move to validation export view
 		'''
-		self.view.pack_forget()
 		img = AppUtils.getImg(self.cam)
 
 		formParams ={'width':float(self.view.widthInput.get()),'height':float(self.view.heightInput.get()),'units':self.view.unitsBox.get()}
+		self.view.destroy()
 		from validationScaleController import ValidationScaleController
 		ValidationScaleController(self.master, formParams, img)
 
