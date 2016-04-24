@@ -11,22 +11,20 @@ class ValidationSkewView(BaseView):
         '''
         BaseView.__init__(self, master)
         self.addTitle("Does this look okay?")
-        
-    def configImgPanel(img, imgPanel):
-        cv2.imwrite('IMPORTANTTEST.jpg', img)
-        resizedImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-165)
-        imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-165, relief=RIDGE, borderwidth=2, image = resizedImg)
-        imgPanel.image = resizedImg
-        
+
+        def configImgPanel(img, imgPanel):
+            cv2.imwrite('IMPORTANTTEST.jpg', img)
+            resizedImg = AppUtils.converImgToTkinterImg(img, master.winfo_width()-50, master.winfo_height()-165)
+            imgPanel.configure(width=master.winfo_width()-50, height=master.winfo_height()-165, relief=RIDGE, borderwidth=2, image = resizedImg)
+            imgPanel.image = resizedImg
+
         self.imgPanel = Label(self)
         configImgPanel(img, self.imgPanel)
         self.imgPanel.bind("<Configure>", lambda e: configImgPanel(img, self.imgPanel) )
         self.imgPanel.pack(side=TOP)
-        
+
         self.redoButton = Button(self, text="No, return to calibrating skew", command=controller.redoClicked)
         self.redoButton.pack(side=BOTTOM)
         continueText = "Yes, continue to scale calibration"
         self.continuteButton = Button(self, text=continueText, command=controller.continueClicked)
         self.continuteButton.pack(side=BOTTOM)
-
-

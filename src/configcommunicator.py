@@ -84,9 +84,7 @@ class ConfigCommunicator():
             value (list): Skew calibration dst
             camera_num (int): Camera which skew calibration corresponds too
         '''
-
         self.config.set("Skew Calibration", "camera" + str(camera_num), json.dumps({'mtx':mtx_value.tolist(), 'dist':dist_value.tolist(), 'newmtx':newmtx_value.tolist()}))
-
         self.config.set("Skew Calibration", "skip_skew", str(False))
 
     def getSkew(self, camera_num):
@@ -97,12 +95,12 @@ class ConfigCommunicator():
         Returns:
             Skew calibration (list) for camera_num
         '''
-        
+
         mtx = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('mtx'), dtype=np.uint8)
         dist = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('dist'), dtype=np.uint8)
         newmtx = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('newmtx'), dtype=np.uint8)
-        
-        
+
+
         return mtx, dist, newmtx
 
 

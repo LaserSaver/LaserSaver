@@ -19,4 +19,4 @@ class ContoursModel:
         finalImage = self.scanner.processImages(img)
 
         #Return stitched image, but doesn't have any contours on it currently
-        return img
+        return finalImage

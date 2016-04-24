@@ -23,5 +23,5 @@ class SkewModel:
 #         except AttributeError:
 #             print "No going"
 
-        returnImage = cv2.imread("skew.jpg")
+        returnImage = cv2.imread("corrected.jpg")
         return returnImage
