@@ -1,7 +1,5 @@
 import configparser
 import json
-import numpy as np
-
 
 
 class ConfigCommunicator():
@@ -53,6 +51,11 @@ class ConfigCommunicator():
         Returns:
             Scale Calibration (dict)
         '''
+        try:
+            json.loads(self.config.get("Scale Calibration", "scale"))
+        except Exception:
+            return None
+
         return json.loads(self.config.get("Scale Calibration", "scale"))
 
     def setSkipSkew(self, value):
@@ -80,7 +83,7 @@ class ConfigCommunicator():
             value (list): Skew calibration dst
             camera_num (int): Camera which skew calibration corresponds too
         '''
-        self.config.set("Skew Calibration", "camera" + str(camera_num), json.dumps({'skew':value.tolist()}))
+        self.config.set("Skew Calibration", "camera" + str(camera_num), json.dumps({'skew':value}))
         self.config.set("Skew Calibration", "skip_skew", str(False))
 
     def getSkew(self, camera_num):
@@ -91,7 +94,7 @@ class ConfigCommunicator():
         Returns:
             Skew calibration (list) for camera_num
         '''
-        return np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('skew'), dtype=np.uint8)
+        return json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('skew')
 
     def saveConfig(self):
         '''
