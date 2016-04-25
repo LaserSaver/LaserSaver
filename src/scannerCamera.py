@@ -24,13 +24,13 @@ class ScannerCamera:
         self.skew_mtx = None
         self.skew_dist = None
         self.skew_newcameramtx = None
-        
+
         #
         # self.skew_dst = None
         # self.skew_roi = None
 
         # Are we using skew correction?
-        self.use_skew_correction = None
+        self.use_skew_correction = False
 
 
     ''' Pull mtx values from config file '''
@@ -60,7 +60,7 @@ class ScannerCamera:
 
         # Find dst and roi matrices
         mtx, dist, newmtx = DetermineSkew.createSkewMatrix(calib_photos)
-    
+
 
         self.skew_mtx = mtx
         self.skew_dist = dist
@@ -109,32 +109,32 @@ class ScannerCamera:
 
 
         if self.use_skew_correction is None:
-            
+
             cv2.imwrite("skew1.jpg", original_img)
             # This means that the image we are using for calibration is permanently rewritten with the skew matrix
             # corrected_img = cv2.imread("skew1.jpg", 0)
-            
+
             dst = cv2.undistort(original_img, self.skew_mtx, self.skew_dist, None, self.skew_newcameramtx)
-            
+
             cv2.imwrite("corrected.jpg", dst)
-            
+
             corrected_img = cv2.imread("corrected.jpg",0)
-            
+
             return corrected_img
 
         elif self.use_skew_correction is True:
-            
+
             cv2.imwrite("skew1.jpg", original_img)
             # This means that the image we are using for calibration is permanently rewritten with the skew matrix
             corrected_img = cv2.imread("skew1.jpg", 0)
-            
+
             dst = cv2.undistort(original_img, self.skew_mtx, self.skew_dist, None, self.skew_newcameramtx)
-            
+
             cv2.imwrite(corrected_img, dst)
-            
+
             cv2.imwrite("corrected.jpg", corrected_img)
-            
+
             return corrected_img
-            
+
         else:
             return original_img
