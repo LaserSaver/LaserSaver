@@ -17,10 +17,11 @@ class SkewModel:
         Returns:
             imgList[0]: First image taken
         """
-        try:
-            returnImage = self.scanner.skewCalibration(imgList,1)
-        except AttributeError:
-            print "No going"
+        returnImage = self.scanner.skewCalibration(imgList,1)
+        # try:
+#             returnImage = self.scanner.skewCalibration(imgList,1)
+#         except AttributeError:
+#             print "No going"
 
-        returnImage = cv2.imread("skew.jpg")
+        returnImage = cv2.imread("corrected.jpg")
         return returnImage

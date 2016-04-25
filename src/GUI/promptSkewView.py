@@ -13,7 +13,7 @@ class PromptSkewView(BaseView):
 
 		self.addTitle("Skew Calibration")
 
-		instructions = Message(self, text="Calibration of skew bleh bleh aksjdhfjdksahfjdsnfjkadbncjkdsabcjkdsbckdsacdlsakcjdslakbcvdsklavjbdskjalvcbdsjakvbsdkjavbsdkavjbdsakjv", relief=RIDGE, borderwidth=2)
+		instructions = Message(self, text="Skew Calibration Instructions: \nSkew calibration is not necessary to proceed. If you skip Skew Calibration, however, your results will be less accurate. \nStep 0: Press Calibrate button \nStep 1: Print out <location of circlegrid pattern> \nStep 2: Place printout on machine bed, with entire pattern in view of camera. \nStep 3: Take two(2) photos. \nStep 4: Rotate image in bed by ~ 15-20 degrees. \nStep 5: Take photo. \n Step 6: Repeat steps 4 and 5 until you have taken at least 15 photos. \nStep 7: Press Start", relief=RIDGE, borderwidth=2)
 		instructions.pack(side=TOP)
 
 		#Configure is for when window is resized 

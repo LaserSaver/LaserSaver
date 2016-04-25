@@ -43,6 +43,16 @@ def get_scale(scaleDetect):
     """
     return scaleDetect.getScale()
 
+def get_scale_exists(configcommunicator):
+    """
+    Get the scale from the scale detection object
+    Args:
+        scaleDetect: scale calibration object
+    Returns:
+        scale
+    """
+    return configcommunicator.getScale()
+
 def skew_calibration(calibImages, camera_number, scanner_camera):
     """
     Calculate skew correction values
@@ -58,7 +68,7 @@ def skew_calibration(calibImages, camera_number, scanner_camera):
     # Config file
     configCom = ConfigCommunicator()
 
-    configCom.setSkew(scanner_camera.skew_dst, camera_number)
+    configCom.setSkew(scanner_camera.skew_mtx, scanner_camera.skew_dist, scanner_camera.skew_newcameramtx, camera_number)
 
     configCom.saveConfig()
 
@@ -167,8 +177,8 @@ class Scanner:
         # Grabs skew info from config, and creates instance of ScannerCamera()
 
         skewObject = ScannerCamera(1)
-        dst = configCom.getSkew(1)
-        skewObject.setDst(dst)
+        mtx, dist, newmtx = configCom.getSkew(1)
+        skewObject.setSkewMtx(mtx, dist, newmtx)
         # Process board image
         image1 = skew_correction(image1, skewObject)
 
@@ -197,7 +207,11 @@ class Scanner:
         Returns:
             True if we have config file, False if we don't
         """
-        if (scale_calibration_data()):
+        configCom = ConfigCommunicator()
+
+        print(get_scale_exists(configCom))
+
+        if (get_scale_exists(configCom)):
             return True
         else:
             return False

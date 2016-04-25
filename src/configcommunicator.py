@@ -3,7 +3,6 @@ import json
 import numpy as np
 
 
-
 class ConfigCommunicator():
     def __init__(self, filename = 'LaserCutterConfig.conf'):
         '''
@@ -53,6 +52,11 @@ class ConfigCommunicator():
         Returns:
             Scale Calibration (dict)
         '''
+        try:
+            json.loads(self.config.get("Scale Calibration", "scale"))
+        except Exception:
+            return None
+
         return json.loads(self.config.get("Scale Calibration", "scale"))
 
     def setSkipSkew(self, value):
@@ -73,14 +77,14 @@ class ConfigCommunicator():
         '''
         return bool(self.config.get("Skew Calibration", "skip_skew"))
 
-    def setSkew(self, value, camera_num):
+    def setSkew(self, mtx_value, dist_value, newmtx_value,  camera_num):
         '''
         Set the skew calibration
         Args:
             value (list): Skew calibration dst
             camera_num (int): Camera which skew calibration corresponds too
         '''
-        self.config.set("Skew Calibration", "camera" + str(camera_num), json.dumps({'skew':value.tolist()}))
+        self.config.set("Skew Calibration", "camera" + str(camera_num), json.dumps({'mtx':mtx_value.tolist(), 'dist':dist_value.tolist(), 'newmtx':newmtx_value.tolist()}))
         self.config.set("Skew Calibration", "skip_skew", str(False))
 
     def getSkew(self, camera_num):
@@ -91,7 +95,14 @@ class ConfigCommunicator():
         Returns:
             Skew calibration (list) for camera_num
         '''
-        return np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('skew'), dtype=np.uint8)
+
+        mtx = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('mtx'), dtype=np.uint8)
+        dist = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('dist'), dtype=np.uint8)
+        newmtx = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('newmtx'), dtype=np.uint8)
+
+
+        return mtx, dist, newmtx
+
 
     def saveConfig(self):
         '''

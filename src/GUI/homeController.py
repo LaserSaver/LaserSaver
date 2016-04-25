@@ -1,5 +1,6 @@
 from appUtils import *
 from homeView import HomeView
+from homeModel import HomeModel
 
 class HomeController:
 	def __init__(self, master):
@@ -10,10 +11,12 @@ class HomeController:
 		    	master(Tk object): The toplevel widget of Tk which is the main window of an application
 		'''
 		self.master = master
+		self.model = HomeModel()
+
 
 
 		#Assume there is a config file for now
-		isReady = True
+		isReady = self.model.doesScaleExist()
 		self.view = HomeView(master, self, isReady, ImageTk.PhotoImage(file="LogoImg.png"))
 		self.view.pack(expand=YES,fill=BOTH)
 

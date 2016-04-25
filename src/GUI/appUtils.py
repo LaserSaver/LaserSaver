@@ -30,7 +30,7 @@ class AppUtils:
 		return AppUtils.cam
 
 	@staticmethod
-	def getImg(cam, width=1920, height=1080):
+	def getImg(cam, width=640, height=360):
 		''' Getting an image object from the video capture
 			Width and Height are optional and their default will
 			be used as the standard resolution we use for the photos
