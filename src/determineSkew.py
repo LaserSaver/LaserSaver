@@ -10,7 +10,6 @@ class DetermineSkew:
     
     ''' CLASS METHODS '''
     shape = (4, 11)
-    h, w = 478, 640
     
     @staticmethod
     def createSkewMatrix(calibImages):
@@ -39,16 +38,19 @@ class DetermineSkew:
             logging.debug("Could not find pattern centers, cannot continue with calibration")
             raise AttributeError
         
-        _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (DetermineSkew.w,DetermineSkew.h), None, None)
+        h, w = calibImages[0].shape[:2]
+        
+        _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (w,h), None, None)
         
         logging.debug("New image time...")
     
         img = calibImages[0]
         
-        newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (DetermineSkew.w,DetermineSkew.h), 1, (DetermineSkew.w,DetermineSkew.h))
+        newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
 
         logging.debug("ROI is: ")
         logging.debug(roi)
+
         
         return mtx, dist, newcameramtx
 
