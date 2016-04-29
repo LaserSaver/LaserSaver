@@ -1,0 +1,443 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to LaserSaver’s documentation! &mdash; LaserSaver 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="LaserSaver 1.0.0 documentation" href="#" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-lasersaver-s-documentation">
+<h1>Welcome to LaserSaver&#8217;s documentation!<a class="headerlink" href="#welcome-to-lasersaver-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-scaleDetection"></span><dl class="class">
+<dt id="scaleDetection.ScaleDetection">
+<em class="property">class </em><code class="descclassname">scaleDetection.</code><code class="descname">ScaleDetection</code><a class="headerlink" href="#scaleDetection.ScaleDetection" title="Permalink to this definition">¶</a></dt>
+<dd><p>ScaleDetection objects translate between pixals and real world dimensions.</p>
+<dl class="method">
+<dt id="scaleDetection.ScaleDetection.calibrate">
+<code class="descname">calibrate</code><span class="sig-paren">(</span><em>image</em>, <em>known_x</em>, <em>known_y</em>, <em>unit</em>, <em>show_conts=False</em><span class="sig-paren">)</span><a class="headerlink" href="#scaleDetection.ScaleDetection.calibrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an image of an object of known size sets the x and y scale
+Args:</p>
+<blockquote>
+<div><p>image (string): file name of image
+known_x (number): length of the object in the horizontal dimension
+known_y (number): length of the object in the vertical dimension
+show_conts(optional[bool]): if True an image with the object</p>
+<blockquote>
+<div>selected in red will be saved as image_rec</div></blockquote>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>True on success, False on failure</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scaleDetection.ScaleDetection.getDimensions">
+<code class="descname">getDimensions</code><span class="sig-paren">(</span><em>image</em>, <em>show_conts=False</em><span class="sig-paren">)</span><a class="headerlink" href="#scaleDetection.ScaleDetection.getDimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detects the size of the largest object.
+Args:</p>
+<blockquote>
+<div><p>image (string): image file path
+show_conts(optional[bool]): if True an image with the object</p>
+<blockquote>
+<div>selected in red will be saved as image_rec</div></blockquote>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A tuple of (w, h) of the rectangle bounding the
+object in pixels. Returns (None, None) if
+unsuccessful.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scaleDetection.ScaleDetection.getScale">
+<code class="descname">getScale</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scaleDetection.ScaleDetection.getScale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns tuple of (self.x_scale, self.y_scale)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scaleDetection.ScaleDetection.getSize">
+<code class="descname">getSize</code><span class="sig-paren">(</span><em>image</em>, <em>show_conts=False</em><span class="sig-paren">)</span><a class="headerlink" href="#scaleDetection.ScaleDetection.getSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a calibrated system, detects the size of the largest object.
+Args:</p>
+<blockquote>
+<div><p>image (string): image file path
+show_conts(optional[bool]): if True an image with the object</p>
+<blockquote>
+<div>selected in red will be saved as image_rec</div></blockquote>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A tuple of (width, height) of the rectangle bounding the
+object in real world units. Returns (None, None) if
+unsuccessful.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scaleDetection.ScaleDetection.loadConfigFile">
+<code class="descname">loadConfigFile</code><span class="sig-paren">(</span><em>config_file='scale.config'</em><span class="sig-paren">)</span><a class="headerlink" href="#scaleDetection.ScaleDetection.loadConfigFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the x and y scale from the config file.
+Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>config_file (string): location of config file,</dt>
+<dd>defaults to configs/scale.config.</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>True on success, False on failure</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scaleDetection.ScaleDetection.openImage">
+<code class="descname">openImage</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#scaleDetection.ScaleDetection.openImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the filename of an image, returns the image object
+Args:</p>
+<blockquote>
+<div>filename (string): filename of image</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>cv2 image object, None on failure</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scaleDetection.ScaleDetection.saveConfigFile">
+<code class="descname">saveConfigFile</code><span class="sig-paren">(</span><em>config_file='scale.config'</em><span class="sig-paren">)</span><a class="headerlink" href="#scaleDetection.ScaleDetection.saveConfigFile" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>saves a dictionary {&#8220;x_scale&#8221;: self.x_scale,</dt>
+<dd>&#8220;y_scale&#8221;: self.y_scale,
+&#8220;units&#8221;: self.units}</dd>
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>config_file (string): location of config file,</dt>
+<dd>defaults to configs/scale.config.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>True on success, False on failure</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-determineSkew"></span><dl class="class">
+<dt id="determineSkew.DetermineSkew">
+<em class="property">class </em><code class="descclassname">determineSkew.</code><code class="descname">DetermineSkew</code><a class="headerlink" href="#determineSkew.DetermineSkew" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skew Correction</p>
+<dl class="staticmethod">
+<dt id="determineSkew.DetermineSkew.correctionAccuracy">
+<em class="property">static </em><code class="descname">correctionAccuracy</code><span class="sig-paren">(</span><em>objpoints</em>, <em>imgpoints</em>, <em>rvecs</em>, <em>tvecs</em>, <em>mtx</em>, <em>dist</em><span class="sig-paren">)</span><a class="headerlink" href="#determineSkew.DetermineSkew.correctionAccuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates error of skew correction
+- Should be as close to 0 as possible</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="determineSkew.DetermineSkew.createSkewMatrix">
+<em class="property">static </em><code class="descname">createSkewMatrix</code><span class="sig-paren">(</span><em>calibImages</em><span class="sig-paren">)</span><a class="headerlink" href="#determineSkew.DetermineSkew.createSkewMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Finds matrix needed to deskew photo based on a list of images</dt>
+<dd><ul class="first last simple">
+<li>also finds approximate error of matrix</li>
+</ul>
+</dd>
+<dt>Args:</dt>
+<dd>calibImages: list of circleGrid photos taken for calibration</dd>
+<dt>Returns:</dt>
+<dd>dst: matrix which will correct skew when applied to an image
+roi:
+error: calculated error value for skew matrix</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="determineSkew.DetermineSkew.findSkewPoints">
+<em class="property">static </em><code class="descname">findSkewPoints</code><span class="sig-paren">(</span><em>calibImages</em><span class="sig-paren">)</span><a class="headerlink" href="#determineSkew.DetermineSkew.findSkewPoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes in a series of images of a 11x4 circleGrid pattern, 
+locates their major center points,
+and places them in two matrices</p>
+<dl class="docutils">
+<dt>Args: </dt>
+<dd>calibImages: list of circleGrid photos taken for calibration</dd>
+<dt>Returns:</dt>
+<dd>objpoints: 3D points in real world space
+imgpoints: 2D points in image plane</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-findContours"></span><dl class="class">
+<dt id="findContours.FindContours">
+<em class="property">class </em><code class="descclassname">findContours.</code><code class="descname">FindContours</code><a class="headerlink" href="#findContours.FindContours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does useful stuff with contours</p>
+<dl class="staticmethod">
+<dt id="findContours.FindContours.display_drawn_contours">
+<em class="property">static </em><code class="descname">display_drawn_contours</code><span class="sig-paren">(</span><em>inputImg</em>, <em>contourList</em><span class="sig-paren">)</span><a class="headerlink" href="#findContours.FindContours.display_drawn_contours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws given contours on a new image, and displays the image to the user</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>inputImg (string): the original photo
+contourList: list of contours found in photo</dd>
+<dt>Returns:</dt>
+<dd>drawnContours: image of the given contours</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="findContours.FindContours.find_all_contours">
+<em class="property">static </em><code class="descname">find_all_contours</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="headerlink" href="#findContours.FindContours.find_all_contours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds contours of given image</p>
+<ul>
+<li><p class="first">Utilizes Canny algorithm for edge detection</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>Threshold numbers are compared to calculated Gradient values</dt>
+<dd><p class="first">Max: Anything above definitely an edge
+Min: Anything below definitely NOT an edge</p>
+<ul class="last simple">
+<li>Alter threshold numbers to change accuracy</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><dl class="first docutils">
+<dt>Finds contours in image using cv2.findContours()</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Assumes a 2-level hierarchy (cv2.RETR_CCOMP)</dt>
+<dd><ul class="first last simple">
+<li>Every contour is the boundary between a hole and a feature</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Each individual contour is a numpy array of (x,y) coordinates of boundary points of the object</dt>
+<dd><ul class="first last simple">
+<li>cv2.CHAIN_APPROX_NONE stores every single point along contour</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Called from main()</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>img (string): Original image of board</dd>
+<dt>Returns:</dt>
+<dd>initial_contours: list of all contours in image
+hierarchy: initial_contours hierarchy
+edgeImage: the edge image the contours were built off</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="findContours.FindContours.select_contours">
+<em class="property">static </em><code class="descname">select_contours</code><span class="sig-paren">(</span><em>contours</em>, <em>hierarchy</em><span class="sig-paren">)</span><a class="headerlink" href="#findContours.FindContours.select_contours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects the relevant contours from set of all contours found in an image</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Loops through every contour found in an initial image</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>identifies where each contour sits in the overall hierarchy</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>if contour has no parent, this is a contour we want to return</dt>
+<dd><p class="first last">=&gt; add it to finalContours</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>contours: list of all contours of an image
+hierarchy: contours hierarchy</dd>
+<dt>Returns:</dt>
+<dd>finalContours: list of every contour of interest</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-jsoncreator"></span><dl class="class">
+<dt id="jsoncreator.jsonCreator">
+<em class="property">class </em><code class="descclassname">jsoncreator.</code><code class="descname">jsonCreator</code><span class="sig-paren">(</span><em>logger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jsoncreator.jsonCreator" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class to construct a json object for exportation</p>
+<dl class="method">
+<dt id="jsoncreator.jsonCreator.addContours">
+<code class="descname">addContours</code><span class="sig-paren">(</span><em>contours</em><span class="sig-paren">)</span><a class="headerlink" href="#jsoncreator.jsonCreator.addContours" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will add the scale to the json object
+Args:</p>
+<blockquote>
+<div>contour (list): the contour(s) to be added this can be a list of vertices or a list of contours (list of lists)</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="jsoncreator.jsonCreator.addScale">
+<code class="descname">addScale</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#jsoncreator.jsonCreator.addScale" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will add the scale to the json object
+Args:</p>
+<blockquote>
+<div>x (float): The scale of the x axis
+y (float): The scale of the y axis</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="jsoncreator.jsonCreator.addUnits">
+<code class="descname">addUnits</code><span class="sig-paren">(</span><em>units</em><span class="sig-paren">)</span><a class="headerlink" href="#jsoncreator.jsonCreator.addUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will add the scale to the json object
+Args:</p>
+<blockquote>
+<div>x (float): The scale of the x axis
+y (float): The scale of the y axis</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="jsoncreator.jsonCreator.exportJson">
+<code class="descname">exportJson</code><span class="sig-paren">(</span><em>filename='final.json'</em><span class="sig-paren">)</span><a class="headerlink" href="#jsoncreator.jsonCreator.exportJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function exports the json object to the specified filename
+Args:</p>
+<blockquote>
+<div>filename (str): The filename that the json should be exported to</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="jsoncreator.jsonCreator.getJson">
+<code class="descname">getJson</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jsoncreator.jsonCreator.getJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns: A dict containing the added information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jsoncreator.jsonCreator.resetJson">
+<code class="descname">resetJson</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jsoncreator.jsonCreator.resetJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the JSON object to empty all variables</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to LaserSaver&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Alex Cordero, Emily Owens, Jacob Resmen, Luke Woodruff, Nir Boneh, Zak Collins.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
