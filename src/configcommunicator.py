@@ -96,9 +96,9 @@ class ConfigCommunicator():
             Skew calibration (list) for camera_num
         '''
 
-        mtx = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('mtx'), dtype=np.uint8)
-        dist = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('dist'), dtype=np.uint8)
-        newmtx = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('newmtx'), dtype=np.uint8)
+        mtx = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('mtx'))
+        dist = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('dist'))
+        newmtx = np.array(json.loads(self.config.get("Skew Calibration", "camera" + str(camera_num))).get('newmtx'))
 
 
         return mtx, dist, newmtx

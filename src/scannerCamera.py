@@ -25,12 +25,9 @@ class ScannerCamera:
         self.skew_dist = None
         self.skew_newcameramtx = None
 
-        #
-        # self.skew_dst = None
-        # self.skew_roi = None
 
         # Are we using skew correction?
-        self.use_skew_correction = False
+        self.use_skew_correction = None
 
 
     ''' Pull mtx values from config file '''
@@ -120,19 +117,19 @@ class ScannerCamera:
 
             corrected_img = cv2.imread("corrected.jpg",0)
 
-            return corrected_img
+            return dst
 
         elif self.use_skew_correction is True:
 
             cv2.imwrite("skew1.jpg", original_img)
             # This means that the image we are using for calibration is permanently rewritten with the skew matrix
-            corrected_img = cv2.imread("skew1.jpg", 0)
+            # corrected_img = cv2.imread("skew1.jpg", 0)
 
             dst = cv2.undistort(original_img, self.skew_mtx, self.skew_dist, None, self.skew_newcameramtx)
 
-            cv2.imwrite(corrected_img, dst)
+            cv2.imwrite("corrected.jpg", dst)
 
-            cv2.imwrite("corrected.jpg", corrected_img)
+            corrected_img = cv2.imread("corrected.jpg",0)
 
             return corrected_img
 
