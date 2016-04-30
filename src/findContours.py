@@ -47,10 +47,13 @@ class FindContours:
 
         '''
 
-        #img = cv2.imread(img,0)
-
         # Edge detection
-        imgcpy = np.array(img, dtype=np.uint8)
+        try:
+            imgcpy = np.array(img, dtype=np.uint8)
+        except:
+            raise AttributeError
+        
+        
         edgeImage = cv2.Canny(imgcpy,200,400)
 
         # Use copy of edges1 if we want to preserve orignal edges, as cv2.threshold() is destructive
