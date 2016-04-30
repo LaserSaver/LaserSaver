@@ -40,7 +40,12 @@ pip install setuptools
 python setup.py install
 ```
 
-# Hardware Shopping List
+## Hardware Shopping List
 The parts needed to construct the scanner.
 
 [Click Here for the Shopping List] (Shopping_List.md)
+
+## Assembly Instructions
+How to assemble the scanner.
+
+[Click Here for the Assembly Instructions] (Assembly_instructions.md)
