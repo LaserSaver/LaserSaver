@@ -27,7 +27,7 @@ class ScannerCamera:
 
 
         # Are we using skew correction?
-        self.use_skew_correction = True
+        self.use_skew_correction = None
 
 
     ''' Pull mtx values from config file '''
@@ -126,15 +126,6 @@ class ScannerCamera:
             # corrected_img = cv2.imread("skew1.jpg", 0)
 
             dst = cv2.undistort(original_img, self.skew_mtx, self.skew_dist, None, self.skew_newcameramtx)
-            
-            print "mtx"
-            print self.skew_mtx
-            
-            print "dist"
-            print self.skew_dist
-            
-            print "newmtx"
-            print self.skew_newcameramtx
 
             cv2.imwrite("corrected.jpg", dst)
 
